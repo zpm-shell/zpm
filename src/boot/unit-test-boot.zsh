@@ -33,11 +33,7 @@ function setGlobalVariables() {
   eval "${globalVariableName}=${value}"
 }
 
-local unitTestFiles=(
-  "${MOD_DIR}/test/unit/utils/test/expect_equal.test.zsh"
-  "${MOD_DIR}/test/unit/utils/debug/assert_gt.test.zsh"
-  "${MOD_DIR}/test/unit/utils/debug/assert_equal.test.zsh"
-)
+. ${MOD_DIR}/src/config/unit-test-conf.zsh
 
 function print_current_test_result() {
   local testFunc=$1
