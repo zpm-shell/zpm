@@ -33,8 +33,8 @@ function setGlobalVariables() {
 }
 
 local unitTestFiles=(
-  "${MOD_DIR}/test/unit/debug/assert_equal.test.zsh"
-  "${MOD_DIR}/test/unit/debug/assert_gt.test.zsh"
+  "${MOD_DIR}/test/unit/utils/debug/assert_equal.test.zsh"
+  "${MOD_DIR}/test/unit/utils/debug/assert_gt.test.zsh"
 )
 
 function print_current_test_result() {

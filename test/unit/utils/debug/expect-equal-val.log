@@ -1,5 +1,5 @@
 
-  [1;97;101m FAIL [0m test/unit/debug/assert_equal.test.zsh:4
+  [1;97;101m FAIL [0m test/unit/utils/debug/assert_equal.test.zsh:4
   [0;91m● test_expect_equal[0m
   Expected: [0;92m1[0m
   Received: [0;91m2[0m
@@ -11,5 +11,5 @@
    [90m5  |[0m $(expect_equal "1" "2")
    [90m6  |[0m EOF
    [90m7  |[0m )
-   [90m8  |[0m   local expectVal=$(cat test/unit/debug/expect-equal-val.log)
+   [90m8  |[0m   local expectVal=$(cat test/unit/utils/debug/expect-equal-val.log)
    [90m9  |[0m   expect_equal "${expectVal}" "${actualVal}"
