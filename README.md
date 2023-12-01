@@ -1,6 +1,15 @@
-# zmod
+<h1 align="center">zmod</h1>
+
+<p align="center">
+    <a rel="Test" href="https://github.com/wuchuheng/zmod-sdk/actions/workflows/test.yaml">
+        <img alt="Tests" src="https://github.com/wuchuheng/zmod-sdk/actions/workflows/test.yaml/badge.svg" />
+    </a>
+</p>
+
+
 
 `zmod` is a powerful module manager for zsh, designed to streamline and simplify the management of Zsh modules. It provides a user-friendly interface to install, update, and manage your zsh environment modules, enhancing your command-line productivity and experience.
+
 
 ## Features
 
