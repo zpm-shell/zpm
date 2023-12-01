@@ -57,7 +57,7 @@ function print_number_line() {
 
 #@param $1: the error message
 #@param $2: the level of the function call stack
-throw() {
+function throw() {
   local errorMessage="${1:-''}"
   local funcFileTraceLevel="${2:-1}"
   local prevFileLine="${funcfiletrace[${funcFileTraceLevel}]}"
@@ -76,6 +76,10 @@ throw() {
 
   #3 print the function call stack
   for (( i = ${funcFileTraceLevel}; i <= ${#funcfiletrace[@]}; i++ )); do
-    printf " ${funcfiletrace[$i]}\n"
+    local stackNumberLine=${funcfiletrace[$i]}
+    if [[ ${#stackNumberLine} -gt ${#ZMOD_APP_PATH} && ${stackNumberLine:0:${#ZMOD_APP_PATH}} == ${ZMOD_APP_PATH} ]]; then
+        stackNumberLine=${stackNumberLine#${ZMOD_APP_PATH}/}
+    fi
+    printf " ${stackNumberLine}\n"
   done
 }

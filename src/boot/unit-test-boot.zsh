@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 MOD_DIR=$(pwd)
+ZMOD_APP_PATH=$(pwd)
 
 . ${MOD_DIR}/src/utils/test.zsh
 . ${MOD_DIR}/src/utils/error.zsh
