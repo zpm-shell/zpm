@@ -81,4 +81,7 @@ Time:         $(( $(date +%s) - ${START_TIME} )) s
 Test files:   ${TOTAL_FILES} f
 Ran all test files."
 
-[[ ${TOTAL_FILES} -ne 0 ]] && exit 1;
+if [[ ${TOTAL_FAILED_TESTS} -gt 0 ]]; then
+  exit 1;
+fi
+
