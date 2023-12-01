@@ -11,7 +11,7 @@ assert_equal() {
 #@param $1: the expected value
 #@param $2: the actual value
 assert_gt() {
-  if [[ "$1" -gt "$2" ]]; then
+  if [[ ! "$1" -gt "$2" ]]; then
     throw "expected $1 to be greater than $2" 2
   fi
 }

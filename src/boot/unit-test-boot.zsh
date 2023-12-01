@@ -4,6 +4,7 @@ MOD_DIR=$(pwd)
 
 . ${MOD_DIR}/src/utils/test.zsh
 . ${MOD_DIR}/src/utils/error.zsh
+. ${MOD_DIR}/src/utils/debug.zsh
 
 TRUE=0
 FALSE=1
@@ -33,17 +34,14 @@ function setGlobalVariables() {
 
 local unitTestFiles=(
   "${MOD_DIR}/test/unit/debug/assert_equal.test.zsh"
+  "${MOD_DIR}/test/unit/debug/assert_gt.test.zsh"
 )
-
-function testPanel() {
-}
 
 function print_current_test_result() {
   local testFunc=$1
   local isCurrentTestOk=$2
   if [[ ${isCurrentTestOk} -eq ${TRUE} ]]; then
-    local prefix="${lightGreen}✓${noColor}"
-    echo "  ${prefix} ${testFunc}"
+    echo "  ${lightGreen}✓${noColor} ${testFunc}"
   fi
 }
 
@@ -57,8 +55,8 @@ for testFile in ${unitTestFiles[@]}; do
   setGlobalVariables "TOTAL_FILES" "$(( TOTAL_FILES + 1 ))"
   # loop the test functions
   setGlobalVariables "CURRENT_TEST_FILE" "${relativeTestFile}"
-  local testFunctions=($(extractTestFunctions ${testFile}))
-  local testFunc
+  local testFunctions=($(extract_test_functions ${testFile}))
+  local testFunc=''
   for testFunc in ${testFunctions[@]}; do
     # execute the test function
     setGlobalVariables "CURRENT_TEST_NAME" "${testFunc}"

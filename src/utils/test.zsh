@@ -4,7 +4,7 @@
 #   script: string: name of script to extract functions from
 # Returns:
 #   string: of function names
-extractTestFunctions() {
+extract_test_functions() {
   local script_=$1
 
   # Extract the lines with test function names, strip of anything besides the
