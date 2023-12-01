@@ -32,7 +32,7 @@ function setGlobalVariables() {
 }
 
 local unitTestFiles=(
-  "${MOD_DIR}/test/debug.test.zsh"
+  "${MOD_DIR}/test/unit/debug/assert_equal.test.zsh"
 )
 
 function testPanel() {
