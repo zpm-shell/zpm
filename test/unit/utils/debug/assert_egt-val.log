@@ -1,0 +1,13 @@
+[0;31mError: expected 1, but got 2[0m
+   [90m1  |[0m #!/usr/bin/env zsh
+   [90m2  |[0m 
+   [90m3  |[0m function test_assert_equal() {
+ [91;1m>[0m [90m4  |[0m   local actualVal=$(cat <<EOF
+   [90m5  |[0m $(assert_equal "1" "2")
+   [90m6  |[0m EOF
+   [90m7  |[0m )
+   [90m8  |[0m   # echo "${actualVal}" > test/unit/utils/debug/assert_egt-val.log
+   [90m9  |[0m   local expectVal=$(cat test/unit/utils/debug/assert_egt-val.log)
+   [90m10 |[0m   expect_equal "${expectVal}" "${actualVal}"
+ test/unit/utils/debug/assert_egt.test.zsh:4
+ src/boot/unit-test-boot.zsh:62
