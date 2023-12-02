@@ -23,7 +23,7 @@
 To get started with `zmod-sdk`, clone this repository and run the install script:
 
 ```sh
-git clone https://github.com/yourusername/zmod-sdk.git
+git clone https://github.com/wuchuheng/zmod-sdk.git
 cd zmod-sdk
 ./install.sh
 ```
@@ -50,7 +50,7 @@ zmod is open-source software licensed under the MIT license.
 
 For more information, please visit zmod-sdk documentation.
 
-Remember to replace placeholders like `https://github.com/yourusername/zmod-sdk.git` with the actual URL of your repository and provide the correct link to your documentation. This `README.md` is meant to serve as a starting point, and you should expand upon each section to give users a comprehensive overview of your project.
+Remember to replace placeholders like `https://github.com/wuchuheng/zmod-sdk.git` with the actual URL of your repository and provide the correct link to your documentation. This `README.md` is meant to serve as a starting point, and you should expand upon each section to give users a comprehensive overview of your project.
 
 
 
