@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
-MOD_DIR=$(pwd)
+ZMOD_DIR=$(pwd)
 ZMOD_APP_PATH=$(pwd)
 
-. ${MOD_DIR}/src/utils/test.zsh
-. ${MOD_DIR}/src/utils/error.zsh
-. ${MOD_DIR}/src/utils/debug.zsh
+. ${ZMOD_DIR}/src/utils/test.zsh
+. ${ZMOD_DIR}/src/utils/error.zsh
+. ${ZMOD_DIR}/src/utils/debug.zsh
 
 TRUE=0
 FALSE=1
@@ -33,7 +33,7 @@ function setGlobalVariables() {
   eval "${globalVariableName}=${value}"
 }
 
-. ${MOD_DIR}/src/config/unit-test-conf.zsh
+. ${ZMOD_DIR}/src/config/unit-test-conf.zsh
 
 function print_current_test_result() {
   local testFunc=$1
@@ -45,7 +45,7 @@ function print_current_test_result() {
 
 local testFile='';
 for testFile in ${unitTestFiles[@]}; do
-  local relativeTestFile=${testFile#${MOD_DIR}/}
+  local relativeTestFile=${testFile#${ZMOD_DIR}/}
   echo "Test  ${relativeTestFile}"
   # load the test file
   . ${testFile}
