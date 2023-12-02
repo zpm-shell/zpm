@@ -43,7 +43,7 @@ function print_current_test_result() {
   fi
 }
 
-local testFile;
+local testFile='';
 for testFile in ${unitTestFiles[@]}; do
   local relativeTestFile=${testFile#${MOD_DIR}/}
   echo "Test  ${relativeTestFile}"

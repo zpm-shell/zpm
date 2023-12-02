@@ -5,6 +5,7 @@
 assert_equal() {
   if [[ "$1" != "$2" ]]; then
     throw "expected $1, but got $2" 2
+    return "${FALSE}"
   fi
 }
 
@@ -13,6 +14,7 @@ assert_equal() {
 assert_gt() {
   if [[ ! "$1" -gt "$2" ]]; then
     throw "expected $1 to be greater than $2" 2
+    return "${FALSE}"
   fi
 }
 
@@ -21,5 +23,6 @@ assert_gt() {
 assert_egt() {
   if [[ "$1" -ge "$2" ]]; then
     throw "expected $1 to be greater than or equal to $2" 2
+    return "${FALSE}"
   fi
 }

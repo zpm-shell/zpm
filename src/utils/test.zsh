@@ -45,7 +45,7 @@ function _print_expected_error() {
 function expect_equal() {
   local expected=$1
   local actual=$2
-  local ok=${TRUE}
+  local ok="${TRUE}"
   if [[ "${expected}" != "${actual}" ]]; then
     local prevFileLine="${funcfiletrace[1]}"
     local filePath="${prevFileLine%:*}"
@@ -62,7 +62,7 @@ function expect_equal() {
     setGlobalVariables "IS_CURRENT_TEST_OK" "${FALSE}"
   fi
 
-  return ${ok}
+  return "${ok}"
 }
 
 

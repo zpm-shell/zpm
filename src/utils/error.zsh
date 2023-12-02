@@ -82,4 +82,7 @@ function throw() {
     fi
     printf " ${stackNumberLine}\n"
   done
+
+  #4 return error code
+  return "${FALSE}"
 }
