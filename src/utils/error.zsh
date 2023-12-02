@@ -20,6 +20,21 @@
 #
 ##
 function print_number_line() {
+  # assert the file exists
+  if [[ ! -f "$1" ]]; then
+    echo "File $1 does not exist."
+    return "${FALSE}"
+  fi
+  # assert the line number is valid
+  if [[ ! $2 =~ ^[0-9]+$ ]]; then
+    echo "The line number must be a number."
+    return "${FALSE}"
+  fi
+  # assert the line number was not greater than the file line
+  if (( $2 > $(wc -l $1 | awk '{print $1}') )); then
+    echo "The line number must be less than the file line."
+    return "${FALSE}"
+  fi
   local file=$1
   local lineNumber=$2;
   local allLine=$(wc -l ${file} | awk '{print $1}')
