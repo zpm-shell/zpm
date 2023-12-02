@@ -1,0 +1,11 @@
+   [90m1  |[0m #!/usr/bin/env zsh
+   [90m2  |[0m function test_print_number_line() {
+   [90m3  |[0m     local currentFile="${MOD_DIR}/test/unit/utils/error/print_number_line.test.zsh"
+   [90m4  |[0m     local actualVal=$(cat <<EOF
+ [91;1m>[0m [90m5  |[0m $(print_number_line "${currentFile}" 5)
+   [90m6  |[0m EOF
+   [90m7  |[0m )
+   [90m8  |[0m     local logFile=test/unit/utils/error/print_number_line-val.log
+   [90m9  |[0m     # echo "${actualVal}" > "${logFile}"
+   [90m10 |[0m     local expectVal=$(cat "${logFile}")
+   [90m11 |[0m     expect_equal "${expectVal}" "${actualVal}"
