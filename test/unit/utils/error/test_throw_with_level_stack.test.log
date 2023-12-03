@@ -2,7 +2,7 @@
    [90m1  |[0m #!/usr/bin/env zsh
    [90m2  |[0m function test_throw_with_level_stack() {
  [91;1m>[0m [90m3  |[0m     local actualVal=$(cat <<EOF
-   [90m4  |[0m $(throw --error-message="error message" --trace-level=1)
+   [90m4  |[0m $(throw --error-message "error message" --trace-level 1)
    [90m5  |[0m EOF
    [90m6  |[0m )
    [90m7  |[0m     local logFile="${ZMOD_DIR}/test/unit/utils/error/test_throw_with_level_stack.test.log"

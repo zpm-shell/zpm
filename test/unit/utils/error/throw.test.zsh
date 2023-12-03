@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 function test_throw() {
     local actualVal=$(cat <<EOF
-$(throw --error-message="error message")
+$(throw --error-message "error message")
 EOF
 )
     local logFile="${ZMOD_DIR}/test/unit/utils/error/throw.test.log"

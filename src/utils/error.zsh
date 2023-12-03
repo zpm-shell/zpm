@@ -95,8 +95,8 @@ function print_number_line() {
 # @param --error-message: {string} default: '', the error message 
 # @param --trace-level: {number} default: 1, the level of the function call stack
 # @param --exit-code: {number} default null, the exit code
-# @use throw --error-message="error message" --trace-level=2 --exit-code=1
-# @example throw --error-message="error message" --trace-level=2 --exit-code=1
+# @use throw --error-message "error message" --trace-level 2 --exit-code 1
+# @example throw --error-message "error message" --trace-level 2 --exit-code 1
 ##
 function throw() {
   local errorMessage=''
@@ -105,23 +105,27 @@ function throw() {
   # parse the arguments
   for i in "$@"; do
     case $i in
-      --error-message=*)
-        errorMessage="${i#*=}"
+      --error-message)
+        errorMessage="$2"
         shift # past argument=value
         ;;
-      --trace-level=*)
-        funcFileTraceLevel="${i#*=}"
+      --trace-level)
+        funcFileTraceLevel="$2"
         shift # past argument=value
         ;;
-      --exit-code=*)
-        exitCode="${i#*=}"
+      --exit-code)
+        exitCode="$2"
         shift
         ;;
-      *)
-        throw --error-message="unknown argument '$i'" --trace-level=2 --exit-code=${exitCode}
+        *)
+        shift;
         ;;
     esac
   done
+  if [[ -z "${errorMessage}" ]]; then
+    throw --error-message "the erroe message not provided." --trace-level 2 --exit-code "${exitCode}"
+    return "${exitCode}"
+  fi
 
   local prevFileLine="${funcfiletrace[${funcFileTraceLevel}]}"
 
