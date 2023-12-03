@@ -2,6 +2,7 @@
 
 local unitTestFiles=(
   "${ZMOD_DIR}/test/unit/utils/test/expect_equal.test.zsh"
+  "${ZMOD_DIR}/test/unit/utils/test/test_extract_test_functions.test.zsh"
 
   "${ZMOD_DIR}/test/unit/utils/debug/assert_gt.test.zsh"
   "${ZMOD_DIR}/test/unit/utils/debug/assert_equal.test.zsh"
