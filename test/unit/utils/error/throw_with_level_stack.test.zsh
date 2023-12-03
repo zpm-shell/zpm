@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 function test_throw_with_level_stack() {
     local actualVal=$(cat <<EOF
-$(throw "error message" 1)
+$(throw --error-message="error message" --func-file-trace-level=1)
 EOF
 )
     local logFile="${ZMOD_DIR}/test/unit/utils/error/test_throw_with_level_stack.test.log"

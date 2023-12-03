@@ -91,12 +91,38 @@ function print_number_line() {
   done <<< "$result"
 }
 
-
-#@param $1: the error message
-#@param $2: the level of the function call stack
+##
+# @param --error-message: {string} default: '', the error message 
+# @param --func-file-trace-level: {number} default: 1, the level of the function call stack
+# @param --exit-code: {number} default null, the exit code
+# @use throw --error-message="error message" --func-file-trace-level=2 --exit-code=1
+# @example throw --error-message="error message" --func-file-trace-level=2 --exit-code=1
+##
 function throw() {
-  local errorMessage="${1:-''}"
-  local funcFileTraceLevel="${2:-1}"
+  local errorMessage=''
+  local funcFileTraceLevel=1
+  local exitCode=''
+  # parse the arguments
+  for i in "$@"; do
+    case $i in
+      --error-message=*)
+        errorMessage="${i#*=}"
+        shift # past argument=value
+        ;;
+      --func-file-trace-level=*)
+        funcFileTraceLevel="${i#*=}"
+        shift # past argument=value
+        ;;
+      --exit-code=*)
+        exitCode="${i#*=}"
+        shift
+        ;;
+      *)
+        throw --error-message="unknown argument '$i'" --func-file-trace-level=2 --exit-code=${exitCode}
+        ;;
+    esac
+  done
+
   local prevFileLine="${funcfiletrace[${funcFileTraceLevel}]}"
 
   # print the error detail.
@@ -120,6 +146,10 @@ function throw() {
     printf " ${stackNumberLine}\n"
   done
 
-  #4 return error code
-  return "${FALSE}"
+  #4 if the exit code was not null and not 0, return the exit code
+  if [[ ! -z "${exitCode}" && "${exitCode}" != 0 ]]; then
+    exit "${exitCode}";
+  else
+    return "${FALSE}"
+  fi
 }
