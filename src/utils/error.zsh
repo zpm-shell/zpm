@@ -4,8 +4,8 @@
 # @brief print the number line of a file between 1-10
 # @param --file-path: file path
 # @param --line-number:  line number
-# @use print_number_line --file-path=/Users/username/tmp.sh --line-number=5
-# @example print_number_line --file-path=/Users/username/tmp.sh --line-number=5
+# @use print_number_line --file-path /Users/username/tmp.sh --line-number 5
+# @example print_number_line --file-path /Users/username/tmp.sh --line-number 5
 
 # @return
 #
@@ -28,20 +28,23 @@ function print_number_line() {
   # parse the arguments
   for i in "$@"; do
     case $i in
-      --file-path=*)
-        filePath="${i#*=}"
+      --file-path)
+        filePath="$2"
         shift # past argument=value
         ;;
-      --line-number=*)
-        lineNumber="${i#*=}"
+      --line-number)
+        lineNumber="$2"
         shift # past argument=value
         ;;
       *)
-        echo "Error: unknown argument '$i'"
-        return "${FALSE}"
+        shift
         ;;
     esac
   done
+  if [[ -z "${filePath}" || -z "${lineNumber}" ]]; then
+    echo "Error: missing argument."
+    return "${FALSE}"
+  fi
 
 
   # assert the file exists
@@ -139,7 +142,7 @@ function throw() {
   local filePath="${prevFileLine%:*}"
   local lineNumber="${prevFileLine##*:}"
   #2.2 print the number line in the file
-  print_number_line --file-path="${filePath}" --line-number="${lineNumber}"
+  print_number_line --file-path "${filePath}" --line-number "${lineNumber}"
 
   #3 print the function call stack
   for (( i = ${funcFileTraceLevel}; i <= ${#funcfiletrace[@]}; i++ )); do
