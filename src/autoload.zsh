@@ -12,5 +12,24 @@
 # @return {void}
 ##
 function import() {
+    local from=''
+    local as=''
+    # parse arguments
+    for i in "$@"; do
+        case $i in
+            --from*)
+                from="$2"
+                shift
+                ;;
+            --as*)
+                as="$1"
+                shift
+                ;;
+        esac
+    done
     
+    
+    echo "from: ${from}, as: ${as}"
 }
+
+import --from /src/utils/error.zsh --as error
