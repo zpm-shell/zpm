@@ -52,7 +52,7 @@ function expect_equal() {
     local lineNumber="${prevFileLine##*:}"
     _print_expected_error "${expected}" "${actual}" "${CURRENT_TEST_FILE}" "${lineNumber}"
     #  print the number line
-    print_number_line "${filePath}" "${lineNumber}"
+    print_number_line --file-path="${filePath}" --line-number="${lineNumber}"
     ok="${FALSE}"
   fi
 

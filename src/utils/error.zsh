@@ -1,9 +1,12 @@
 #!/usr/bin/env zsh
 
 ##
-# @desc 获取一个文件1-10行内容
-# @use  print_number_line <file path> <file line>
-# @example  print_number_line "/Users/wuchuheng/dotfiles/tmp.sh" 5
+# @brief print the number line of a file between 1-10
+# @param --file-path: file path
+# @param --line-number:  line number
+# @use print_number_line --file-path=/Users/username/tmp.sh --line-number=5
+# @example print_number_line --file-path=/Users/username/tmp.sh --line-number=5
+
 # @return
 #
 #    1  | readonly ALL_UNIT_TEST_FILES=(
@@ -20,24 +23,43 @@
 #
 ##
 function print_number_line() {
+  local filePath=''
+  local lineNumber=''
+  # parse the arguments
+  for i in "$@"; do
+    case $i in
+      --file-path=*)
+        filePath="${i#*=}"
+        shift # past argument=value
+        ;;
+      --line-number=*)
+        lineNumber="${i#*=}"
+        shift # past argument=value
+        ;;
+      *)
+        echo "Error: unknown argument '$i'"
+        return "${FALSE}"
+        ;;
+    esac
+  done
+
+
   # assert the file exists
-  if [[ ! -f "$1" ]]; then
-    echo "File $1 does not exist."
+  if [[ ! -f "${filePath}" ]]; then
+    echo "File ${filePath} does not exist."
     return "${FALSE}"
   fi
   # assert the line number is valid
-  if [[ ! $2 =~ ^[0-9]+$ ]]; then
+  if [[ ! ${lineNumber} =~ ^[0-9]+$ ]]; then
     echo "The line number must be a number."
     return "${FALSE}"
   fi
   # assert the line number was not greater than the file line
-  if (( $2 > $(wc -l $1 | awk '{print $1}') )); then
+  if (( ${lineNumber} > $(wc -l ${filePath} | awk '{print $1}') )); then
     echo "The line number must be less than the file line."
     return "${FALSE}"
   fi
-  local file=$1
-  local lineNumber=$2;
-  local allLine=$(wc -l ${file} | awk '{print $1}')
+  local allLine=$(wc -l ${filePath} | awk '{print $1}')
   local intervalStart=$lineNumber # 区间开始坐标
   local intervalEnd=$lineNumber # 区间结始坐标
   for (( i=1; i <= 5; i++ )); do
@@ -54,7 +76,7 @@ function print_number_line() {
       fi
     fi
   done
-  local result=`sed -n "${intervalStart},${intervalEnd}p" $file`
+  local result=`sed -n "${intervalStart},${intervalEnd}p" $filePath`
   local cln=${intervalStart}
   local lineNumberWidth=${#intervalEnd}
   while IFS= read -r line; do
@@ -87,7 +109,7 @@ function throw() {
   local filePath="${prevFileLine%:*}"
   local lineNumber="${prevFileLine##*:}"
   #2.2 print the number line in the file
-  print_number_line ${filePath} "${lineNumber}"
+  print_number_line --file-path="${filePath}" --line-number="${lineNumber}"
 
   #3 print the function call stack
   for (( i = ${funcFileTraceLevel}; i <= ${#funcfiletrace[@]}; i++ )); do
