@@ -93,10 +93,10 @@ function print_number_line() {
 
 ##
 # @param --error-message: {string} default: '', the error message 
-# @param --func-file-trace-level: {number} default: 1, the level of the function call stack
+# @param --trace-level: {number} default: 1, the level of the function call stack
 # @param --exit-code: {number} default null, the exit code
-# @use throw --error-message="error message" --func-file-trace-level=2 --exit-code=1
-# @example throw --error-message="error message" --func-file-trace-level=2 --exit-code=1
+# @use throw --error-message="error message" --trace-level=2 --exit-code=1
+# @example throw --error-message="error message" --trace-level=2 --exit-code=1
 ##
 function throw() {
   local errorMessage=''
@@ -109,7 +109,7 @@ function throw() {
         errorMessage="${i#*=}"
         shift # past argument=value
         ;;
-      --func-file-trace-level=*)
+      --trace-level=*)
         funcFileTraceLevel="${i#*=}"
         shift # past argument=value
         ;;
@@ -118,7 +118,7 @@ function throw() {
         shift
         ;;
       *)
-        throw --error-message="unknown argument '$i'" --func-file-trace-level=2 --exit-code=${exitCode}
+        throw --error-message="unknown argument '$i'" --trace-level=2 --exit-code=${exitCode}
         ;;
     esac
   done
