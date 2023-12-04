@@ -11,4 +11,4 @@
    [90m10 |[0m     expect_equal "${actualVal}" "${expectedVal}"
    [90m11 |[0m }
  test/unit/utils/error/throw.test.zsh:3
- src/boot/unit-test-boot.zsh:62
+ src/boot/unit-test-boot.zsh:63
