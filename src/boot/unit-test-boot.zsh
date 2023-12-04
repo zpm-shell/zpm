@@ -6,7 +6,7 @@ ZMOD_APP_PATH=$(pwd)
 . ${ZMOD_DIR}/src/utils/test.zsh;
 . ${ZMOD_DIR}/src/utils/error.zsh;
 . ${ZMOD_DIR}/src/utils/debug.zsh; 
-. ${ZMOD_DIR}/src/utils/extract-funtions.zsh;
+. ${ZMOD_DIR}/src/utils/extract-functions.zsh;
 
 TRUE=0
 FALSE=1
