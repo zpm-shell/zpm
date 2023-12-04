@@ -5,20 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "zshdb",
+            "type": "quickjs",
             "request": "launch",
-            "name": "Zsh-Debug (type in script name)",
-            "cwd": "${workspaceFolder}",
-            "program": "${command:AskForScriptName}",
-            "args": []
-        },
-        {
-            "type": "zshdb",
-            "request": "launch",
-            "name": "Zsh-Debug (select script from list of sh files)",
-            "cwd": "${workspaceFolder}",
-            "program": "${command:SelectScriptName}",
-            "args": []
+            "name": "Launch QuickJS",
+            "runtimeExecutable": "${workspaceFolder}/bin/qjs_Darwin_arm64",
+            "program": "${workspaceFolder}/src/js-scripts/src/get_alias_name_from_zsh_file.js"
         },
         {
             "type": "zshdb",
@@ -28,11 +19,5 @@
             "program": "${workspaceFolder}/src/boot/unit-test-boot.zsh",
             "args": []
         },
-        {
-            "type": "zshdb",
-            "request": "launch",
-            "name": "Unit test",
-            "program": "src/boot/unit-test-boot.zsh",
-        }
     ]
 }

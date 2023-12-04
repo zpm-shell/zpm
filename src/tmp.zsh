@@ -1,27 +1,15 @@
 #!/usr/bin/env zsh
 
-# Define the original function
-old_function() {
-  echo "hello"
-}
 
-# Copy the definition to the new function name
-functions[new_function]=$functions[old_function]
+# get the tmp funtion standard output but not the error
 
-# Unset the old function
-unset -f old_function
+tmpList=()
 
-# Now you can call new_function
+tmpList+=("1")
+tmpList+=("2")
+tmpList+=("3")
 
-#new_function
-#95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c() {
-#  echo "hello"
-#}
-#
-#95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c95f39b5729063a944f6e20356e938f4c
 
-function import() {
-  echo "$@"
-}
+# print the last element of the array
+echo ${tmpList[-1]}
 
-# import module1 module2 module3 --from "tmp"

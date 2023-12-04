@@ -26,3 +26,4 @@ declare enum ErrorType {
 declare function parseArgs(commandConfigs: CommandType, args: string[]): Promise<OutputType>;
 export { ErrorType };
 export default parseArgs;
+//# sourceMappingURL=index.d.ts.map
