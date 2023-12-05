@@ -30,3 +30,13 @@ function test_import_circul() {
   actualVal=$( ${ZMOD_DIR}/test/unit/autoload.test/circul2.zsh:5:circul2)
   expect_equal --actual "${actualVal}" --expected "circul2"
 }
+
+function test_same_as_name() {
+  local actual=$(
+  import --from "./m4.zsh" --as circul1;
+  import --from "./m5.zsh" --as circul1
+  )
+  local expectedValPath="${ZMOD_DIR}/test/unit/autoload.test/test_same_as_name_function_test_result_compaire_txt.txt"
+  # echo "${actual}" > ${expectedValPath} 
+  expect_equal --actual "${actual}" --expected "$(cat ${expectedValPath})"
+}
