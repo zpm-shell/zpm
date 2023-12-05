@@ -142,11 +142,25 @@ function throw() {
   local filePath="${prevFileLine%:*}"
   local lineNumber="${prevFileLine##*:}"
   #2.2 print the number line in the file
+  if [[ -z ${filePath} ]]; then
+      local funcAliasName=${CALL_STACE[-1]}
+      local filePath=${funcAliasName%%:*}
+      local newLineNumber=${funcAliasName#*:}
+      newLineNumber=${newLineNumber%:*}
+      lineNumber=$(( ${lineNumber} + ${newLineNumber}  ))
+  fi
   print_number_line --file-path "${filePath}" --line-number "${lineNumber}"
 
   #3 print the function call stack
+  local callStraceIndex=${#CALL_STACE[@]}
   for (( i = ${funcFileTraceLevel}; i <= ${#funcfiletrace[@]}; i++ )); do
     local stackNumberLine=${funcfiletrace[$i]}
+    # if the file path was empty, then get the file path from call trace
+    if [[ ${stackNumberLine:0:1} == ":" ]]; then
+      local funcAliasName=${CALL_STACE[$callStraceIndex]}
+      stackNumberLine=${funcAliasName%:*}
+      callStraceIndex=$(( ${callStraceIndex} - 1 ))
+    fi
     if [[ ${#stackNumberLine} -gt ${#ZMOD_APP_PATH} && ${stackNumberLine:0:${#ZMOD_APP_PATH}} == ${ZMOD_APP_PATH} ]]; then
         stackNumberLine=${stackNumberLine#${ZMOD_APP_PATH}/}
     fi

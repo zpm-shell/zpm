@@ -32,7 +32,13 @@ function extract_functions() {
   # Extract the lines with test function names, strip of anything besides the
   # function name, and output everything on a single line.
   local regex_='^\s*((function [A-Za-z0-9_-]*)|([A-Za-z0-9_-]* *\(\)))'
-  egrep "${regex_}" "${filePath}" \
-  |command sed 's/^[^A-Za-z0-9_-]*//;s/^function //;s/\([A-Za-z0-9_-]*\).*/\1/g' \
+#   egrep "${regex_}" "${filePath}" \
+#   |command sed 's/^[^A-Za-z0-9_-]*//;s/^function //;s/\([A-Za-z0-9_-]*\).*/\1/g' \
+#   |xargs
+
+  grep -nE "${regex_}" "${filePath}"  \
+  |sed -E 's/function[[:space:]]+//' \
+  |sed -E 's/^[[:space:]]+//' \
+  |sed -E 's/^([0-9]+:[A-Za-z0-9_-]+).*/\1/g' \
   |xargs
 }

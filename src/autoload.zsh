@@ -16,6 +16,7 @@ if [[ -z ${ZMOD_APP_PATH} ]]; then
     throw --error-message "the ZMOD_APP_PATH is not set" --exit-code 1
 fi
 
+# global source files, which will be stored the loaded files
 typeset -A -g GLOBAL_SOURCE_FILES=()
 typeset -A -g STACE_SOURCE_FILE=()
 
@@ -128,9 +129,13 @@ function import() {
     local functionNames=($(extract_functions --zsh-file "${absolutePath}"))
 
     # 12 rename the function name in absolutePath as the new name with a prefix of absolutePath
-    for oldFunName in ${functionNames[@]}; do
+    for lineNoAdnFunName in ${functionNames[@]}; do
+
+        local lineNo=${lineNoAdnFunName%:*}
+        local oldFunName="${lineNoAdnFunName##*:}"
+
         # 12.1 rename the function name
-        local newFunName="${absolutePath}:${oldFunName}"
+        local newFunName="${absolutePath}:${lineNo}:${oldFunName}"
         functions[$newFunName]=${functions[$oldFunName]}
         # 12.2 remove the old function name
         unset "functions[$oldFunName]"
@@ -141,7 +146,10 @@ function qjs() {
     ${ZMOD_DIR}/bin/qjs_$(uname -s)_$(uname -m) "$@"
 }
 
-typeset CALL_STACE=()
+typeset CALL_TRACE=()
+function get_call_trace_file() {
+    echo "${CALL_TRACE[@]}"
+}
 
 ##
 # call a function by alias name and function name
@@ -179,7 +187,8 @@ function call() {
     prevFilePath="${prevFilePath:A}"
 
     if [[ -z ${prevFilePath} && ${#CALL_STACE[@]} -gt 0 ]]; then
-     prevFilePath=${CALL_STACE[-1]}
+    local funcAliasName=${CALL_STACE[-1]}
+     prevFilePath=${funcAliasName%%:*}
     fi
     
     # 2.2 get the loaded path
@@ -214,20 +223,39 @@ function call() {
             ;;
     esac
     # 4 contact the function name with the loaded path and function name
-    local funcaliasName="${loadedFilePath}:${funcName}"
+    local lineNumbers=($(
+        grep -En "^function[[:space:]]+${funcName}\(\)|[[:space:]]*${funcName}\(\)" "${loadedFilePath}"  \
+          | sed -E "s/^([0-9]+):[[:space:]]*(function[[:space:]]+)*(.*)\(\).*/\1/g" \
+          | xargs
+    ))
+    local lineNumber=${lineNumbers[-1]}
+    local funcAliasName="${loadedFilePath}:${lineNumber}:${funcName}"
+
     # 5 check the function exists
-    if [[ -z ${functions[$funcaliasName]} ]]; then
+    if [[ -z ${functions[$funcAliasName]} ]]; then
         throw --error-message "the function ${aliasName}.${funcName} not exists"  --trace-level 2
         return ${FALSE}
     fi
     # 6 Add the loaded path to call stace
-    CALL_STACE+=("${loadedFilePath}")
+    CALL_STACE+=("${funcAliasName}")
 
     # 7 call the funcation with the args
     shift 1
-    ${funcaliasName} $@
+    ${funcAliasName} $@
 
     # 8 remove the loaded path from call stace
 
     CALL_STACE=(${CALL_STACE:0:-1})
 }
+
+import --from ./modules/m1.zsh --as m1
+
+# for funcName in ${(k)functions[@]}; do
+#     echo "funcName: ${funcName}"
+# done
+# /Users/wuchuheng/.zmod/src/modules/m2.zsh:3:m2
+call m1.m1
+# /Users/wuchuheng/.zmod/src/modules/m2.zsh:m2:212
+# command /Users/wuchuheng/.zmod/src/modules/m2.zsh:m2
+
+# /Users/wuchuheng/.zmod/src/modules/m1.zsh:m1:5

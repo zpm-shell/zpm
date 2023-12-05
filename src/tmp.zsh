@@ -1,15 +1,7 @@
 #!/usr/bin/env zsh
 
+# source src/utils/extract-functions.zsh
 
-# get the tmp funtion standard output but not the error
+# extract_functions --zsh-file src/utils/error.zsh
 
-tmpList=()
-
-tmpList+=("1")
-tmpList+=("2")
-tmpList+=("3")
-
-
-# print the last element of the array
-echo ${tmpList[-1]}
-
+#   |sed -E 's/^([0-9]+):.*+/\1/'
