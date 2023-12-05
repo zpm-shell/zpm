@@ -116,7 +116,7 @@ function import() {
         GLOBAL_SOURCE_FILES[$absolutePath]="${as}"
     fi
 
-    # 7 Verify Loop import
+    # 7 Verify circul importing file
     if [[ -n ${STACE_SOURCE_FILE[$absolutePath]} ]]; then
         # 7.1 print the loop import file path
         local errorMsg=''
@@ -154,8 +154,9 @@ function import() {
     fi
     # 10 add the import file path to stace
     STACE_SOURCE_FILE[${absolutePath}]="${from}"
+
     # 11 source the file
-    source ${absolutePath}
+    . ${absolutePath}
     # 12 remove the import file path from stace
     unset "STACE_SOURCE_FILE[${absolutePath}]"
 
