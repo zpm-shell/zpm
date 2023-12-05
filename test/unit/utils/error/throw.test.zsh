@@ -7,5 +7,5 @@ EOF
     local logFile="${ZMOD_DIR}/test/unit/utils/error/throw.test.log"
     # echo "${actualVal}" > "${logFile}"
     local expectedVal=$(cat "${logFile}")
-    expect_equal --expected "${actualVal}" --actual "${expectedVal}"
+    expect_equal --actual "${actualVal}" --expected "${expectedVal}"
 }

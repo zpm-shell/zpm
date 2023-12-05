@@ -8,7 +8,7 @@
    [90m7  |[0m     local logFile="${ZMOD_DIR}/test/unit/utils/error/throw.test.log"
    [90m8  |[0m     # echo "${actualVal}" > "${logFile}"
    [90m9  |[0m     local expectedVal=$(cat "${logFile}")
-   [90m10 |[0m     expect_equal --expected "${actualVal}" --actual "${expectedVal}"
+   [90m10 |[0m     expect_equal --actual "${actualVal}" --expected "${expectedVal}"
    [90m11 |[0m }
  test/unit/utils/error/throw.test.zsh:3
  src/boot/unit-test-boot.zsh:63
