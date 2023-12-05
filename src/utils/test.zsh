@@ -42,9 +42,32 @@ function _print_expected_error() {
 "
 }
 
+
+##
+# @param --expected {string} the expected value
+# @param --actual {string} the actual value
+# @return <boolean>
+##
 function expect_equal() {
-  local expected=$1
-  local actual=$2
+  local expected=''
+  local actual=''
+  for i in "$@"; do
+    case ${i} in
+      --expected)
+        expected=$2
+        shift 2;
+        ;;
+      --actual)
+        actual=$2
+        shift 2;
+        ;;
+    esac
+  done
+  if [[ -z ${actual} || -z ${expected} ]]; then
+        throw --error-message "the options --expected and --actual are required" --trace-level 2
+        return false
+  fi
+
   local ok="${TRUE}"
   if [[ "${expected}" != "${actual}" ]]; then
     local prevFileLine="${funcfiletrace[1]}"
