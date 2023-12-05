@@ -58,7 +58,7 @@ function print_number_line() {
     return "${FALSE}"
   fi
   # assert the line number was not greater than the file line
-  if (( ${lineNumber} > $(wc -l ${filePath} | awk '{print $1}') )); then
+  if (( ${lineNumber} > $(wc -l ${filePath} | awk '{print $1}') + 1  )); then
     echo "The line number must be less than the file line."
     return "${FALSE}"
   fi
