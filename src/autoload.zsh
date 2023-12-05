@@ -79,7 +79,7 @@ function import() {
             esac
             ;;
         @/*)
-            absolutePath="${ZMOD_APP_PATH}/${absolutePath:3}"
+            absolutePath="${ZMOD_APP_PATH}/${absolutePath:2}"
             ;;
         *)
             throw --error-message "the module file ${from} not exists" --exit-code 1 --trace-level 2
