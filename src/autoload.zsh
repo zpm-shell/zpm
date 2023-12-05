@@ -18,7 +18,24 @@ fi
 
 # global source files, which will be stored the loaded files
 typeset -A -g GLOBAL_SOURCE_FILES=()
+
+##
+# storage the stace source file,and the stace file path used to get the 
+# missing file in the call stack when the function name was renamed and 
+# missing the file path.
+##
 typeset -A -g STACE_SOURCE_FILE=()
+
+##
+# to map the importing file path to multiple alias names
+# the global variable is used to find the alias name in the imported file, 
+# and check the alias name in the imported file was used or not.
+# e.g.
+# IMPORT_FILE_MAP_ALIAS_NAMES=(
+#   [source_file1]="{"module_name1":true, "module_name2":true, ... }"
+#   ...
+# )
+typeset -A -g IMPORT_FILE_MAP_ALIAS_NAMES=()
 
 ##
 # @param --from {string} the module source path
@@ -57,12 +74,12 @@ function import() {
     #3 get the absolute path
     local absolutePath="${from}"
     local isExists="${TRUE}"
+    local prevFileLine="${funcfiletrace[1]}"
     case ${absolutePath} in
         /*)
             ;;
         .*)
             # 3.1 get the absolute prev file path
-            local prevFileLine="${funcfiletrace[1]}"
             if [[ ${prevFileLine:0:1} != '/' ]]; then
                 prevFileLine="${ZMOD_APP_PATH}/${prevFileLine}"
             fi
@@ -118,26 +135,43 @@ function import() {
     if [[ -n ${STACE_SOURCE_FILE[${absolutePath}]} ]]; then
         return ${TRUE}
     fi
-    # 8 add the import file path to stace
+    # 9 check the alias name was used in the import file
+    local prefFile=${prevFileLine%:*}
+    local prefFile=${prefFile:A}
+    local prefLineNo=${prevFileLine#*:}
+    if [[ -n ${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]} ]]; then
+        local aliasNamesJson="${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]}"
+        result=$(qjs ${ZMOD_APP_PATH}/src/js-scripts/src/alias-name-query.js "${aliasNamesJson}" -q "${as}" 2>&1)
+        # if the command executed successfully with the exit code 0, then the output will be the alias name
+        if [[ $? -eq 0 ]]; then
+            throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${ZMOD_APP_PATH}/}'" --trace-level 2 --exit-code 1
+            return ${FALSE}
+        else
+            IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="${aliasNamesJson:0:-1},\"${as}\":true}"
+        fi
+    else
+        IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="{\"${as}\":true}"
+    fi
+    # 10 add the import file path to stace
     STACE_SOURCE_FILE[${absolutePath}]="${from}"
-    # 9 source the file
+    # 11 source the file
     source ${absolutePath}
-    #f10 remove the import file path from stace
+    # 12 remove the import file path from stace
     unset "STACE_SOURCE_FILE[${absolutePath}]"
 
-    # 11 get the list of function names from the source file
+    # 13 get the list of function names from the source file
     local functionNames=($(extract_functions --zsh-file "${absolutePath}"))
 
-    # 12 rename the function name in absolutePath as the new name with a prefix of absolutePath
+    # 14 rename the function name in absolutePath as the new name with a prefix of absolutePath
     for lineNoAdnFunName in ${functionNames[@]}; do
 
         local lineNo=${lineNoAdnFunName%:*}
         local oldFunName="${lineNoAdnFunName##*:}"
 
-        # 12.1 rename the function name
+        # 14.1 rename the function name
         local newFunName="${absolutePath}:${lineNo}:${oldFunName}"
         functions[$newFunName]=${functions[$oldFunName]}
-        # 12.2 remove the old function name
+        # 14.2 remove the old function name
         unset "functions[$oldFunName]"
     done
 }
