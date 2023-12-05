@@ -22,3 +22,11 @@ function test_import_with_absolute_path() {
   local actualVal=$( ${ZMOD_DIR}/test/unit/autoload.test/m3.zsh:3:m3 )
   expect_equal --actual "${actualVal}" --expected "m3 func"
 }
+
+function test_import_circul() {
+  import --from "./circul1.zsh" --as circul1
+  local actualVal=$( ${ZMOD_DIR}/test/unit/autoload.test/circul1.zsh:5:circul1)
+  expect_equal --actual "${actualVal}" --expected "circul1"
+  actualVal=$( ${ZMOD_DIR}/test/unit/autoload.test/circul2.zsh:5:circul2)
+  expect_equal --actual "${actualVal}" --expected "circul2"
+}
