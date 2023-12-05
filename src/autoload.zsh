@@ -247,15 +247,3 @@ function call() {
 
     CALL_STACE=(${CALL_STACE:0:-1})
 }
-
-import --from ./modules/m1.zsh --as m1
-
-# for funcName in ${(k)functions[@]}; do
-#     echo "funcName: ${funcName}"
-# done
-# /Users/wuchuheng/.zmod/src/modules/m2.zsh:3:m2
-call m1.m1
-# /Users/wuchuheng/.zmod/src/modules/m2.zsh:m2:212
-# command /Users/wuchuheng/.zmod/src/modules/m2.zsh:m2
-
-# /Users/wuchuheng/.zmod/src/modules/m1.zsh:m1:5
