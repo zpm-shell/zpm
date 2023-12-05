@@ -1,7 +1,5 @@
 #!/usr/bin/env zsh
 
-# source src/utils/extract-functions.zsh
+source "src/autoload.zsh"
 
-# extract_functions --zsh-file src/utils/error.zsh
-
-#   |sed -E 's/^([0-9]+):.*+/\1/'
+expect_equal --expected "hello" --actual "1hello"

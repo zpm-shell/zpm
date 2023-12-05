@@ -8,5 +8,5 @@ EOF
     local logFile=test/unit/utils/error/print_number_line-val.log
     # echo "${actualVal}" > "${logFile}"
     local expectVal=$(cat "${logFile}")
-    expect_equal "${expectVal}" "${actualVal}"
+    expect_equal --expected "${expectVal}" --actual "${actualVal}"
 }

@@ -8,6 +8,6 @@
    [90m7  |[0m )
    [90m8  |[0m   # echo "${actualVal}" > test/unit/utils/debug/assert-gt-val.log
    [90m9  |[0m   local expectVal=$(cat test/unit/utils/debug/assert-gt-val.log)
-   [90m10 |[0m   expect_equal "${expectVal}" "${actualVal}"
+   [90m10 |[0m   expect_equal --expected "${expectVal}" --actual "${actualVal}"
  test/unit/utils/debug/assert_gt.test.zsh:4
  src/boot/unit-test-boot.zsh:63

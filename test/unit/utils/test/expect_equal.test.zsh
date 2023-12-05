@@ -2,10 +2,10 @@
 
 function test_expect_equal() {
   local actualVal=$(cat <<EOF
-$(expect_equal "1" "2")
+$(expect_equal --expected "1" --actual "2")
 EOF
 )
   local expectVal=$(cat test/unit/utils/test/expect-equal-val.log)
-  expect_equal "${expectVal}" "${actualVal}"
+  expect_equal --expected "${expectVal}" --actual "${actualVal}"
 
 }

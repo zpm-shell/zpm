@@ -8,4 +8,4 @@
    [90m8  |[0m     local logFile=test/unit/utils/error/print_number_line-val.log
    [90m9  |[0m     # echo "${actualVal}" > "${logFile}"
    [90m10 |[0m     local expectVal=$(cat "${logFile}")
-   [90m11 |[0m     expect_equal "${expectVal}" "${actualVal}"
+   [90m11 |[0m     expect_equal --expected "${expectVal}" --actual "${actualVal}"

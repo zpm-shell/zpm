@@ -7,5 +7,5 @@ EOF
 )
   # echo "${actualVal}" > test/unit/utils/debug/assert_equal-val.log
   local expectVal=$(cat test/unit/utils/debug/assert_equal-val.log)
-  expect_equal "${expectVal}" "${actualVal}"
+  expect_equal --expected "${expectVal}" --actual "${actualVal}"
 }
