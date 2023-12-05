@@ -1,7 +1,7 @@
-all: autoload
+all: unit-test
 
 unit-test:
-	zsh src/boot/unit-test-boot.zsh
+	ZMOD_DIR=${PWD} ZMOD_APP_PATH=${PWD} zsh src/boot/unit-test-boot.zsh
 
 mod:
 	zsh -c './bin/mod'

@@ -15,4 +15,6 @@ local unitTestFiles=(
   "${ZMOD_DIR}/test/unit/utils/error/throw.test.zsh"
   "${ZMOD_DIR}/test/unit/utils/error/throw_with_level_stack.test.zsh"
   "${ZMOD_DIR}/test/unit/utils/extract-functions/extract-functions.test.zsh"
+
+  "${ZMOD_DIR}/test/unit/autoload.test/autoload.test.zsh"
 )
