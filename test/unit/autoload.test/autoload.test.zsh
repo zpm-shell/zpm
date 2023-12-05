@@ -40,3 +40,9 @@ function test_same_as_name() {
   # echo "${actual}" > ${expectedValPath} 
   expect_equal --actual "${actual}" --expected "$(cat ${expectedValPath})"
 }
+
+function test_import_self() {
+  import --from ./m7.zsh --as m7
+  local actual=$( call m7.callSelfFunc)
+  expect_equal --actual "${actual}" --expected "hello"
+}
