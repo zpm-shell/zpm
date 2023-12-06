@@ -12,7 +12,7 @@ zmod install        install all the dependencies in your project
 zmod install <foo>  add the <foo> dependency to your project
 zmod test           run this project's tests
 zmod run <foo>      run the script named <foo>
-zmod init           create a zmod.json file
+zmod init           create a zmod.json5 file
 zmod --help,-h      print the help documentation
 zmod -v,--version   print the help documentation
 zmod [script.zsh]   execute the script
