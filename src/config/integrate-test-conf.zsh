@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 local integrateTestFiles=(
-
+  "${ZMOD_DIR}/test/integration/zmod-cli.test.zsh"
 )
 
 local confFile=''
