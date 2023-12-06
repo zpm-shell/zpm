@@ -47,9 +47,6 @@ function create_zmod_json5() {
   "version": "1.0.0",
   "description": "",
   "main": "lib/main.zsh",
-  "scripts": {
-    "start": "echo \"hello, ${packageName}\" && exit 1"
-  },
   "keywords": [],
   "author": "",
   "license": "MIT"
