@@ -17,4 +17,5 @@ local unitTestFiles=(
   "${ZMOD_DIR}/test/unit/utils/extract-functions/extract-functions.test.zsh"
 
   "${ZMOD_DIR}/test/unit/autoload.test/autoload.test.zsh"
+  ${ZMOD_DIR}/test/unit/call.test/call.test.zsh
 )
