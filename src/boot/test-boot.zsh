@@ -34,8 +34,6 @@ function setGlobalVariables() {
   eval "${globalVariableName}=${value}"
 }
 
-. ${ZMOD_DIR}/src/config/unit-test-conf.zsh
-
 function print_current_test_result() {
   local testFunc=$1
   local isCurrentTestOk=$2
@@ -44,8 +42,10 @@ function print_current_test_result() {
   fi
 }
 
+local testConfFile=$1
+local configFiles=($(source ${testConfFile}))
 local testFile='';
-for testFile in ${unitTestFiles[@]}; do
+for testFile in ${configFiles[@]}; do
   local relativeTestFile=${testFile#${ZMOD_DIR}/}
   echo "Test  ${relativeTestFile}"
   # load the test file

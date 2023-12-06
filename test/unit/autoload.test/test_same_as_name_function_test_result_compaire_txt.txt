@@ -11,4 +11,4 @@
    [90m40 |[0m   # echo "${actual}" > ${expectedValPath} 
    [90m41 |[0m   expect_equal --actual "${actual}" --expected "$(cat ${expectedValPath})"
  test/unit/autoload.test/autoload.test.zsh:36
- src/boot/unit-test-boot.zsh:63
+ src/boot/test-boot.zsh:63

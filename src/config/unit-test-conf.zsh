@@ -19,3 +19,8 @@ local unitTestFiles=(
   "${ZMOD_DIR}/test/unit/autoload.test/autoload.test.zsh"
   ${ZMOD_DIR}/test/unit/call.test/call.test.zsh
 )
+
+local confFile=''
+for confFile in ${unitTestFiles[@]}; do
+  echo "${confFile}"
+done

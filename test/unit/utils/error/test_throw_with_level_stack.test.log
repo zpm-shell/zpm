@@ -11,4 +11,4 @@
    [90m10 |[0m     expect_equal --actual "${actualVal}" --expected "${expectedVal}"
    [90m11 |[0m }
  test/unit/utils/error/throw_with_level_stack.test.zsh:3
- src/boot/unit-test-boot.zsh:63
+ src/boot/test-boot.zsh:63

@@ -10,4 +10,4 @@
    [90m9  |[0m   local expectVal=$(cat test/unit/utils/debug/assert_equal-val.log)
    [90m10 |[0m   expect_equal --expected "${expectVal}" --actual "${actualVal}"
  test/unit/utils/debug/assert_equal.test.zsh:4
- src/boot/unit-test-boot.zsh:63
+ src/boot/test-boot.zsh:63

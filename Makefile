@@ -1,13 +1,12 @@
-all: unit-test
+all: test
+
+test: unit-test integration-test
 
 unit-test:
-	ZMOD_DIR=${PWD} ZMOD_WORKSPACE=${PWD} zsh src/boot/unit-test-boot.zsh
+	ZMOD_DIR=${PWD} ZMOD_WORKSPACE=${PWD} zsh src/boot/test-boot.zsh src/config/unit-test-conf.zsh
 
-mod:
-	zsh -c './bin/mod'
+integration-test:
+	ZMOD_DIR=${PWD} ZMOD_WORKSPACE=${PWD} zsh src/boot/test-boot.zsh src/config/integrate-test-conf.zsh
 
 tmp:
 	ZMOD_DIR=${PWD} ZMOD_WORKSPACE=${PWD} zsh src/tmp/tmp.zsh
-
-autoload:
-	ZMOD_DIR=${PWD} ZMOD_WORKSPACE=${PWD} zsh src/autoload.zsh
