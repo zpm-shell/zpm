@@ -109,7 +109,7 @@ elif [[  ${isVersion} -eq ${TRUE} ]]; then
   exit ${TRUE};
 elif [[ ${isInit} -eq ${TRUE} ]]; then
   create_zmod_json5 "${initArgs}"
-elif [[ ${isInvalidArgs} ]]; then
+elif [[ ${isInvalidArgs} -eq ${TRUE} ]]; then
   cat <<EOF
 unknown arg: --incorect-args
 try 'zmod --help'
