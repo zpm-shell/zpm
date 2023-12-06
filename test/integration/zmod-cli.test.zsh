@@ -49,3 +49,15 @@ function test_zmod_cli() {
   local actualVal=$( ${ZMOD_DIR}/bin/zmod )
   expect_equal --actual "${actualVal}" --expected "$(get_help_docs)"
 }
+
+function test_zmod_cli_with_incorect_args() {
+  ${ZMOD_DIR}/bin/zmod --incorect-args >> /dev/null 2>&1  
+  expect_equal --actual "${?}" --expected "1"
+  local actualVal=$( ${ZMOD_DIR}/bin/zmod --incorect-args)
+  local expectVal=$(cat <<EOF
+unknown arg: --incorect-args
+try 'zmod --help'
+EOF
+)
+  expect_equal --actual "${actualVal}" --expected "${expectVal}"
+}
