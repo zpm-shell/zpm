@@ -1,24 +1,48 @@
 #!/usr/bin/env zsh
 
-local currentDir="$(dirname ${0:A})"
+local ZMOD_VERSION="0.0.1"
 
-source "${currentDir}/utils/error.zsh"
-source "${currentDir}/utils/debug.zsh"
+function print_zmod_docs() {
+  cat <<EOF
+zmod <command> [ script.zsh ]
 
-#echo "The absolute path of the current script is: $current_file"
+Usage:
 
-# the mod app base path
-typeset -g MOD_APP_BASE_PATH=$(pwd)
+zmod install        install all the dependencies in your project
+zmod install <foo>  add the <foo> dependency to your project
+zmod test           run this project's tests
+zmod run <foo>      run the script named <foo>
+zmod init           create a zmod.json file
+zmod --help,-h      print the help documentation
+zmod -v,--version   print the help documentation
+zmod [script.zsh]   execute the script
 
-
-##
-# @example: import fun1, fun2, fun3 from 'modules/m1'
-# @param {string} $1: the module name
-import() {
-
-  assert_egt 3 "$#"
-
-
+zmod@${ZMOD_VERSION} ${ZMOD_DIR}/bin/zmod
+EOF
 }
 
-import m1, m2
+if [[ $# -eq 0 ]]; then
+  print_zmod_docs;
+  exit 1;
+fi
+
+local args=("$@")
+for (( i = 1; i <= ${#args[@]}; i++ )); do
+  local arg=${args[$i]}
+  case ${arg}; in
+    --help|-h)
+      print_zmod_docs
+      exit 0
+      ;;
+    --version|-v)
+      echo "${ZMOD_VERSION}"
+      exit 0
+      ;;
+    *)
+      echo "unknown arg: ${arg}"
+      echo "try 'zmod --help'"
+      exit 1
+      ;;
+  esac
+done
+
