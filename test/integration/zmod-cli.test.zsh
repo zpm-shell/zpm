@@ -6,14 +6,14 @@ zmod <command> [ script.zsh ]
 
 Usage:
 
-zmod install        install all the dependencies in your project
-zmod install <foo>  add the <foo> dependency to your project
-zmod test           run this project's tests
-zmod run <foo>      run the script named <foo>
-zmod init           create a zmod.json5 file
-zmod --help,-h      print the help documentation
-zmod -v,--version   print the help documentation
-zmod [script.zsh]   execute the script
+zmod install                                install all the dependencies in your project
+zmod install <foo>                          add the <foo> dependency to your project
+zmod test                                   run this project's tests
+zmod run <foo>                              run the script named <foo>
+zmod init <repository/username/module-name> create a zmod.json5 file
+zmod --help,-h                              print the help documentation
+zmod -v,--version                           print the help documentation
+zmod [script.zsh]                           execute the script
 
 zmod@0.0.1 ${ZMOD_DIR}/bin/zmod
 EOF
