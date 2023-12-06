@@ -161,8 +161,8 @@ function throw() {
       stackNumberLine=${funcAliasName%:*}
       callStraceIndex=$(( ${callStraceIndex} - 1 ))
     fi
-    if [[ ${#stackNumberLine} -gt ${#ZMOD_APP_PATH} && ${stackNumberLine:0:${#ZMOD_APP_PATH}} == ${ZMOD_APP_PATH} ]]; then
-        stackNumberLine=${stackNumberLine#${ZMOD_APP_PATH}/}
+    if [[ ${#stackNumberLine} -gt ${#ZMOD_WORKSPACE} && ${stackNumberLine:0:${#ZMOD_WORKSPACE}} == ${ZMOD_WORKSPACE} ]]; then
+        stackNumberLine=${stackNumberLine#${ZMOD_WORKSPACE}/}
     fi
     printf " ${stackNumberLine}\n"
   done

@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 ZMOD_DIR=$(pwd)
-ZMOD_APP_PATH=$(pwd)
+ZMOD_WORKSPACE=$(pwd)
 
 . ${ZMOD_DIR}/src/utils/test.zsh;
 . ${ZMOD_DIR}/src/utils/error.zsh;

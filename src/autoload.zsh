@@ -12,8 +12,8 @@ fi
 . ${ZMOD_DIR}/src/utils/debug.zsh
 . ${ZMOD_DIR}/src/utils/extract-functions.zsh
 
-if [[ -z ${ZMOD_APP_PATH} ]]; then
-    throw --error-message "the ZMOD_APP_PATH is not set" --exit-code 1
+if [[ -z ${ZMOD_WORKSPACE} ]]; then
+    throw --error-message "the ZMOD_WORKSPACE is not set" --exit-code 1
 fi
 
 # global source files, which will be stored the loaded files
@@ -81,7 +81,7 @@ function import() {
         .*)
             # 3.1 get the absolute prev file path
             if [[ ${prevFileLine:0:1} != '/' ]]; then
-                prevFileLine="${ZMOD_APP_PATH}/${prevFileLine}"
+                prevFileLine="${ZMOD_WORKSPACE}/${prevFileLine}"
             fi
             local prevFile="${prevFileLine%:*}"
             local prevDir="${prevFile%/*}"
@@ -96,7 +96,7 @@ function import() {
             esac
             ;;
         @/*)
-            absolutePath="${ZMOD_APP_PATH}/${absolutePath:2}"
+            absolutePath="${ZMOD_WORKSPACE}/${absolutePath:2}"
             ;;
         *)
             throw --error-message "the module file ${from} not exists" --exit-code 1 --trace-level 2
@@ -141,10 +141,10 @@ function import() {
     local prefLineNo=${prevFileLine#*:}
     if [[ -n ${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]} ]]; then
         local aliasNamesJson="${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]}"
-        result=$(qjs ${ZMOD_APP_PATH}/src/js-scripts/src/alias-name-query.js "${aliasNamesJson}" -q "${as}" 2>&1)
+        result=$(qjs ${ZMOD_WORKSPACE}/src/js-scripts/src/alias-name-query.js "${aliasNamesJson}" -q "${as}" 2>&1)
         # if the command executed successfully with the exit code 0, then the output will be the alias name
         if [[ $? -eq 0 ]]; then
-            throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${ZMOD_APP_PATH}/}'" --trace-level 2 --exit-code 1
+            throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${ZMOD_WORKSPACE}/}'" --trace-level 2 --exit-code 1
             return ${FALSE}
         else
             IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="${aliasNamesJson:0:-1},\"${as}\":true}"
@@ -254,7 +254,7 @@ function call() {
             esac
             ;;
         @/*)
-            loadedFilePath="${ZMOD_APP_PATH}/${loadedFilePath:3}"
+            loadedFilePath="${ZMOD_WORKSPACE}/${loadedFilePath:3}"
             ;;
     esac
     # 4 contact the function name with the loaded path and function name
