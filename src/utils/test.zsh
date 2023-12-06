@@ -63,10 +63,6 @@ function expect_equal() {
         ;;
     esac
   done
-  if [[ -z ${actual} || -z ${expected} ]]; then
-        throw --error-message "the options --expected and --actual are required" --trace-level 2
-        return false
-  fi
 
   local ok="${TRUE}"
   if [[ "${expected}" != "${actual}" ]]; then
