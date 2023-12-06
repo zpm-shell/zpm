@@ -70,6 +70,8 @@ local isHelp=${FALSE}
 local isVersion=${FALSE}
 local isInit=${FALSE}
 local initArgs=''
+local isInvalidArgs=${FALSE}
+local invalidArgs=''
 local args=("$@")
 for (( i = 1; i <= ${#args[@]}; i++ )); do
   local arg=${args[$i]}
@@ -85,6 +87,15 @@ for (( i = 1; i <= ${#args[@]}; i++ )); do
       shift 1
       initArgs="$@"
       ;;
+    --*|-*)
+      isInvalidArgs=${TRUE}
+      invalidArgs="$1"
+      shift 1
+      # if the prefix --* or -* was not in $1, and then shift
+      if [[ $1 =~ "--*" ]]; then
+          shift 1
+      fi
+    ;;
     *)
       local filePath=$1
       isScript=${TRUE}
@@ -97,9 +108,16 @@ done
 if [[ ${isHelp} -eq ${TRUE} ]]; then
   print_zmod_docs;
 elif [[  ${isVersion} -eq ${TRUE} ]]; then
-  exit ${FALSE};
+  echo "${ZMOD_VERSION}"
+  exit ${TRUE};
 elif [[ ${isInit} -eq ${TRUE} ]]; then
   create_zmod_json5 "${initArgs}"
+elif [[ ${isInvalidArgs} ]]; then
+  cat <<EOF
+unknown arg: --incorect-args
+try 'zmod --help'
+EOF
+  exit ${FALSE}
 elif [[ ${isScript} -eq ${TRUE} ]]; then
  ZMOD_WORKSPACE=$(pwd)
  . ${ZMOD_DIR}/src/autoload.zsh --source "${scriptPath}"

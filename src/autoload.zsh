@@ -299,7 +299,7 @@ done
 
 if [[ -f ${sourceFile} ]]; then
     . ${sourceFile}
-else 
+elif [[ -n ${sourceFile} ]]; then
     throw --error-message "the file: ${sourceFile} was not exited" --exit-code 1
 fi
 
