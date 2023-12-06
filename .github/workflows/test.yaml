@@ -50,3 +50,8 @@ jobs:
             yum install -y make zsh
             make unit-test
           "
+      - name: Integration test
+        run: |
+          docker exec ${CONTAINER_NAME} bash -c "
+            make integration-test
+          "
