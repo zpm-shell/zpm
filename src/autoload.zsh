@@ -48,8 +48,10 @@ function import() {
     local from=''
     local as=''
     #1 parse arguments
-    for i in "$@"; do
-        case $i in
+    local args=("$@")
+    for (( i = 1; i <= ${#args[@]}; i++)); do
+        local arg=${args[$i]}
+        case $arg in
             --from*)
                 from="$2"
                 shift
@@ -282,3 +284,22 @@ function call() {
 
     CALL_STACE=(${CALL_STACE:0:-1})
 }
+
+local sourceFile=''
+local args=("$@")
+for (( i = 1; i <= ${#args[@]}; i++ )); do
+  local arg=${args[$i]}
+  case ${arg}; in
+    --source)
+        sourceFile=$2
+        shift 2
+    ;;
+  esac
+done
+
+if [[ -f ${sourceFile} ]]; then
+    . ${sourceFile}
+else 
+    throw --error-message "the file: ${sourceFile} was not exited" --exit-code 1
+fi
+

@@ -64,28 +64,43 @@ if [[ $# -eq 0 ]]; then
   exit 1;
 fi
 
+local isScript=${FALSE}
+local scriptPath=''
+local isHelp=${FALSE}
+local isVersion=${FALSE}
+local isInit=${FALSE}
+local initArgs=''
 local args=("$@")
 for (( i = 1; i <= ${#args[@]}; i++ )); do
   local arg=${args[$i]}
   case ${arg}; in
     --help|-h)
-      print_zmod_docs
-      exit 0
+      isHelp=${TRUE}
       ;;
     --version|-v)
-      echo "${ZMOD_VERSION}"
-      exit 0
+      isVersion=${TRUE}
       ;;
     init)
-      shift
-      create_zmod_json5
-      exit 0
+      isInit=${TRUE}
+      shift 1
+      initArgs="$@"
       ;;
     *)
-      echo "unknown arg: ${arg}"
-      echo "try 'zmod --help'"
-      exit 1
+      local filePath=$1
+      isScript=${TRUE}
+      scriptPath="$1"
+      shift 1
       ;;
   esac
 done
 
+if [[ ${isHelp} -eq ${TRUE} ]]; then
+  print_zmod_docs;
+elif [[  ${isVersion} -eq ${TRUE} ]]; then
+  exit ${FALSE};
+elif [[ ${isInit} -eq ${TRUE} ]]; then
+  create_zmod_json5 "${initArgs}"
+elif [[ ${isScript} -eq ${TRUE} ]]; then
+ ZMOD_WORKSPACE=$(pwd)
+ . ${ZMOD_DIR}/src/autoload.zsh --source "${scriptPath}"
+fi

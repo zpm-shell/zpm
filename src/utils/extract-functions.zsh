@@ -9,8 +9,10 @@ function extract_functions() {
         return ${FALSE}
     fi
     local filePath=''
-    for i in "${@}"; do
-        case "${i}" in
+    local args=("$@")
+    for (( i = 1; i <= ${#args[@]}; i++ )); do
+        local arg=${args[$i]}
+        case ${arg} in
             --zsh-file)
                 filePath="$2"
                 shift

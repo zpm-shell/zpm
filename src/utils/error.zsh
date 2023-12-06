@@ -26,8 +26,10 @@ function print_number_line() {
   local filePath=''
   local lineNumber=''
   # parse the arguments
-  for i in "$@"; do
-    case $i in
+  local args=("$@")
+  for (( i = 1; i <= ${#args[@]}; i++ )); do
+    local arg=${args[$i]}
+    case $arg in
       --file-path)
         filePath="$2"
         shift # past argument=value
@@ -106,8 +108,10 @@ function throw() {
   local funcFileTraceLevel=1
   local exitCode=''
   # parse the arguments
-  for i in "$@"; do
-    case $i in
+local args=("$@")
+for (( i = 1; i <= ${#args[@]}; i++ )); do
+  local arg=${args[$i]}
+    case $arg in
       --error-message)
         errorMessage="$2"
         shift # past argument=value
