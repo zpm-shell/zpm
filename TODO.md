@@ -16,3 +16,5 @@
         ]
     }
 ```
+
+4. [ ] add cli: zmod test in zmod-cli, the cli will execute the test/test.zsh script to test the zsh scripts under the test/**
