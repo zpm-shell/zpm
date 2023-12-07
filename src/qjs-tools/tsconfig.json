@@ -14,5 +14,10 @@
     "noImplicitReturns": true // Ensure that all functions specify a return type
   },
   // the files will exclude before compile
-  "exclude": ["node_modules", "dist", "src/lib"]
+  "exclude": [
+    "node_modules",
+     "dist",
+      "src/lib", "tests", 
+  "jest.config.ts"
+]
 }

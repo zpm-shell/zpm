@@ -1,6 +1,8 @@
 .idea
-node_modules
 tmp**
 src/runtime
 src/tmp/
-dist/
+
+node_modules
+src/qjs-tools/dist/
+src/qjs-tools/coverage/

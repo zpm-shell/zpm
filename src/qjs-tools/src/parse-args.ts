@@ -25,13 +25,10 @@ type ProgramArgsType = {
   commands: CommandType[];
 };
 
-type CliArgsParsedResultType = {
-  command: {
-    name: string;
-    value: string;
-    args: string[];
-    options: Record<string, string>;
-  };
+type CliCommandParsedResultType = {
+  value: string;
+  args: string[];
+  options: Record<string, string>;
 };
 
 /**
@@ -43,9 +40,15 @@ type CliArgsParsedResultType = {
 async function program(
   argsConf: ProgramArgsType,
   arg: string
-): Promise<CliArgsParsedResultType> {
-  const isHelp: boolean = false;
-  return {};
+): Promise<CliCommandParsedResultType> {
+  // let isHelp: boolean = false;
+  console.log(argsConf);
+  console.log(arg);
+  return {
+    value: "",
+    args: [],
+    options: {},
+  };
 }
 
 export default program;
