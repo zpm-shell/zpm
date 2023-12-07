@@ -30,7 +30,6 @@ EOF
 # @return <boolean>
 ##
 function create_zmod_json5() {
-
   local zmodJson5="zmod.json5"
   if [[ -f ${zmodJson5} ]]; then
     echo "${zmodJson5} already exitst"
@@ -55,11 +54,6 @@ EOF
 
 cat ${zmodJson5};
 }
-
-if [[ $# -eq 0 ]]; then
-  print_zmod_docs;
-  exit 1;
-fi
 
 local isScript=${FALSE}
 local scriptPath=''
@@ -102,7 +96,17 @@ for (( i = 1; i <= ${#args[@]}; i++ )); do
   esac
 done
 
-if [[ ${isHelp} -eq ${TRUE} ]]; then
+[[ -z "${ZMOD_WORKSPACE}" ]] && ZMOD_WORKSPACE=$(pwd)
+
+local zmodJson5="${ZMOD_WORKSPACE}/zmod.json5"
+if [[ ! -f ${zmodJson5} ]]; then
+    echo "zmod.json5 not found in ${ZMOD_WORKSPACE}"; exit ${FALSE};
+fi
+
+if [[ ${#args[@]} -eq 0 ]]; then
+  print_zmod_docs;
+  exit 1;
+elif [[ ${isHelp} -eq ${TRUE} ]]; then
   print_zmod_docs;
 elif [[  ${isVersion} -eq ${TRUE} ]]; then
   echo "${ZMOD_VERSION}"
@@ -116,6 +120,5 @@ try 'zmod --help'
 EOF
   exit ${FALSE}
 elif [[ ${isScript} -eq ${TRUE} ]]; then
- ZMOD_WORKSPACE=$(pwd)
  . ${ZMOD_DIR}/src/autoload.zsh --source "${scriptPath}"
 fi
