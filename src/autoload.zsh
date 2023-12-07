@@ -143,7 +143,7 @@ function import() {
     local prefLineNo=${prevFileLine#*:}
     if [[ -n ${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]} ]]; then
         local aliasNamesJson="${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]}"
-        result=$(qjs ${ZMOD_WORKSPACE}/src/js-scripts/src/alias-name-query.js "${aliasNamesJson}" -q "${as}" 2>&1)
+        result=$(qjs ${ZMOD_WORKSPACE}/src/qjs-tools/src/alias-name-query.js "${aliasNamesJson}" -q "${as}" 2>&1)
         # if the command executed successfully with the exit code 0, then the output will be the alias name
         if [[ $? -eq 0 ]]; then
             throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${ZMOD_WORKSPACE}/}'" --trace-level 2 --exit-code 1
@@ -231,7 +231,7 @@ function call() {
     # 2.2 get the loaded path
     local loadedFilePath=$(
         ${ZMOD_DIR}/bin/qjs_$(uname -s)_$(uname -m) \
-        ${ZMOD_DIR}/src/js-scripts/src/get_loaded_path_in_zsh_file.js \
+        ${ZMOD_DIR}/src/qjs-tools/src/get_loaded_path_in_zsh_file.js \
         -f ${prevFilePath} -a ${aliasName}
     )
     if [[ ${loadedFilePath} == '{}' ]]; then
