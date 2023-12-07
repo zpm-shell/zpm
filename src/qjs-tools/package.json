@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec \"npm run prettier && npm run lint:fix && npm run dev:build\"",
+    "dev": "nodemon --exec \"pnpm prettier && pnpm lint:fix && pnpm dev:build && pnpm test\"",
     "test": "jest",
     "prettier": "prettier --write .",
     "lint:fix": "eslint --fix '**/*.{ts,mjs,ts}'",
