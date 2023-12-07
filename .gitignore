@@ -3,3 +3,4 @@ node_modules
 tmp**
 src/runtime
 src/tmp/
+dist/

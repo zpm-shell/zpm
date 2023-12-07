@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // the target js version will be compiled
+    "module": "ES2020", // the js module will be output
+    "declaration": true, // ouput the declaration file
+    "sourceMap": true, // ouput the source map file,
+    "outDir": "dist", // output directory
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+    "rootDir": "src", // the root directory will be compiled
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+    "strict": true /* Enable all strict type-checking options. */,
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+    "noImplicitAny": true, // Ensure that no expressions are implicitly 'any'
+    "noImplicitReturns": true // Ensure that all functions specify a return type
+  },
+  // the files will exclude before compile
+  "exclude": ["node_modules", "dist", "src/lib"]
+}

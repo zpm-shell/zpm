@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon --exec \"npm run prettier && npm run lint:fix && npm run dev:build\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "prettier --write .",
-    "lint:fix": "eslint --fix '**/*.{ts,mjs,ts}'"
+    "lint:fix": "eslint --fix '**/*.{ts,mjs,ts}'",
+    "dev:build": "tsc -p tsconfig.json"
   },
   "engines": {
     "node": ">=20.10.0"
@@ -18,8 +20,10 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
-    "eslint": "^8.54.0",
+    "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.0.0",
-    "prettier": "^3.1.0"
+    "nodemon": "^3.0.2",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.3"
   }
 }

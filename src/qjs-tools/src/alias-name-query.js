@@ -1,5 +1,5 @@
-import parseArgs from "./libs/quckjs_args_parser/dist/index.js"
-import * as std from "std"
+import parseArgs from "./libs/quckjs_args_parser/dist/index.js";
+import * as std from "std";
 
 parseArgs(
   {
@@ -25,20 +25,19 @@ parseArgs(
   scriptArgs.slice(1)
 )
   .then((result) => {
-    const jsonTxt  = result.regularArgs[0];
+    const jsonTxt = result.regularArgs[0];
     const queryPath = result.options.query;
     const jsonObj = JSON.parse(jsonTxt);
     // if the jsonObj contains a property with the queryPath,
     if (jsonObj.hasOwnProperty(queryPath)) {
       // then print the value of that property
       console.log(jsonObj[queryPath]);
-      std.exit(0)
+      std.exit(0);
     } else {
       // otherwise, print an error message
       console.log(`Error: ${queryPath} not found in ${jsonTxt}`);
-      std.exit(1)
+      std.exit(1);
     }
-    
   })
   .catch((err) => {
     console.log(err.message);
