@@ -51,7 +51,7 @@ jobs:
             pwd
             ls -ahl
             export PATH=${PATH}:$(pwd)/bin;
-            qjs --version
+            bin/qjs --version
             make unit-test;
           "
       - name: Integration test
