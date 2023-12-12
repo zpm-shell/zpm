@@ -49,6 +49,7 @@ jobs:
           docker exec ${CONTAINER_NAME} bash -c "
             yum install -y make zsh;
             pwd
+            ls -ahl
             export PATH=${PATH}:$(pwd)/bin;
             qjs --version
             make unit-test;
@@ -58,6 +59,7 @@ jobs:
           docker exec ${CONTAINER_NAME} bash -c "
             export PATH=${PATH}:$(pwd)/bin;
             pwd;
+            ls -ahl
             qjs --version
             make integration-test;
           "
