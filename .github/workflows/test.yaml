@@ -58,3 +58,13 @@ jobs:
             export PATH=\${PATH}:\$(pwd)/bin;
             make integration-test;
           "
+  macos_x86:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+    
+      - name: Run commands on macOS
+        run: |
+          export PATH=${PATH}:$(pwd)/bin;
+          make test
