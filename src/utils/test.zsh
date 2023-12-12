@@ -51,8 +51,10 @@ function _print_expected_error() {
 function expect_equal() {
   local expected=''
   local actual=''
-  for i in "$@"; do
-    case ${i} in
+  local args=("$@")
+  for (( i = 1; i <= ${#args[@]}; i++ )); do
+    local arg=${args[$i]}
+    case ${arg} in
       --expected)
         expected=$2
         shift 2;
