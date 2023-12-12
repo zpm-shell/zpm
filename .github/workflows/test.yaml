@@ -48,10 +48,12 @@ jobs:
         run: |
           docker exec ${CONTAINER_NAME} bash -c "
             yum install -y make zsh
+            export PATH=${PATH}:$(pwd)/bin
             make unit-test
           "
       - name: Integration test
         run: |
           docker exec ${CONTAINER_NAME} bash -c "
+            export PATH=${PATH}:$(pwd)/bin
             make integration-test
           "
