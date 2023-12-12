@@ -47,13 +47,16 @@ jobs:
       - name: Unit test
         run: |
           docker exec ${CONTAINER_NAME} bash -c "
-            yum install -y make zsh
-            export PATH=${PATH}:$(pwd)/bin
-            make unit-test
+            yum install -y make zsh;
+            export PATH=${PATH}:$(pwd)/bin;
+            qjs --version
+            make unit-test;
           "
       - name: Integration test
         run: |
           docker exec ${CONTAINER_NAME} bash -c "
-            export PATH=${PATH}:$(pwd)/bin
-            make integration-test
+            export PATH=${PATH}:$(pwd)/bin;
+            pwd;
+            qjs --version
+            make integration-test;
           "
