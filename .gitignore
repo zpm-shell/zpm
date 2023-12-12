@@ -4,5 +4,4 @@ src/runtime
 src/tmp/
 
 node_modules
-src/qjs-tools/dist/
 src/qjs-tools/coverage/
