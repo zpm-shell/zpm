@@ -1,0 +1,72 @@
+name: Build qjs binary
+
+on:
+  push:
+    branches:
+      - build_cli_bin
+
+jobs:
+  build_linux_x86:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run commands on CentOS 8
+        run: |
+          docker pull centos:centos8.4.2105
+          docker run --rm -v $PWD:/workdir -w /workdir centos:8 bash -c "
+          rm -rf /etc/yum.repos.d/*
+          cat .github/workflows/CentOS-Base.repo > /etc/yum.repos.d/CentOS-Base.repo
+          cat /etc/yum.repos.d/CentOS-Base.repo
+          ls -ahl /etc/yum.repos.d/*
+          yum install -y make zsh git gcc cmake clang lld ninja-build clangd 
+          "
+      - name: Build binary
+        run: |
+          git clone https://github.com/wuchuheng/slowjs slowjs
+          cd slowjs
+          export CC=clang
+          cmake -S . --preset=default
+          cmake --build --preset=qjs
+      # - name: Send mail
+      #   uses: dawidd6/action-send-mail@v2
+      #   with:
+      #     # Use secrets for sensitive data
+      #     server_address: ${{ secrets.EMAIL_HOST }}
+      #     server_port: ${{ secrets.EMAIL_PORT }}
+      #     username: ${{ secrets.EMAIL_USERNAME }}
+      #     password: ${{ secrets.EMAIL_PASSWORD }}
+      #     subject: GitHub Action Email with Attachment
+      #     # Comma-separated string for multiple recipients
+      #     to: ${{ secrets.EMAIL_TO }}
+      #     from: ${{ secrets.EMAIL_FROM }}
+      #     # Literal body:
+      #     body: Email body in plain text
+      #     # Alternatively, use a file for the body:
+      #     # body_file: path/to/email/body.txt
+      #     attachments: src/cli/1_qjs_cli/bin/qjs_linux_x86 # Comma-separated string for multiple attachments
+      # - name: rename qjs as jqs_linux_x86
+      #   run: |
+      #     echo $USER
+
+#  ubuntu:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#      - name: install zsh
+#        run: sudo apt install -y zsh
+#      - name: Run commands on Ubuntu
+#        run: |
+#          ls -ahl
+#          make show_os_type
+#
+#  macos_x86:
+#    runs-on: macos-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      - name: Run commands on macOS
+#        run: |
+#          make show_os_type
