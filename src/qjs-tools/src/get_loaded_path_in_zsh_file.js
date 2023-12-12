@@ -1,5 +1,5 @@
-import parseArgs from "./libs/quckjs_args_parser/dist/index.js";
-import { readFile } from "./libs/std.mjs";
+import parseArgs from "../dist/quckjs-args-parser";
+import { readFile } from "../dist/std";
 import * as std from "std";
 
 function getAliasNameFromZshFile(filePath, aliasName) {

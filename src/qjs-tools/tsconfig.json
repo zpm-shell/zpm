@@ -1,11 +1,10 @@
 {
   "include": [
     "src/**/*.ts", // the files will be compiled
-    "src/types/**/*"
   ],
   "compilerOptions": {
+    "typeRoots": ["node_modules/@types", "src/types"], // the type roots
     "target": "ES2020", // the target js version will be compiled
-    // "module": "ES2020", // the js module will be output
     "declaration": true, // ouput the declaration file
     "sourceMap": true, // ouput the source map file,
     "outDir": "dist", // output directory

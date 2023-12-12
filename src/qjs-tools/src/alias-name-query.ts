@@ -1,5 +1,27 @@
-import parseArgs from "./libs/quckjs_args_parser/dist/index.js";
+/**
+ *  the script to query the alias name in the json text given the query path in cli
+ *  @example
+ * ``` bash
+ *  $ qjs alias-name-query.js --json-txt {"aliasName1": true, "aliasName2": true, ...} --query aliasName1
+ *  true # <-- if the key name in the json and then output the v
+
+
+export function exit(arg0: number) {
+  throw new Error("Function not implemented.");
+}
+export function exit(arg0: number) {
+  throw new Error("Function not implemented.");
+}
+alue
+ * ```
+ *  @author wuchuheng<root@wuchuheng.com>
+ *  @date 2023/12/11
+ */
+
 import * as std from "std";
+import parseArgs from "./quckjs-args-parser";
+
+declare const scriptArgs: string[];
 
 parseArgs(
   {
@@ -26,10 +48,10 @@ parseArgs(
 )
   .then((result) => {
     const jsonTxt = result.regularArgs[0];
-    const queryPath = result.options.query;
+    const queryPath: string = result.options.query as string;
     const jsonObj = JSON.parse(jsonTxt);
     // if the jsonObj contains a property with the queryPath,
-    if (jsonObj.hasOwnProperty(queryPath)) {
+    if (Object.prototype.hasOwnProperty.call(jsonObj, queryPath)) {
       // then print the value of that property
       console.log(jsonObj[queryPath]);
       std.exit(0);

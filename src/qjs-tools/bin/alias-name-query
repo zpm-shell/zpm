@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+##
+#   the script to query the alias name in the json text given the query path in cli
+#   @example
+#  ``` bash
+#   $ bin/alias-name-query '{"aliasName1": true, "aliasName2": true }' --query aliasName1 
+#   true # <-- if the key name in the json and then output the value
+#  ```
+#   @author wuchuheng<root@wuchuheng.com>
+#   @date 2023/12/11
+##
+
+# get current directory 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+qjs ${DIR}/../dist/alias-name-query.js "$@"
+
