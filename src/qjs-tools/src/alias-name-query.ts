@@ -21,8 +21,6 @@ alue
 import * as std from "std";
 import parseArgs from "./quckjs-args-parser";
 
-declare const scriptArgs: string[];
-
 parseArgs(
   {
     name: "alias-name-query",

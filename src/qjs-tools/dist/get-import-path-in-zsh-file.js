@@ -1,5 +1,5 @@
-import parseArgs from "../dist/quckjs-args-parser";
-import { readFile } from "../dist/std";
+import parseArgs from "./quckjs-args-parser";
+import { readFile } from "./std";
 import * as std from "std";
 function getAliasNameFromZshFile(filePath, aliasName) {
     const fileContent = readFile(filePath);
@@ -8,7 +8,10 @@ function getAliasNameFromZshFile(filePath, aliasName) {
     const regexPattern = `\\s*import\\s*--from\\s+["|']?([\\.|\\/|a-z|A-Z|0-9|\\-|\\_]*)["|']?\\s+--as\\s+${aliasName}\\s*`;
     const r = new RegExp(regexPattern);
     const match = fileContent.match(r);
-    if (match.legth < 1) {
+    if (!match) {
+        std.exit(1);
+    }
+    if (match.length === 0) {
         std.exit(1);
     }
     else {
@@ -45,4 +48,4 @@ parseArgs({
     .catch((err) => {
     console.log(JSON.stringify(err));
 });
-//# sourceMappingURL=get_loaded_path_in_zsh_file.js.map
+//# sourceMappingURL=get-import-path-in-zsh-file.js.map

@@ -1,22 +1,26 @@
-import parseArgs from "../dist/quckjs-args-parser";
-import { readFile } from "../dist/std";
+import parseArgs from "./quckjs-args-parser";
+import { readFile } from "./std";
 import * as std from "std";
 
-function getAliasNameFromZshFile(filePath, aliasName) {
+function getAliasNameFromZshFile(filePath: string, aliasName: string): void {
   const fileContent = readFile(filePath);
   // get the alias name from the zsh file: like the string: import --from ./src/index.js --as index, and i just want the index
   //   const regexPattern = `\$\{\{\s*\s*\}\}`;
   const regexPattern = `\\s*import\\s*--from\\s+["|']?([\\.|\\/|a-z|A-Z|0-9|\\-|\\_]*)["|']?\\s+--as\\s+${aliasName}\\s*`;
   const r = new RegExp(regexPattern);
   const match = fileContent.match(r);
-  if (match.legth < 1) {
+  if (!match) {
+    std.exit(1);
+  }
+  if (match!.length ===  0) {
     std.exit(1);
   } else {
-    const tagName = match[1];
+    const tagName = match![1];
     console.log(tagName); // Outputs: error
     std.exit(0);
   }
 }
+
 
 const args = scriptArgs.slice(1);
 
@@ -46,8 +50,8 @@ parseArgs(
 )
   .then((result) => {
     getAliasNameFromZshFile(
-      result.options["file-path"],
-      result.options["alias-name"]
+      result.options["file-path"] as string,
+      result.options["alias-name"] as string
     );
   })
   .catch((err) => {

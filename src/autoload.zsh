@@ -224,14 +224,13 @@ function call() {
      prevFilePath=${funcAliasName%%:*}
     fi
     
-    # 2.2 get the loaded path
+    # 2.2 get the import path in the current file with the --as name
     local loadedFilePath=$(
-        ${ZMOD_DIR}/bin/qjs \
-        ${ZMOD_DIR}/src/qjs-tools/src/get_loaded_path_in_zsh_file.js \
-        -f ${prevFilePath} -a ${aliasName}
+        ${ZMOD_DIR}/src/qjs-tools/bin/get-import-path-in-zsh-file \
+        -f ${prevFilePath} -a ${aliasName} 2>&1
     )
-    if [[ ${loadedFilePath} == '{}' ]]; then
-        throw --error-message "get the loaded path failed: ${loadedFilePath}"  --trace-level 2
+    if [[ $? -ne 0 ]]; then
+        throw --error-message "get the import path failed: ${loadedFilePath}"  --trace-level 2
         return ${FALSE}
     fi
 
