@@ -1,3 +1,14 @@
+//
+// the script to query the alias name in the json text given the query path in cli
+// @example
+//``` bash
+// $ bin/get-import-path-in-zsh-file  -f <zsh file path> -a <as name>
+// <file path> # <-- if the key name in the json and then output the value
+//```
+// @author wuchuheng<root@wuchuheng.com>
+// @date 2023/12/12
+//
+
 import parseArgs from "./quckjs-args-parser";
 import { readFile } from "./std";
 import * as std from "std";
