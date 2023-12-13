@@ -1,6 +1,6 @@
 .idea
 tmp**
-src/runtime
+runtime
 src/tmp/
 
 node_modules

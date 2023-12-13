@@ -1,12 +1,12 @@
 #!/usr/bin/env zsh
 
-ZMOD_DIR=$(pwd)
-ZMOD_WORKSPACE=$(pwd)
+ZPM_DIR=$(pwd)
+ZPM_WORKSPACE=$(pwd)
 
-. ${ZMOD_DIR}/src/utils/test.zsh;
-. ${ZMOD_DIR}/src/utils/error.zsh;
-. ${ZMOD_DIR}/src/utils/debug.zsh; 
-. ${ZMOD_DIR}/src/utils/extract-functions.zsh;
+. ${ZPM_DIR}/src/utils/test.zsh;
+. ${ZPM_DIR}/src/utils/error.zsh;
+. ${ZPM_DIR}/src/utils/debug.zsh; 
+. ${ZPM_DIR}/src/utils/extract-functions.zsh;
 
 TRUE=0
 FALSE=1
@@ -46,7 +46,7 @@ local testConfFile=$1
 local configFiles=($(source ${testConfFile}))
 local testFile='';
 for testFile in ${configFiles[@]}; do
-  local relativeTestFile=${testFile#${ZMOD_DIR}/}
+  local relativeTestFile=${testFile#${ZPM_DIR}/}
   echo "Test  ${relativeTestFile}"
   # load the test file
   . ${testFile}

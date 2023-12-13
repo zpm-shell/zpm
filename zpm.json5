@@ -1,5 +1,5 @@
 {
-  "name": ".zmod",
+  "name": ".zpm",
   "version": "1.0.0",
   "description": "",
   "main": "lib/main.zsh",

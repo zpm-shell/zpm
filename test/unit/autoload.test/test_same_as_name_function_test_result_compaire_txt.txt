@@ -7,7 +7,7 @@
  [91;1m>[0m [90m36 |[0m   import --from "./m4.zsh" --as circul1;
    [90m37 |[0m   import --from "./m5.zsh" --as circul1
    [90m38 |[0m   )
-   [90m39 |[0m   local expectedValPath="${ZMOD_DIR}/test/unit/autoload.test/test_same_as_name_function_test_result_compaire_txt.txt"
+   [90m39 |[0m   local expectedValPath="${ZPM_DIR}/test/unit/autoload.test/test_same_as_name_function_test_result_compaire_txt.txt"
    [90m40 |[0m   # echo "${actual}" > ${expectedValPath} 
    [90m41 |[0m   expect_equal --actual "${actual}" --expected "$(cat ${expectedValPath})"
  test/unit/autoload.test/autoload.test.zsh:36

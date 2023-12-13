@@ -3,36 +3,36 @@
 TRUE=0
 FALSE=1
 
-local ZMOD_VERSION="0.0.1"
+local ZPM_VERSION="0.0.1"
 
-function print_zmod_docs() {
+function print_zpm_docs() {
   cat <<EOF
-zmod <command> [ script.zsh ]
+zpm <command> [ script.zsh ]
 
 Usage:
 
-zmod install                                install all the dependencies in your project
-zmod install <foo>                          add the <foo> dependency to your project
-zmod test                                   run this project's tests
-zmod run <foo>                              run the script named <foo>
-zmod init <repository/username/module-name> create a zmod.json5 file
-zmod --help,-h                              print the help documentation
-zmod -v,--version                           print the help documentation
-zmod [script.zsh]                           execute the script
+zpm install                                install all the dependencies in your project
+zpm install <foo>                          add the <foo> dependency to your project
+zpm test                                   run this project's tests
+zpm run <foo>                              run the script named <foo>
+zpm init <repository/username/module-name> create a zpm.json5 file
+zpm --help,-h                              print the help documentation
+zpm -v,--version                           print the help documentation
+zpm [script.zsh]                           execute the script
 
-zmod@${ZMOD_VERSION} ${ZMOD_DIR}/bin/zmod
+zpm@${ZPM_VERSION} ${ZPM_DIR}/bin/zpm
 EOF
 }
 
 ##
-# create a zmod.json5
+# create a zpm.json5
 # @params $1 {string} the package name
 # @return <boolean>
 ##
-function create_zmod_json5() {
-  local zmodJson5="zmod.json5"
-  if [[ -f ${zmodJson5} ]]; then
-    echo "${zmodJson5} already exitst"
+function create_zpm_json5() {
+  local zpmJson5="zpm.json5"
+  if [[ -f ${zpmJson5} ]]; then
+    echo "${zpmJson5} already exitst"
     exit ${FALSE};
   fi
   local packageName="$1"
@@ -40,7 +40,7 @@ function create_zmod_json5() {
       local currentDir=$(pwd)
       local packageName=${currentDir##*/}
   fi
-  cat > ${zmodJson5} << EOF
+  cat > ${zpmJson5} << EOF
 {
   "name": "${packageName}",
   "version": "1.0.0",
@@ -52,7 +52,7 @@ function create_zmod_json5() {
 }
 EOF
 
-cat ${zmodJson5};
+cat ${zpmJson5};
 }
 
 local isScript=${FALSE}
@@ -96,29 +96,29 @@ for (( i = 1; i <= ${#args[@]}; i++ )); do
   esac
 done
 
-[[ -z "${ZMOD_WORKSPACE}" ]] && ZMOD_WORKSPACE=$(pwd)
+[[ -z "${ZPM_WORKSPACE}" ]] && ZPM_WORKSPACE=$(pwd)
 
-local zmodJson5="${ZMOD_WORKSPACE}/zmod.json5"
-if [[ ! -f ${zmodJson5} ]]; then
-    echo "zmod.json5 not found in ${ZMOD_WORKSPACE}"; exit ${FALSE};
+local zpmJson5="${ZPM_WORKSPACE}/zpm.json5"
+if [[ ! -f ${zpmJson5} ]]; then
+    echo "zpm.json5 not found in ${ZPM_WORKSPACE}"; exit ${FALSE};
 fi
 
 if [[ ${#args[@]} -eq 0 ]]; then
-  print_zmod_docs;
+  print_zpm_docs;
   exit 1;
 elif [[ ${isHelp} -eq ${TRUE} ]]; then
-  print_zmod_docs;
+  print_zpm_docs;
 elif [[  ${isVersion} -eq ${TRUE} ]]; then
-  echo "${ZMOD_VERSION}"
+  echo "${ZPM_VERSION}"
   exit ${TRUE};
 elif [[ ${isInit} -eq ${TRUE} ]]; then
-  create_zmod_json5 "${initArgs}"
+  create_zpm_json5 "${initArgs}"
 elif [[ ${isInvalidArgs} -eq ${TRUE} ]]; then
   cat <<EOF
 unknown arg: --incorect-args
-try 'zmod --help'
+try 'zpm --help'
 EOF
   exit ${FALSE}
 elif [[ ${isScript} -eq ${TRUE} ]]; then
- . ${ZMOD_DIR}/src/autoload.zsh --source "${scriptPath}"
+ . ${ZPM_DIR}/src/autoload.zsh --source "${scriptPath}"
 fi

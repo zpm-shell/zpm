@@ -4,7 +4,7 @@ function test_throw_with_level_stack() {
 $(throw --error-message "error message" --trace-level 1)
 EOF
 )
-    local logFile="${ZMOD_DIR}/test/unit/utils/error/test_throw_with_level_stack.test.log"
+    local logFile="${ZPM_DIR}/test/unit/utils/error/test_throw_with_level_stack.test.log"
     # echo "${actualVal}" > "${logFile}"
     local expectedVal=$(cat "${logFile}")
     expect_equal --actual "${actualVal}" --expected "${expectedVal}"

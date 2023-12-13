@@ -3,17 +3,17 @@
 TRUE=0
 FALSE=1
 
-if [[ -z ${ZMOD_DIR} ]]; then
-    echo "ZMOD_DIR is not set"; exit 1;
+if [[ -z ${ZPM_DIR} ]]; then
+    echo "ZPM_DIR is not set"; exit 1;
 fi
 
-. ${ZMOD_DIR}/src/utils/test.zsh
-. ${ZMOD_DIR}/src/utils/error.zsh
-. ${ZMOD_DIR}/src/utils/debug.zsh
-. ${ZMOD_DIR}/src/utils/extract-functions.zsh
+. ${ZPM_DIR}/src/utils/test.zsh
+. ${ZPM_DIR}/src/utils/error.zsh
+. ${ZPM_DIR}/src/utils/debug.zsh
+. ${ZPM_DIR}/src/utils/extract-functions.zsh
 
-if [[ -z ${ZMOD_WORKSPACE} ]]; then
-    throw --error-message "the ZMOD_WORKSPACE is not set" --exit-code 1
+if [[ -z ${ZPM_WORKSPACE} ]]; then
+    throw --error-message "the ZPM_WORKSPACE is not set" --exit-code 1
 fi
 
 # global source files, which will be stored the loaded files
@@ -83,7 +83,7 @@ function import() {
         .*)
             # 3.1 get the absolute prev file path
             if [[ ${prevFileLine:0:1} != '/' ]]; then
-                prevFileLine="${ZMOD_WORKSPACE}/${prevFileLine}"
+                prevFileLine="${ZPM_WORKSPACE}/${prevFileLine}"
             fi
             local prevFile="${prevFileLine%:*}"
             local prevDir="${prevFile%/*}"
@@ -98,7 +98,7 @@ function import() {
             esac
             ;;
         @/*)
-            absolutePath="${ZMOD_WORKSPACE}/${absolutePath:2}"
+            absolutePath="${ZPM_WORKSPACE}/${absolutePath:2}"
             ;;
         *)
             throw --error-message "the module file ${from} not exists" --exit-code 1 --trace-level 2
@@ -143,10 +143,10 @@ function import() {
     local prefLineNo=${prevFileLine#*:}
     if [[ -n ${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]} ]]; then
         local aliasNamesJson="${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]}"
-        result=$(${ZMOD_WORKSPACE}/src/qjs-tools/bin/alias-name-query "${aliasNamesJson}" -q "${as}" 2>&1)
+        result=$(${ZPM_WORKSPACE}/src/qjs-tools/bin/alias-name-query "${aliasNamesJson}" -q "${as}" 2>&1)
         # if the command executed successfully with the exit code 0, then the output will be the alias name
         if [[ $? -eq 0 ]]; then
-            throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${ZMOD_WORKSPACE}/}'" --trace-level 2 --exit-code 1
+            throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${ZPM_WORKSPACE}/}'" --trace-level 2 --exit-code 1
             return ${FALSE}
         else
             IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="${aliasNamesJson:0:-1},\"${as}\":true}"
@@ -226,7 +226,7 @@ function call() {
     
     # 2.2 get the import path in the current file with the --as name
     local loadedFilePath=$(
-        ${ZMOD_DIR}/src/qjs-tools/bin/get-import-path-in-zsh-file \
+        ${ZPM_DIR}/src/qjs-tools/bin/get-import-path-in-zsh-file \
         -f ${prevFilePath} -a ${aliasName} 2>&1
     )
     if [[ $? -ne 0 ]]; then
@@ -251,7 +251,7 @@ function call() {
             esac
             ;;
         @/*)
-            loadedFilePath="${ZMOD_WORKSPACE}/${loadedFilePath:3}"
+            loadedFilePath="${ZPM_WORKSPACE}/${loadedFilePath:3}"
             ;;
     esac
     # 4 contact the function name with the loaded path and function name

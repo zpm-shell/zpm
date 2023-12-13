@@ -165,8 +165,8 @@ for (( i = 1; i <= ${#args[@]}; i++ )); do
       stackNumberLine=${funcAliasName%:*}
       callStraceIndex=$(( ${callStraceIndex} - 1 ))
     fi
-    if [[ ${#stackNumberLine} -gt ${#ZMOD_WORKSPACE} && ${stackNumberLine:0:${#ZMOD_WORKSPACE}} == ${ZMOD_WORKSPACE} ]]; then
-        stackNumberLine=${stackNumberLine#${ZMOD_WORKSPACE}/}
+    if [[ ${#stackNumberLine} -gt ${#ZPM_WORKSPACE} && ${stackNumberLine:0:${#ZPM_WORKSPACE}} == ${ZPM_WORKSPACE} ]]; then
+        stackNumberLine=${stackNumberLine#${ZPM_WORKSPACE}/}
     fi
     printf " ${stackNumberLine}\n"
   done

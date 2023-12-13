@@ -4,7 +4,7 @@ function test_throw() {
 $(throw --error-message "error message")
 EOF
 )
-    local logFile="${ZMOD_DIR}/test/unit/utils/error/throw.test.log"
+    local logFile="${ZPM_DIR}/test/unit/utils/error/throw.test.log"
     # echo "${actualVal}" > "${logFile}"
     local expectedVal=$(cat "${logFile}")
     expect_equal --actual "${actualVal}" --expected "${expectedVal}"
