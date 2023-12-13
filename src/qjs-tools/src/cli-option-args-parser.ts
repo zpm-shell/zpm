@@ -1,11 +1,9 @@
-// 
+//
 // To parse the option args from cli args
 // @example:
 //   bin/cli-option-args-parser --option-config '[{name: "tmp",alias:"t",description:"des",required:true, type: "string"}]' --args '--tmp hello'
 //   {"tmp": "hello"}
-// 
-
-import * as std from "std";
+//
 
 import JSON5 from "./lib/json5/json5.js";
 
@@ -142,7 +140,13 @@ const aliasNameMapName: Record<string, string> = {
   oc: "option-config",
   a: "args",
 };
+let isPreArgIsPotion = false;
 args.forEach((arg) => {
+  if (isPreArgIsPotion) {
+    isPreArgIsPotion = false;
+    return;
+  }
+
   if (!arg.startsWith("-")) {
     return;
   }
@@ -153,9 +157,6 @@ args.forEach((arg) => {
   let optionName = "";
   if (arg.startsWith("--")) {
     optionName = arg.slice(2);
-    if (!aliasNameMapName[optionName]) {
-      throw new CliOptionError(`option name ${arg} is not supported.`);
-    }
   } else if (arg.startsWith("-")) {
     const aliasName = arg.slice(1);
     if (!aliasNameMapName[aliasName]) {
@@ -163,6 +164,9 @@ args.forEach((arg) => {
     }
     optionName = aliasNameMapName[aliasName];
   }
+
+  isPreArgIsPotion = true;
+
   // # parse the option name
   switch (optionName) {
     case "option-config":
@@ -183,12 +187,6 @@ if (!argsStr) {
 
 // # Parse the opions
 const optionConfig = JSON5.parse(optionConfigStr) as OptionType[];
-
-try {
-  const optionsObj = optionParser(optionConfig, argsStr);
-  const result = JSON.stringify(optionsObj);
-  console.log(result);
-} catch (e) {
-  console.log((e as Error).message);
-  std.exit(1);
-}
+const optionsObj = optionParser(optionConfig, argsStr);
+const result = JSON.stringify(optionsObj);
+console.log(result);

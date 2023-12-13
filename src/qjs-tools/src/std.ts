@@ -14,7 +14,7 @@ function fileExists(filePath: string): void {
  */
 const readFile = (filename: string): string => {
   fileExists(filename);
-  const file = std.open(filename, "r")
+  const file = std.open(filename, "r");
   if (file) {
     const contents = file.readAsString();
     file.close();

@@ -3,8 +3,8 @@
 ##
 # To parse the option args
 # @example:
-#   bin/cli-option-args-parser --option-config '[{name: "tmp",alias:"t",description:"des",required:true, type: "string"}]' --args '--tmp hello'
-#   {"tmp": "hello"}
+#   bin/cli-option-args-parser  --option-config '[{name: "name", alias: "n", description: "The name", required: true, default: "", type: "string"}]' --args '--name hello' 
+#   {"name": "hello"}
 
 # get current directory 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

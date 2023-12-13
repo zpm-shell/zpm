@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/**/*.ts", // the files will be compiled
+    "src/**/*.ts" // the files will be compiled
   ],
   "compilerOptions": {
     "typeRoots": ["node_modules/@types", "src/types"], // the type roots

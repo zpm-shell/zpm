@@ -23,7 +23,7 @@ function getAliasNameFromZshFile(filePath: string, aliasName: string): void {
   if (!match) {
     std.exit(1);
   }
-  if (match!.length ===  0) {
+  if (match!.length === 0) {
     std.exit(1);
   } else {
     const tagName = match![1];
@@ -31,7 +31,6 @@ function getAliasNameFromZshFile(filePath: string, aliasName: string): void {
     std.exit(0);
   }
 }
-
 
 const args = scriptArgs.slice(1);
 
