@@ -3,6 +3,8 @@
     "src/**/*.ts" // the files will be compiled
   ],
   "compilerOptions": {
+    "noUnusedLocals": true, // Warns about unused local variables
+    "noUnusedParameters": true, // Warns about unused function parameters
     "typeRoots": ["node_modules/@types", "src/types"], // the type roots
     "target": "ES2020", // the target js version will be compiled
     "declaration": true, // ouput the declaration file
