@@ -23,7 +23,8 @@ EOF
 }
 
 function test_zpm_cli_helpe_docs() {
-  local actualVal=$( ${ZPM_DIR}/bin/zpm --help 2>&1)
+  local actualVal;
+  actualVal=$( ${ZPM_DIR}/bin/zpm --help 2>&1)
   expect_equal --actual "$?" --expected "0"
   local expectVal=$(get_help_docs)
   expect_equal --actual "${actualVal}" --expected "${expectVal}"
@@ -34,11 +35,12 @@ function test_zpm_cli_helpe_docs() {
 }
 
 function test_zpm_cli_version() {
-  local actualVal=$( ${ZPM_DIR}/bin/zpm --version 2>&1)
+  local actualVal;
+  actualVal=$( ${ZPM_DIR}/bin/zpm --version 2>&1)
   expect_equal --actual "$?" --expected "0"
   expect_equal --actual "${actualVal}" --expected "0.0.1"
 
-  local actualVal=$( ${ZPM_DIR}/bin/zpm -v 2>&1 )
+  actualVal=$( ${ZPM_DIR}/bin/zpm -v 2>&1 )
   expect_equal --actual "$?" --expected "0"
   expect_equal --actual "${actualVal}" --expected "0.0.1"
 }
