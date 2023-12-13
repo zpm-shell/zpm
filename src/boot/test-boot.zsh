@@ -73,7 +73,7 @@ for testFile in ${configFiles[@]}; do
 done
 
 echo "
-Tests:        ${TOTAL_FAILED_TESTS} failed, ${TOTAL_PASSED_TESTS} passed, ${TOTAL_TESTS} total
+Tests:        ${lightRed}${TOTAL_FAILED_TESTS}${noColor} failed, ${lightGreen}${TOTAL_PASSED_TESTS}${noColor} passed, ${TOTAL_TESTS} total
 Time:         $(( $(date +%s) - ${START_TIME} )) s
 Test files:   ${TOTAL_FILES} f
 Ran all test files."

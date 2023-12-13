@@ -20,6 +20,7 @@ local backgroundRedColor="\e[1;97;101m"
 local noColor="\e[0m"
 local lightRed="\e[0;91m"
 local lightGreen="\e[0;92m"
+local lightRed="\e[0;91m"
 
 ##
 # print the expected error
