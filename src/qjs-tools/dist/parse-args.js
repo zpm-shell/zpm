@@ -1,24 +1,26 @@
 /*
  */
 function printHelp(argsConf) {
-    console.log(`Usage: ${argsConf.name} [command] [options]\n`);
-    console.log(`Version: ${argsConf.version}`);
-    console.log(`${argsConf.description}\n`);
-    console.log("Commands:");
+    const printTxtList = [];
+    printTxtList.push(`Usage: ${argsConf.name} [command] [options]\n`);
+    printTxtList.push(`Version: ${argsConf.version}`);
+    printTxtList.push(`${argsConf.description}`);
+    printTxtList.push("Commands:");
     Object.keys(argsConf.commands).forEach((commandName) => {
         const command = argsConf.commands[commandName];
-        console.log(`  ${argsConf.name} ${commandName}\t\t${command.description}`);
+        printTxtList.push(`  ${argsConf.name} ${commandName}\t\t${command.description}`);
         command.options.forEach((option) => {
             const optionString = option.alias
                 ? `-${option.alias}, --${option.name}`
                 : `    --${option.name}`;
-            console.log(`    ${optionString}\t${option.description} (default: ${option.default})`);
+            printTxtList.push(`    ${optionString}\t${option.description} (default: ${option.default})`);
         });
-        console.log(""); // Add an empty line for readability
+        printTxtList.push(""); // Add an empty line for readability
     });
-    console.log("Global options:");
-    console.log("  -h, --help\t\tShow this help message and exit");
-    console.log("  -v, --version\t\tShow version information and exit\n");
+    printTxtList.push("Global options:");
+    printTxtList.push("  -h, --help\t\tShow this help message and exit");
+    printTxtList.push("  -v, --version\t\tShow version information and exit\n");
+    return printTxtList.join("\n");
 }
 /**
  *
@@ -26,36 +28,44 @@ function printHelp(argsConf) {
  * @param arg cli arg
  * @returns
  */
-async function parseArgs(argsConf, args) {
-    const resultToPrint = { isPrint: true };
+function parseArgs(argsConf, args) {
     // # Check if the user is asking for help
     const isHelp = args.find((arg) => arg.includes("--help") || arg.includes("-h")) || false;
     if (isHelp || args.length === 0) {
-        printHelp(argsConf);
-        return resultToPrint;
+        return {
+            success: args.length !== 0,
+            printTxt: printHelp(argsConf),
+        };
     }
     //# Check if the user is asking for version
     const isAskVersion = args.find((arg) => arg.includes("--version") || arg.includes("-v")) ||
         false;
     if (isAskVersion) {
-        console.log(argsConf.version);
-        return resultToPrint;
+        return {
+            success: true,
+            printTxt: argsConf.version,
+        };
     }
     //# Check the command existed or not
     const command = args[0];
     const commandConf = argsConf.commands[command];
     if (!commandConf) {
-        throw new Error(`
-Unknown command: "${command}"
-
-To see a list of supported zpm commands, run:
-zpm --help`);
+        return {
+            success: false,
+            printTxt: [
+                `Unknown command: "${command}"`,
+                ``,
+                `To see a list of supported zpm commands, run:`,
+                `zpm --help`,
+            ].join("\n"),
+        };
     }
     // # Parse the options and arguments
     // ## Initialize results with default values
     // ### Initialize result value
     const results = {
-        isPrint: false,
+        success: false,
+        printTxt: "",
         result: {
             value: command,
             args: [],
@@ -81,7 +91,10 @@ zpm --help`);
             });
             // #### Check the option config exited or not
             if (!optionConf) {
-                throw new Error(`Unknown option: ${arg}`);
+                return {
+                    success: false,
+                    printTxt: `Unknown option: ${arg}`,
+                };
             }
             // ### Set the option value bewteen the boolean and string
             // #### if the boolean value required in option config and  Set the option value as boolean
@@ -95,11 +108,17 @@ zpm --help`);
                 if (i < args.length) {
                     const arg = args[i];
                     if (arg.includes("-"))
-                        throw new Error(`Option ${arg} requires a string value.`);
+                        return {
+                            success: false,
+                            printTxt: `Option ${arg} requires a string value.`,
+                        };
                     results.result.options[optionConf.name] = arg;
                 }
                 else {
-                    throw new Error(`Option ${arg} requires a string value.`);
+                    return {
+                        success: false,
+                        printTxt: `Option ${arg} requires a string value.`,
+                    };
                 }
             }
         }

@@ -1,19 +1,5 @@
-function test_zpm-cli_help_docs() {
-    local expectedVal=$(cat <<EOF
-Usage: zpm [command] [options]
-
-Version: 0.0.1
-zpm is a package manager for zsh
-
-Commands:
-  zpm init		create a zpm.json5 file
-
-Global options:
-  -h, --help		Show this help message and exit
-  -v, --version		Show version information and exit
-
-EOF
-    )
+function test_zpm-cli-args-parser() {
+    local expectedVal="{success:false,printTxt:'Usage: zpm [command] [options]\n\nVersion: 0.0.1\nzpm is a package manager for zsh\nCommands:\n  zpm init\t\tcreate a zpm.json5 file\n\nGlobal options:\n  -h, --help\t\tShow this help message and exit\n  -v, --version\t\tShow version information and exit\n'}"
     local actual;
     actual=$( ${ZPM_DIR}/src/qjs-tools/bin/zpm-cli-args-parser 2>&1 )
     expect_equal --expected 0 --actual "$?"

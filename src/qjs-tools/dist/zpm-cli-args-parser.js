@@ -1,5 +1,6 @@
 // zpm <command> [ script.zsh ]
 import parseArgs from "./parse-args";
+import JSON5 from "./lib/json5/json5";
 // Usage:
 // zpm install                                install all the dependencies in your project
 // zpm install <foo>                          add the <foo> dependency to your project
@@ -26,9 +27,6 @@ const programArgsConf = {
         },
     },
 };
-parseArgs(programArgsConf, scriptArgs.slice(1))
-    .then(() => { })
-    .catch((err) => {
-    console.log(err);
-});
+const result = parseArgs(programArgsConf, scriptArgs.slice(1));
+console.log(JSON5.stringify(result));
 //# sourceMappingURL=zpm-cli-args-parser.js.map

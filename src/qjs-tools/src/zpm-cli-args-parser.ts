@@ -2,6 +2,7 @@
 
 import { ProgramArgsType } from "./parse-args";
 import parseArgs from "./parse-args";
+import JSON5 from "./lib/json5/json5"
 
 // Usage:
 
@@ -32,8 +33,5 @@ const programArgsConf: ProgramArgsType = {
   },
 };
 
-parseArgs(programArgsConf, scriptArgs.slice(1))
-  .then(() => {})
-  .catch((err) => {
-    console.log(err);
-  });
+const result = parseArgs(programArgsConf, scriptArgs.slice(1))
+console.log(JSON5.stringify(result))

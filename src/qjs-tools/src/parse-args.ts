@@ -35,43 +35,45 @@ type ProgramArgsType = {
   commands: Record<string, CommandType>;
 };
 
-type CliCommandParsedResultType =
-  | {
-      isPrint: false;
-      result: {
-        value: string;
-        args: string[];
-        options: Record<string, string | boolean>;
-      };
-    }
-  | { isPrint: true };
+type CliCommandParsedResultType = {
+  success: boolean;
+  printTxt: string;
+  result?: {
+    value: string;
+    args: string[];
+    options: Record<string, string | boolean>;
+  };
+};
 
 /*
  */
-function printHelp(argsConf: ProgramArgsType): void {
-  console.log(`Usage: ${argsConf.name} [command] [options]\n`);
-
-  console.log(`Version: ${argsConf.version}`);
-  console.log(`${argsConf.description}\n`);
-
-  console.log("Commands:");
+function printHelp(argsConf: ProgramArgsType): string {
+  const printTxtList: string[] = [];
+  printTxtList.push(`Usage: ${argsConf.name} [command] [options]\n`);
+  printTxtList.push(`Version: ${argsConf.version}`);
+  printTxtList.push(`${argsConf.description}`);
+  printTxtList.push("Commands:");
   Object.keys(argsConf.commands).forEach((commandName) => {
     const command = argsConf.commands[commandName];
-    console.log(`  ${argsConf.name} ${commandName}\t\t${command.description}`);
+    printTxtList.push(
+      `  ${argsConf.name} ${commandName}\t\t${command.description}`
+    );
     command.options.forEach((option) => {
       const optionString = option.alias
         ? `-${option.alias}, --${option.name}`
         : `    --${option.name}`;
-      console.log(
+      printTxtList.push(
         `    ${optionString}\t${option.description} (default: ${option.default})`
       );
     });
-    console.log(""); // Add an empty line for readability
+    printTxtList.push(""); // Add an empty line for readability
   });
 
-  console.log("Global options:");
-  console.log("  -h, --help\t\tShow this help message and exit");
-  console.log("  -v, --version\t\tShow version information and exit\n");
+  printTxtList.push("Global options:");
+  printTxtList.push("  -h, --help\t\tShow this help message and exit");
+  printTxtList.push("  -v, --version\t\tShow version information and exit\n");
+
+  return printTxtList.join("\n");
 }
 
 /**
@@ -80,43 +82,52 @@ function printHelp(argsConf: ProgramArgsType): void {
  * @param arg cli arg
  * @returns
  */
-async function parseArgs(
+function parseArgs(
   argsConf: ProgramArgsType,
   args: string[]
-): Promise<CliCommandParsedResultType> {
-  const resultToPrint: CliCommandParsedResultType = { isPrint: true };
+): CliCommandParsedResultType {
   // # Check if the user is asking for help
   const isHelp =
     args.find((arg) => arg.includes("--help") || arg.includes("-h")) || false;
+
   if (isHelp || args.length === 0) {
-    printHelp(argsConf);
-    return resultToPrint;
+    return {
+      success: args.length !== 0,
+      printTxt: printHelp(argsConf),
+    };
   }
   //# Check if the user is asking for version
   const isAskVersion =
     args.find((arg) => arg.includes("--version") || arg.includes("-v")) ||
     false;
   if (isAskVersion) {
-    console.log(argsConf.version);
-    return resultToPrint;
+    return {
+      success: true,
+      printTxt: argsConf.version,
+    };
   }
 
   //# Check the command existed or not
   const command = args[0];
   const commandConf = argsConf.commands[command];
   if (!commandConf) {
-    throw new Error(`
-Unknown command: "${command}"
-
-To see a list of supported zpm commands, run:
-zpm --help`);
+    return {
+      success: false,
+      printTxt: [
+        `Unknown command: "${command}"`,
+        ``,
+        `To see a list of supported zpm commands, run:`,
+        `zpm --help`,
+      ].join("\n"),
+    };
   }
 
   // # Parse the options and arguments
   // ## Initialize results with default values
   // ### Initialize result value
   const results: CliCommandParsedResultType = {
-    isPrint: false,
+    success: false,
+    printTxt: "",
     result: {
       value: command,
       args: [],
@@ -126,7 +137,7 @@ zpm --help`);
 
   // ### Populate options with default values
   for (const option of commandConf.options) {
-    results.result.options[option.name] = option.default;
+    results.result!.options[option.name] = option.default;
   }
 
   // ## Parse the options and arguments
@@ -145,12 +156,15 @@ zpm --help`);
       });
       // #### Check the option config exited or not
       if (!optionConf) {
-        throw new Error(`Unknown option: ${arg}`);
+        return {
+          success: false,
+          printTxt: `Unknown option: ${arg}`,
+        };
       }
       // ### Set the option value bewteen the boolean and string
       // #### if the boolean value required in option config and  Set the option value as boolean
       if (optionConf.type === "boolean") {
-        results.result.options[optionConf.name] = true;
+        results.result!.options[optionConf.name] = true;
         // #### Set the option value as boolean
       } else if (optionConf.type === "string") {
         // ##### If it's a string, take the next argument as its value
@@ -158,15 +172,21 @@ zpm --help`);
         if (i < args.length) {
           const arg = args[i];
           if (arg.includes("-"))
-            throw new Error(`Option ${arg} requires a string value.`);
-          results.result.options[optionConf.name] = arg;
+            return {
+              success: false,
+              printTxt: `Option ${arg} requires a string value.`,
+            };
+          results.result!.options[optionConf.name] = arg;
         } else {
-          throw new Error(`Option ${arg} requires a string value.`);
+          return {
+            success: false,
+            printTxt: `Option ${arg} requires a string value.`,
+          };
         }
       }
     } else {
       // # Get the argument
-      results.result.args.push(arg);
+      results.result!.args.push(arg);
     }
   }
 
