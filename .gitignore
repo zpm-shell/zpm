@@ -6,5 +6,5 @@ src/tmp/
 node_modules
 src/qjs-tools/coverage/
 
-**/dist/*.map
-**/dist/*.d.ts
+**/dist/**/*.map
+**/dist/**/*.d.ts
