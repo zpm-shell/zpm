@@ -29,5 +29,11 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/.idea": true,
+    "**/dist": true,
+  }
 }
