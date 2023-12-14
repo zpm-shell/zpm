@@ -49,21 +49,30 @@ function import() {
     local as=''
     #1 parse arguments
     local args=("$@")
+    local isContinue=${FALSE}
     for (( i = 1; i <= ${#args[@]}; i++)); do
+        if [[ ${isContinue} -eq ${TRUE} ]]; then
+            isContinue=${FALSE}
+            continue
+        fi
         local arg=${args[$i]}
         case $arg in
             --from*)
-                from="$2"
-                shift
+                from="${args[ $i + 1 ]}"
+                isContinue=${TRUE}
+                continue
                 ;;
             --as*)
-                as="$2"
-                shift
+                as="${args[ $i + 1 ]}"
+                isContinue=${TRUE}
+                continue
                 ;;
-            *)
-            shift;
-            ;;
+            --*)
+               isContinue=${TRUE}
+               continue
+               ;;
         esac
+        from="${arg}"
     done
     #2 check the args
     #2.1 check the args not empty
