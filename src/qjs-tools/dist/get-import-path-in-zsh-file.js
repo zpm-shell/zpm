@@ -13,9 +13,9 @@ import { readFile } from "./std";
 import * as std from "std";
 function getAliasNameFromZshFile(filePath, aliasName) {
     const fileContent = readFile(filePath);
-    // get the alias name from the zsh file: like the string: import --from ./src/index.js --as index, and i just want the index
+    // get the alias name from the zsh file: like the string: import ./src/index.js --as index, and i just want the index
     //   const regexPattern = `\$\{\{\s*\s*\}\}`;
-    const regexPattern = `\\s*import\\s*--from\\s+["|']?([\\.|\\/|a-z|A-Z|0-9|\\-|\\_]*)["|']?\\s+--as\\s+${aliasName}\\s*`;
+    const regexPattern = `\\s*import\\s*\\s+["|']?([\\.|\\/|a-z|A-Z|0-9|\\-|\\_]*)["|']?\\s+--as\\s+${aliasName}\\s*`;
     const r = new RegExp(regexPattern);
     const match = fileContent.match(r);
     if (!match) {

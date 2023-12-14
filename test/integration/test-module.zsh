@@ -1,2 +1,2 @@
-import --from ./test-module.zsh --as this
-import --from ./test-module.zsh --as this2
+import ./test-module.zsh --as this
+import ./test-module.zsh --as this2

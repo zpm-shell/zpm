@@ -4,8 +4,8 @@
    [90m33 |[0m 
    [90m34 |[0m function test_same_as_name() {
    [90m35 |[0m   local actual=$(
- [91;1m>[0m [90m36 |[0m   import --from "./m4.zsh" --as circul1;
-   [90m37 |[0m   import --from "./m5.zsh" --as circul1
+ [91;1m>[0m [90m36 |[0m   import "./m4.zsh" --as circul1;
+   [90m37 |[0m   import "./m5.zsh" --as circul1
    [90m38 |[0m   )
    [90m39 |[0m   local expectedValPath="${ZPM_DIR}/test/unit/autoload.test/test_same_as_name_function_test_result_compaire_txt.txt"
    [90m40 |[0m   # echo "${actual}" > ${expectedValPath} 

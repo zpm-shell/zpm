@@ -38,10 +38,10 @@ typeset -A -g STACE_SOURCE_FILE=()
 typeset -A -g IMPORT_FILE_MAP_ALIAS_NAMES=()
 
 ##
-# @param --from {string} the module source path
+# @param {string} the module source path
 # @param --as {string} the alias name for for module
 # @example
-#   import --from /src/utils/error.zsh --as error
+#   import /src/utils/error.zsh --as error
 # @return {void}
 ##
 function import() {
@@ -57,11 +57,6 @@ function import() {
         fi
         local arg=${args[$i]}
         case $arg in
-            --from*)
-                from="${args[ $i + 1 ]}"
-                isContinue=${TRUE}
-                continue
-                ;;
             --as*)
                 as="${args[ $i + 1 ]}"
                 isContinue=${TRUE}
@@ -77,7 +72,7 @@ function import() {
     #2 check the args
     #2.1 check the args not empty
     if [[ -z "${from}" ]]; then
-        throw --error-message "the --from arg is required" --exit-code 1 --trace-level 2
+        throw --error-message "the arg of module path is required" --exit-code 1 --trace-level 2
     fi
     if [[ -z "${as}" ]]; then
         throw --error-message "the --as arg is required" --exit-code 1 --trace-level 2
