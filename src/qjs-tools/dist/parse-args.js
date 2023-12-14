@@ -1,12 +1,13 @@
 /*
  */
 function printHelp(argsConf) {
-    console.log(`\nUsage: ${argsConf.name} [command] [options]\n`);
+    console.log(`Usage: ${argsConf.name} [command] [options]\n`);
     console.log(`Version: ${argsConf.version}`);
     console.log(`${argsConf.description}\n`);
     console.log("Commands:");
-    argsConf.commands.forEach((command) => {
-        console.log(`  ${argsConf.name} ${command.name}\t\t${command.description}`);
+    Object.keys(argsConf.commands).forEach((commandName) => {
+        const command = argsConf.commands[commandName];
+        console.log(`  ${argsConf.name} ${commandName}\t\t${command.description}`);
         command.options.forEach((option) => {
             const optionString = option.alias
                 ? `-${option.alias}, --${option.name}`
@@ -25,30 +26,30 @@ function printHelp(argsConf) {
  * @param arg cli arg
  * @returns
  */
-async function parseArgs(argsConf, arg) {
+async function parseArgs(argsConf, args) {
     const resultToPrint = { isPrint: true };
     // # Check if the user is asking for help
-    const isHelp = arg.includes("--help") || arg.includes("-h");
-    const args = arg.split(" ");
-    if (args.length === 1 || isHelp) {
+    const isHelp = args.find((arg) => arg.includes("--help") || arg.includes("-h")) || false;
+    if (isHelp || args.length === 0) {
         printHelp(argsConf);
         return resultToPrint;
     }
     //# Check if the user is asking for version
-    const isAskVersion = arg.includes("--version") || arg.includes("-v");
+    const isAskVersion = args.find((arg) => arg.includes("--version") || arg.includes("-v")) ||
+        false;
     if (isAskVersion) {
         console.log(argsConf.version);
         return resultToPrint;
     }
     //# Check the command existed or not
-    const command = args[1];
-    const commandConf = argsConf.commands.find((c) => c.name === command);
+    const command = args[0];
+    const commandConf = argsConf.commands[command];
     if (!commandConf) {
         throw new Error(`
 Unknown command: "${command}"
 
-To see a list of supported npm commands, run:
-${command} --help`);
+To see a list of supported zpm commands, run:
+zpm --help`);
     }
     // # Parse the options and arguments
     // ## Initialize results with default values
@@ -66,7 +67,7 @@ ${command} --help`);
         results.result.options[option.name] = option.default;
     }
     // ## Parse the options and arguments
-    for (let i = 1; i < args.length; i++) {
+    for (let i = 0; i <= args.length; i++) {
         const arg = args[i];
         // ### Get an option and check
         if (arg.startsWith("-")) {

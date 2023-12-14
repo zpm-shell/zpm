@@ -1,5 +1,5 @@
 function test_alias_name_query_bin() {
-  ${ZPM_DIR}/src/qjs-tools/bin/alias-name-query '{"aliasName1": true, "aliasName2": true }' --query aliasName1 
+  ${ZPM_DIR}/src/qjs-tools/bin/alias-name-query '{"aliasName1": true, "aliasName2": true }' --query aliasName1 >> /dev/null 2>&1
   expect_equal --actual "$?" --expected "0"
 }
 

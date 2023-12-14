@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+##
+# To parse the option args
+# @example:
+#   bin/zpm-cli-args-parser
+# get current directory 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+qjs ${DIR}/../dist/zpm-cli-args-parser.js "$@"
