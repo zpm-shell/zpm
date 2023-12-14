@@ -19,7 +19,7 @@ alue
  */
 
 import * as std from "std";
-import parseArgs from "./quckjs-args-parser";
+import parseArgs from "./lib/quckjs-args-parser";
 
 parseArgs(
   {

@@ -18,7 +18,7 @@ alue
  *  @date 2023/12/11
  */
 import * as std from "std";
-import parseArgs from "./quckjs-args-parser";
+import parseArgs from "./lib/quckjs-args-parser";
 parseArgs({
     name: "alias-name-query",
     description: "Query the alias name of a given alias",
