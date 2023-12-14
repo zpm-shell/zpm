@@ -1,8 +1,8 @@
 // zpm <command> [ script.zsh ]
 
-import { ProgramArgsType } from "./lib/parse-args";
-import parseArgs from "./lib/parse-args";
-import JSON5 from "./lib/json5/json5"
+import { ProgramArgsType } from "../lib/parse-args";
+import parseArgs from "../lib/parse-args";
+import JSON5 from "../lib/json5/json5"
 
 // Usage:
 

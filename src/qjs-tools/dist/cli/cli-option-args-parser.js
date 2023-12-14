@@ -4,7 +4,7 @@
 //   bin/cli-option-args-parser --option-config '[{name: "tmp",alias:"t",description:"des",required:true, type: "string"}]' --args '--tmp hello'
 //   {"tmp": "hello"}
 //
-import JSON5 from "./lib/json5/json5.js";
+import JSON5 from "../lib/json5/json5.js";
 class OptionError extends Error {
     constructor(message, options) {
         super(message);

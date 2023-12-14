@@ -1,6 +1,6 @@
 // zpm <command> [ script.zsh ]
-import parseArgs from "./lib/parse-args";
-import JSON5 from "./lib/json5/json5";
+import parseArgs from "../lib/parse-args";
+import JSON5 from "../lib/json5/json5";
 // Usage:
 // zpm install                                install all the dependencies in your project
 // zpm install <foo>                          add the <foo> dependency to your project

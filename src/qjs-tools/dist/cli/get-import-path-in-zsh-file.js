@@ -8,8 +8,8 @@
 // @author wuchuheng<root@wuchuheng.com>
 // @date 2023/12/12
 //
-import parseArgs from "./lib/quckjs-args-parser";
-import { readFile } from "./lib/std";
+import parseArgs from "../lib/quckjs-args-parser";
+import { readFile } from "../lib/std";
 import * as std from "std";
 function getAliasNameFromZshFile(filePath, aliasName) {
     const fileContent = readFile(filePath);
