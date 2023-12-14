@@ -19,7 +19,8 @@
     "noImplicitReturns": true, // Ensure that all functions specify a return type,
     "module": "ESNext",
     "moduleResolution": "node",
-    "allowJs": true
+    "allowJs": true,
+    "isolatedModules": false,
   },
   // the files will exclude before compile
   "exclude": ["node_modules", "dist", "src/lib", "tests", "jest.config.ts"]
