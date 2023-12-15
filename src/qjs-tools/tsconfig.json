@@ -20,8 +20,8 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "allowJs": true,
-    "isolatedModules": false,
+    "isolatedModules": false
   },
   // the files will exclude before compile
-  "exclude": ["node_modules", "dist", "src/lib", "tests", "jest.config.ts"]
+  "exclude": ["node_modules", "dist", "tests", "jest.config.ts"]
 }
