@@ -10,6 +10,24 @@ on:
       - tmp
 
 jobs:
+  qjs-tools-test:
+    # runs on node 21 on container
+    container: node:20
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm
+      - name: Install dependencies
+        run: |
+          pnpm install
+      - name: Run tests
+        run: |
+          cd src/qjs-tools
+          pnpm run test
+
   setup_matrix_for_centOS:
     name: Setup matrix for centOS
     runs-on: ubuntu-latest
