@@ -5,5 +5,6 @@ MACHINE_NAME=$(uname -m)
 
 # current directory path
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$( dirname ${DIR} )"
 
-${DIR}/qjs_${OS_NAME}_${MACHINE_NAME} "$@"
+${DIR}/src/qjs-tools/bin/qjs_${OS_NAME}_${MACHINE_NAME} "$@"
