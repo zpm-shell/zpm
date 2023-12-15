@@ -47,6 +47,7 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "**/coverage": true
+    "**/coverage": true,
+    "**/.idea": true
   }
 }
