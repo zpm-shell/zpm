@@ -3,7 +3,6 @@ import { execSync } from "child_process";
 describe("zpm-cli-args-parser tests", () => {
   it("should print the json5 incle the helpe document after execute the cli", () => {
     let json5: string = execSync("./bin/zpm-cli-args-parser").toString();
-    console.log(`->${json5}<-`);
     json5 = json5.trim();
     const expectedVal =
       "{success:false,printTxt:" +
