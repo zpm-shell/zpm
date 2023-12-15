@@ -1,12 +1,22 @@
 type OptionType = Record<
   string,
   {
-    type: string;
+    type: "boolean" | "string";
     alias: string;
     description: string;
   }
 >;
-type OptionParserResultType = Record<string, string | boolean>;
+// type OptionParserResultType = Record<string, string | boolean>;
+
+// Define a union type for possible value types
+type OptionValue<T extends "boolean" | "string"> = T extends "boolean"
+  ? boolean
+  : string;
+
+// Update OptionParserResultType to use OptionValue type
+type OptionParserResultType<T extends OptionType> = {
+  [K in keyof T]: OptionValue<T[K]["type"]>;
+};
 
 /**
  * Parses command line options based on the provided option configuration.
@@ -20,7 +30,7 @@ type OptionParserResultType = Record<string, string | boolean>;
 const optionParser = (
   optionConfig: OptionType, // Configuration for options
   args: string[] // Command line arguments
-): OptionParserResultType => {
+): OptionParserResultType<OptionType> => {
   // Create an alias map option name for options
   const aliasMapOName: Record<string, string> = {};
   Object.keys(optionConfig).forEach((optionName) => {
@@ -29,7 +39,7 @@ const optionParser = (
   });
 
   // Initialize the result object
-  const result: OptionParserResultType = {};
+  const result: OptionParserResultType<OptionType> = {};
 
   // Colect options from command line arguments to result object
   args.forEach((arg: string, index) => {
@@ -63,6 +73,15 @@ const optionParser = (
       }
     }
   });
+
+  if (Object.keys(result).length === 0) {
+    for (const optionName in optionConfig) {
+      console.log(
+        `--${optionName}, -${optionConfig[optionName].alias}\t\t${optionConfig[optionName].description}`
+      );
+    }
+    throw new Error("No options provided");
+  }
 
   return result;
 };

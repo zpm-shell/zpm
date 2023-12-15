@@ -46,4 +46,15 @@ describe("optionParser", () => {
       "Missing value: --name"
     );
   });
+
+  it("should throw an error if no options provided", () => {
+    const optionConfig: OptionType = {
+      verbose: { alias: "v", type: "boolean", description: "" },
+    };
+    const args: string[] = [];
+
+    expect(() => optionParser(optionConfig, args)).toThrowError(
+      "No options provided"
+    );
+  });
 });
