@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec \"rm -rf dist/* && pnpm dev:build\"",
-    "test": "jest",
+    "test": "export PATH=$(pwd)/../../bin:$PATH && jest",
     "prettier": "prettier --write .",
     "lint:fix": "eslint --fix '**/*.{ts,mjs,ts}'",
     "dev:build": "tsc -p tsconfig.json"
