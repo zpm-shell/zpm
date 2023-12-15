@@ -1,4 +1,4 @@
-import optionParser, { OptionType } from "../src/lib/cli-option-parser";
+import optionParser, { OptionType } from "../../src/lib/cli-option-parser";
 
 describe("optionParser", () => {
   it("should parse boolean options correctly", () => {
