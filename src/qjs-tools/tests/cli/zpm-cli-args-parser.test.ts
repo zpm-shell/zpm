@@ -24,4 +24,17 @@ describe("zpm-cli-args-parser tests", () => {
     json5 = json5.trim();
     expect(json5).toBe(expectedVal);
   });
+
+  it("should print the JSON5 inclded a version", () => {
+    let json5: string = execSync(
+      "./bin/zpm-cli-args-parser --version"
+    ).toString();
+    json5 = json5.trim();
+    const expectedVal = "{success:true,printTxt:'0.0.1'}";
+    expect(json5).toBe(expectedVal);
+
+    json5 = execSync("./bin/zpm-cli-args-parser -v").toString();
+    json5 = json5.trim();
+    expect(json5).toBe(expectedVal);
+  });
 });
