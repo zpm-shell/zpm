@@ -57,36 +57,22 @@ describe("Test to parse args", () => {
     expect(result.printTxt).toBe(expected);
   });
 
-  //   it("should return version if --version option is provided", () => {
-  //     const argsConf = {
-  //       version: "1.0.0",
-  //       commands: {
-  //         test: {
-  //           options: [
-  //             {
-  //               name: "--help",
-  //               alias: "-h",
-  //               type: "boolean",
-  //               default: false,
-  //             },
-  //             {
-  //               name: "--version",
-  //               alias: "-v",
-  //               type: "boolean",
-  //               default: false,
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     };
+  it("should return version if --version option is provided", () => {
+    const argsConf: ProgramArgsType = {
+      name: "zpm",
+      version: "1.0.0",
+      description: "zpm is a package manager for zsh",
+      commands: {},
+    };
 
-  //     const args = ["--version"];
+    let result = parseArgs(argsConf, ["--version"]);
+    expect(result.success).toBe(true);
+    expect(result.printTxt).toBe("1.0.0");
 
-  //     const result = parseArgs(argsConf, args);
-
-  //     expect(result.success).toBe(true);
-  //     expect(result.printTxt).toBe("1.0.0");
-  //   });
+    result = parseArgs(argsConf, ["-v"]);
+    expect(result.success).toBe(true);
+    expect(result.printTxt).toBe("1.0.0");
+  });
 
   //   it("should return unknown command error if command does not exist", () => {
   //     const argsConf = {
