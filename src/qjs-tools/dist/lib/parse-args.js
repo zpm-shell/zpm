@@ -67,7 +67,7 @@ function parseArgs(argsConf, args) {
         success: false,
         printTxt: "",
         result: {
-            value: command,
+            command,
             args: [],
             options: {},
         },
@@ -77,7 +77,7 @@ function parseArgs(argsConf, args) {
         results.result.options[option.name] = option.default;
     }
     // ## Parse the options and arguments
-    for (let i = 0; i <= args.length; i++) {
+    for (let i = 1; i < args.length; i++) {
         const arg = args[i];
         // ### Get an option and check
         if (arg.startsWith("-")) {
@@ -100,6 +100,7 @@ function parseArgs(argsConf, args) {
             // #### if the boolean value required in option config and  Set the option value as boolean
             if (optionConf.type === "boolean") {
                 results.result.options[optionConf.name] = true;
+                continue;
                 // #### Set the option value as boolean
             }
             else if (optionConf.type === "string") {
@@ -113,6 +114,7 @@ function parseArgs(argsConf, args) {
                             printTxt: `Option ${arg} requires a string value.`,
                         };
                     results.result.options[optionConf.name] = arg;
+                    continue;
                 }
                 else {
                     return {
@@ -127,6 +129,7 @@ function parseArgs(argsConf, args) {
             results.result.args.push(arg);
         }
     }
+    results.success = true;
     return results;
 }
 export default parseArgs;

@@ -39,7 +39,7 @@ type CliCommandParsedResultType = {
   success: boolean;
   printTxt: string;
   result?: {
-    value: string;
+    command: string;
     args: string[];
     options: Record<string, string | boolean>;
   };
@@ -129,7 +129,7 @@ function parseArgs(
     success: false,
     printTxt: "",
     result: {
-      value: command,
+      command,
       args: [],
       options: {},
     },
@@ -141,7 +141,7 @@ function parseArgs(
   }
 
   // ## Parse the options and arguments
-  for (let i = 0; i <= args.length; i++) {
+  for (let i = 1; i < args.length; i++) {
     const arg = args[i];
     // ### Get an option and check
     if (arg.startsWith("-")) {
@@ -165,6 +165,7 @@ function parseArgs(
       // #### if the boolean value required in option config and  Set the option value as boolean
       if (optionConf.type === "boolean") {
         results.result!.options[optionConf.name] = true;
+        continue;
         // #### Set the option value as boolean
       } else if (optionConf.type === "string") {
         // ##### If it's a string, take the next argument as its value
@@ -177,6 +178,7 @@ function parseArgs(
               printTxt: `Option ${arg} requires a string value.`,
             };
           results.result!.options[optionConf.name] = arg;
+          continue;
         } else {
           return {
             success: false,
@@ -190,6 +192,7 @@ function parseArgs(
     }
   }
 
+  results.success = true;
   return results;
 }
 

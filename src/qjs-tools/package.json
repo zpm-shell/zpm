@@ -8,7 +8,8 @@
     "test": "PATH=$(pwd)/../../bin:$PATH jest",
     "prettier": "prettier --write .",
     "lint:fix": "eslint --fix '**/*.{ts,mjs,ts}'",
-    "dev:build": "tsc -p tsconfig.json"
+    "dev:build": "tsc -p tsconfig.json",
+    "test:tmp": "PATH=$(pwd)/../../bin:$PATH jest"
   },
   "engines": {
     "node": ">=20.10.0"
