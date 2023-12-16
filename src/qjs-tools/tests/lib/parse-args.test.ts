@@ -74,85 +74,64 @@ describe("Test to parse args", () => {
     expect(result.printTxt).toBe("1.0.0");
   });
 
-  //   it("should return unknown command error if command does not exist", () => {
-  //     const argsConf = {
-  //       version: "1.0.0",
-  //       commands: {
-  //         test: {
-  //           options: [
-  //             {
-  //               name: "--help",
-  //               alias: "-h",
-  //               type: "boolean",
-  //               default: false,
-  //             },
-  //             {
-  //               name: "--version",
-  //               alias: "-v",
-  //               type: "boolean",
-  //               default: false,
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     };
+  it("should return unknown command error if command does not exist", () => {
+    const argsConf: ProgramArgsType = {
+      version: "1.0.0",
+      name: "zpm",
+      description: "zpm is a package manager for zsh",
+      commands: {
+        test: {
+          description: "",
+          options: [],
+          args: [],
+        },
+      },
+    };
 
-  //     const args = ["unknown-command"];
+    const args = ["unknown-command"];
 
-  //     const result = parseArgs(argsConf, args);
+    const result = parseArgs(argsConf, args);
 
-  //     expect(result.success).toBe(false);
-  //     expect(result.printTxt).toContain('Unknown command: "unknown-command"');
-  //     expect(result.printTxt).toContain(
-  //       "To see a list of supported zpm commands, run:"
-  //     );
-  //     expect(result.printTxt).toContain("zpm --help");
-  //   });
+    expect(result.success).toBe(false);
+    expect(result.printTxt).toContain('Unknown command: "unknown-command"');
+    expect(result.printTxt).toContain(
+      "To see a list of supported zpm commands, run:"
+    );
+    expect(result.printTxt).toContain("zpm --help");
+  });
 
-  //   it("should parse options and arguments correctly", () => {
-  //     const argsConf = {
-  //       version: "1.0.0",
-  //       commands: {
-  //         test: {
-  //           options: [
-  //             {
-  //               name: "--help",
-  //               alias: "-h",
-  //               type: "boolean",
-  //               default: false,
-  //             },
-  //             {
-  //               name: "--version",
-  //               alias: "-v",
-  //               type: "boolean",
-  //               default: false,
-  //             },
-  //             {
-  //               name: "--name",
-  //               alias: "-n",
-  //               type: "string",
-  //               default: "",
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     };
+  it("should parse options and arguments correctly", () => {
+    const argsConf: ProgramArgsType = {
+      version: "1.0.0",
+      name: "zpm",
+      description: "zpm is a package manager for zsh",
+      commands: {
+        test: {
+          description: "",
+          options: [
+            {
+              name: "name",
+              alias: "n",
+              type: "string",
+              default: "",
+              description: "",
+            },
+          ],
+          args: [],
+        },
+      },
+    };
 
-  //     const args = ["test", "--name", "John", "arg1", "arg2"];
+    const args = ["test", "--name", "John", "arg1", "arg2"];
 
-  //     const result = parseArgs(argsConf, args);
+    const result = parseArgs(argsConf, args);
 
-  //     expect(result.success).toBe(true);
-  //     expect(result.printTxt).toBe("");
-  //     expect(result.result.value).toBe("test");
-  //     expect(result.result.args).toEqual(["arg1", "arg2"]);
-  //     expect(result.result.options).toEqual({
-  //       "--help": false,
-  //       "-h": false,
-  //       "--version": false,
-  //       "-v": false,
-  //       "--name": "John",
-  //       "-n": "John",
-  //     });
-  //   });
+    expect(result.success).toBe(true);
+    expect(result.printTxt).toBe("");
+    expect(result.result?.command).toBe("test");
+    expect(result.result?.args).toEqual(["arg1", "arg2"]);
+    expect(result.result?.options).toEqual({
+      name: "John",
+    });
+  });
 });
