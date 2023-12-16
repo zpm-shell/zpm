@@ -31,36 +31,31 @@ describe("Test to parse args", () => {
     expect(JSON.stringify(result.result?.options)).toBe("{}");
   });
 
-  //   it("should return help text if --help option is provided", () => {
-  //     const argsConf:  = {
-  //       version: "1.0.0",
-  //       commands: {
-  //         test: {
-  //           options: [
-  //             {
-  //               name: "--help",
-  //               alias: "-h",
-  //               type: "boolean",
-  //               default: false,
-  //             },
-  //             {
-  //               name: "--version",
-  //               alias: "-v",
-  //               type: "boolean",
-  //               default: false,
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     };
+  it("should return help text if --help option is provided", () => {
+    const argsConf: ProgramArgsType = {
+      version: "0.0.1",
+      description: "zpm is a package manager for zsh",
+      name: "zpm",
+      commands: {
+        init: {
+          description: "create a zpm.json5 file",
+          args: [],
+          options: [],
+        },
+      },
+    };
 
-  //     const args = ["init", "hello"];
+    let result = parseArgs(argsConf, ["--help"]);
 
-  //     const result = parseArgs(argsConf, args);
+    expect(result.success).toBe(true);
+    const expected =
+      "Usage: zpm [command] [options]\n\nVersion: 0.0.1\nzpm is a package manager for zsh\nCommands:\n  zpm init\t\tcreate a zpm.json5 file\n\nGlobal options:\n  -h, --help\t\tShow this help message and exit\n  -v, --version\t\tShow version information and exit\n";
 
-  //     expect(result.success).toBe(true);
-  //     expect(result.printTxt).toContain("Help text goes here");
-  //   });
+    expect(result.printTxt).toBe(expected);
+
+    result = parseArgs(argsConf, ["-h"]);
+    expect(result.printTxt).toBe(expected);
+  });
 
   //   it("should return version if --version option is provided", () => {
   //     const argsConf = {
