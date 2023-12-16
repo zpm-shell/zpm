@@ -55,8 +55,8 @@ function parseArgs(argsConf, args) {
             printTxt: [
                 `Unknown command: "${command}"`,
                 ``,
-                `To see a list of supported zpm commands, run:`,
-                `zpm --help`,
+                `To see a list of supported ${argsConf.name} commands, run:`,
+                `${argsConf.name} --help`,
             ].join("\n"),
         };
     }
