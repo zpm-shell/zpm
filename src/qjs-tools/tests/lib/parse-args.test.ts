@@ -1,7 +1,7 @@
 import parseArgs, { ProgramArgsType } from "../../src/lib/parse-args";
 
-describe("optionParser", () => {
-  it("Shout ", () => {
+describe("Test to parse args", () => {
+  it("should parse the cmd init with args", () => {
     const argsConf: ProgramArgsType = {
       name: "zpm",
       description: "zpm is a package manager for zsh",
