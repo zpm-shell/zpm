@@ -8,4 +8,10 @@ describe("json5-query cli test", () => {
     ).toString();
     expect(result).toBe("world\n");
   });
+  it("should return the false value", () => {
+    const result = execSync(
+      `./bin/json5-query -j '{hello: false}' -q hello`
+    ).toString();
+    expect(result).toBe("false\n");
+  });
 });
