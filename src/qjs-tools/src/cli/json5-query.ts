@@ -9,7 +9,7 @@ import JSON5 from "../lib/json5/json5";
 const json5Query = (json5: string, query: string): unknown => {
   const json5Obj = JSON5.parse(json5);
   const resultObj = query.split(".").reduce((acc, key) => {
-    if (acc[key]) {
+    if (Object.keys(acc).includes(key)) {
       return acc[key];
     } else {
       throw new Error(`json5Query: ${key} is not a valid key`);
