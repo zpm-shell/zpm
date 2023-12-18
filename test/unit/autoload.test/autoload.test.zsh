@@ -46,3 +46,15 @@ function test_import_self() {
   local actual=$( call m7.callSelfFunc)
   expect_equal --actual "${actual}" --expected "hello"
 }
+
+function test_relative_module_path() {
+  import ../../../test/unit/autoload.test/m8.zsh --as m8
+  local actual=$(call m8.func)
+  expect_equal --actual "${actual}" --expected "hello"
+}
+
+function test_relative_module_path2() {
+  import ./../../../test/unit/autoload.test/m9.zsh --as m9
+  local actual=$(call m9.func)
+  expect_equal --actual "${actual}" --expected "hello"
+}
