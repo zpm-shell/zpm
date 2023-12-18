@@ -7,10 +7,8 @@ if [[ -z ${ZPM_DIR} ]]; then
     echo "ZPM_DIR is not set"; exit 1;
 fi
 
-. ${ZPM_DIR}/src/core/test.zsh
-. ${ZPM_DIR}/src/core/error.zsh
-. ${ZPM_DIR}/src/core/debug.zsh
-. ${ZPM_DIR}/src/core/extract-functions.zsh
+. ${ZPM_DIR}/src/core/error.zsh #{print_number_line, throw}
+. ${ZPM_DIR}/src/core/extract-functions.zsh #{extract_functions}
 
 if [[ -z ${ZPM_WORKSPACE} ]]; then
     throw --error-message "the ZPM_WORKSPACE is not set" --exit-code 1
