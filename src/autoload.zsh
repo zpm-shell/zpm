@@ -95,7 +95,7 @@ function import() {
                     absolutePath="${prevDir}/${absolutePath:2}"
                     ;;
                .)
-                    absolutePath="${prevDir}/${absolutePath:3}"
+                    absolutePath="${prevDir}/${absolutePath}"
                     ;;
             esac
             ;;
@@ -113,7 +113,7 @@ function import() {
     # 5 Simplify the path
     absolutePath=${absolutePath:A}
 
-    # 6 check the file not imported
+    # 6 if the file was imported and then return false.
     if [[ -n ${GLOBAL_SOURCE_FILES[$absolutePath]} ]]; then
         return "${FALSE}" 
     else
@@ -165,7 +165,7 @@ function import() {
     unset "STACE_SOURCE_FILE[${absolutePath}]"
 
     # 13 get the list of function names from the source file
-    local functionNames=($(extract_functions --zsh-file "${absolutePath}"))
+    local functionNames=($(extract_functions --zsh-file "${absolutePath}" 2>&1))
 
     # 14 rename the function name in absolutePath as the new name with a prefix of absolutePath
     for lineNoAdnFunName in ${functionNames[@]}; do
@@ -248,7 +248,7 @@ function call() {
                     loadedFilePath="${prevDir}/${loadedFilePath:2}"
                     ;;
                .)
-                    loadedFilePath="${prevDir}/${loadedFilePath:3}"
+                    loadedFilePath="${prevDir}/${loadedFilePath}"
                     ;;
             esac
             ;;
@@ -256,6 +256,7 @@ function call() {
             loadedFilePath="${ZPM_WORKSPACE}/${loadedFilePath:3}"
             ;;
     esac
+    loadedFilePath=${loadedFilePath:A}
     # 4 contact the function name with the loaded path and function name
     local lineNumbers=($(
         grep -En "^function[[:space:]]+${funcName}\(\)|[[:space:]]*${funcName}\(\)" "${loadedFilePath}"  \
