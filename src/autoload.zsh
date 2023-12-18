@@ -11,7 +11,7 @@ fi
 . ${ZPM_DIR}/src/core/extract-functions.zsh #{extract_functions}
 
 if [[ -z ${ZPM_WORKSPACE} ]]; then
-    throw --error-message "the ZPM_WORKSPACE is not set" --exit-code 1
+    ZPM_WORKSPACE=$(pwd)
 fi
 
 # global source files, which will be stored the loaded files
