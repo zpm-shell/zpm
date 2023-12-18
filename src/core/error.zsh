@@ -10,16 +10,16 @@
 # @return
 #
 #    1  | readonly ALL_UNIT_TEST_FILES=(
-#    2  | utils/__test__/unit_tests/1_helper.test.sh
-#    3  | utils/__test__/unit_tests/2_helper.test.sh
-#    4  | utils/__test__/unit_tests/3_helper.test.sh
-#  > 5  | utils/__test__/unit_tests/4_helper.test.sh
-#    6  | utils/__test__/unit_tests/5_helper.test.sh
-#    7  | utils/__test__/unit_tests/6_helper.test.sh
-#    8  | utils/__test__/unit_tests/7_helper.test.sh
-#    9  | utils/__test__/unit_tests/8_helper.test.sh
-#    10 | utils/__test__/unit_tests/9_helper.test.sh
-#    11 | utils/__test__/unit_tests/10_helper.test.sh
+#    2  | core/__test__/unit_tests/1_helper.test.sh
+#    3  | core/__test__/unit_tests/2_helper.test.sh
+#    4  | core/__test__/unit_tests/3_helper.test.sh
+#  > 5  | core/__test__/unit_tests/4_helper.test.sh
+#    6  | core/__test__/unit_tests/5_helper.test.sh
+#    7  | core/__test__/unit_tests/6_helper.test.sh
+#    8  | core/__test__/unit_tests/7_helper.test.sh
+#    9  | core/__test__/unit_tests/8_helper.test.sh
+#    10 | core/__test__/unit_tests/9_helper.test.sh
+#    11 | core/__test__/unit_tests/10_helper.test.sh
 #
 ##
 function print_number_line() {

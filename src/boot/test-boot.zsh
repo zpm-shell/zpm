@@ -3,10 +3,10 @@
 ZPM_DIR=$(pwd)
 ZPM_WORKSPACE=$(pwd)
 
-. ${ZPM_DIR}/src/utils/test.zsh;
-. ${ZPM_DIR}/src/utils/error.zsh;
-. ${ZPM_DIR}/src/utils/debug.zsh; 
-. ${ZPM_DIR}/src/utils/extract-functions.zsh;
+. ${ZPM_DIR}/src/core/test.zsh;
+. ${ZPM_DIR}/src/core/error.zsh;
+. ${ZPM_DIR}/src/core/debug.zsh; 
+. ${ZPM_DIR}/src/core/extract-functions.zsh;
 
 TRUE=0
 FALSE=1

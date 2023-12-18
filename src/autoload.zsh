@@ -7,10 +7,10 @@ if [[ -z ${ZPM_DIR} ]]; then
     echo "ZPM_DIR is not set"; exit 1;
 fi
 
-. ${ZPM_DIR}/src/utils/test.zsh
-. ${ZPM_DIR}/src/utils/error.zsh
-. ${ZPM_DIR}/src/utils/debug.zsh
-. ${ZPM_DIR}/src/utils/extract-functions.zsh
+. ${ZPM_DIR}/src/core/test.zsh
+. ${ZPM_DIR}/src/core/error.zsh
+. ${ZPM_DIR}/src/core/debug.zsh
+. ${ZPM_DIR}/src/core/extract-functions.zsh
 
 if [[ -z ${ZPM_WORKSPACE} ]]; then
     throw --error-message "the ZPM_WORKSPACE is not set" --exit-code 1
@@ -41,7 +41,7 @@ typeset -A -g IMPORT_FILE_MAP_ALIAS_NAMES=()
 # @param {string} the module source path
 # @param --as {string} the alias name for for module
 # @example
-#   import /src/utils/error.zsh --as error
+#   import /src/core/error.zsh --as error
 # @return {void}
 ##
 function import() {

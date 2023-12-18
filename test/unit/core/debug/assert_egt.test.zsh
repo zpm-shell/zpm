@@ -5,7 +5,7 @@ function test_assert_equal() {
 $(assert_equal "1" "2")
 EOF
 )
-  # echo "${actualVal}" > test/unit/utils/debug/assert_equal-val.log
-  local expectVal=$(cat test/unit/utils/debug/assert_equal-val.log)
+  # echo "${actualVal}" > test/unit/core/debug/assert_egt-val.log
+  local expectVal=$(cat test/unit/core/debug/assert_egt-val.log)
   expect_equal --expected "${expectVal}" --actual "${actualVal}"
 }

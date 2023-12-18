@@ -5,7 +5,7 @@ function test_assert_gt() {
 $(assert_gt "1" "2")
 EOF
 )
-  # echo "${actualVal}" > test/unit/utils/debug/assert-gt-val.log
-  local expectVal=$(cat test/unit/utils/debug/assert-gt-val.log)
+  # echo "${actualVal}" > test/unit/core/debug/assert-gt-val.log
+  local expectVal=$(cat test/unit/core/debug/assert-gt-val.log)
   expect_equal --expected "${expectVal}" --actual "${actualVal}"
 }

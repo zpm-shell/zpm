@@ -6,8 +6,8 @@
    [90m5  |[0m $(assert_gt "1" "2")
    [90m6  |[0m EOF
    [90m7  |[0m )
-   [90m8  |[0m   # echo "${actualVal}" > test/unit/utils/debug/assert-gt-val.log
-   [90m9  |[0m   local expectVal=$(cat test/unit/utils/debug/assert-gt-val.log)
+   [90m8  |[0m   # echo "${actualVal}" > test/unit/core/debug/assert-gt-val.log
+   [90m9  |[0m   local expectVal=$(cat test/unit/core/debug/assert-gt-val.log)
    [90m10 |[0m   expect_equal --expected "${expectVal}" --actual "${actualVal}"
- test/unit/utils/debug/assert_gt.test.zsh:4
+ test/unit/core/debug/assert_gt.test.zsh:4
  src/boot/test-boot.zsh:63

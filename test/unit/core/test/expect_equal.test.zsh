@@ -5,7 +5,7 @@ function test_expect_equal() {
 $(expect_equal --expected "1" --actual "2")
 EOF
 )
-  local expectVal=$(cat test/unit/utils/test/expect-equal-val.log)
+  local expectVal=$(cat test/unit/core/test/expect-equal-val.log)
   expect_equal --expected "${expectVal}" --actual "${actualVal}"
 
 }
