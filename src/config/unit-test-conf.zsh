@@ -18,6 +18,8 @@ local unitTestFiles=(
 
   "${ZPM_DIR}/test/unit/autoload.test/autoload.test.zsh"
   "${ZPM_DIR}/test/unit/call.test/call.test.zsh"
+
+  "${ZPM_DIR}/test/unit/utils/log.test.zsh"
 )
 
 local confFile=''

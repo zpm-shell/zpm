@@ -48,7 +48,7 @@ local testFile='';
 for testFile in ${configFiles[@]}; do
   local relativeTestFile=${testFile#${ZPM_DIR}/}
   echo "Test  ${relativeTestFile}"
-  # load the test file
+# load the test file
   . ${testFile}
 
   setGlobalVariables "TOTAL_FILES" "$(( TOTAL_FILES + 1 ))"
