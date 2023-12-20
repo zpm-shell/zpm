@@ -115,7 +115,7 @@ function import() {
 
     # 6 if the file was imported and then return false.
     if [[ -n ${GLOBAL_SOURCE_FILES[$absolutePath]} ]]; then
-        return "${FALSE}" 
+        return "${TRUE}"
     else
         GLOBAL_SOURCE_FILES[$absolutePath]="${as}"
     fi
@@ -287,6 +287,51 @@ function call() {
     # 8 remove the loaded path from call stace
 
     ZPM_CALL_STACE=(${ZPM_CALL_STACE:0:-1})
+}
+
+
+##
+# @param --trace-levre|-l {number} the trace level
+# @example
+#  zpm_calltrace --trace-level 2
+#  path/file.zsh:lineNumber
+#  path/file.zsh:lineNumber
+#  ...
+# @echo {list string}
+##
+function zpm_calltrace() {
+  local funcFileTraceLevel=1
+  if [[ -n $1 && $1 =~ ^(-l|--trace-level)$ ]]; then
+      funcFileTraceLevel=$2
+      shift 2
+  fi
+  local callStraceIndex=${#ZPM_CALL_STACE[@]}
+  local fileCallStrace=()
+  for (( i = 1; i <= ${#funcfiletrace[@]}; i++ )); do
+    local stackNumberLine=${funcfiletrace[$i]}
+    # if the file path was empty, then get the file path from call trace
+    if [[ ${stackNumberLine:0:1} == ":" ]]; then
+      local funcAliasName=${ZPM_CALL_STACE[$callStraceIndex]}
+      local funcBodyLineNO=${stackNumberLine:1}
+      stackNumberLine=${funcAliasName%:*}
+      local fileName=${stackNumberLine%:*}
+      local lineNo=${stackNumberLine#*:}
+      lineNo=$(( ${lineNo} + ${funcBodyLineNO} ))
+      stackNumberLine="${fileName}:${lineNo}"
+      # if where has comment in the line from the function start line to the line of the call stack,
+      # then add the count of the comment line to the line number.
+
+      (( callStraceIndex-- ))
+    fi
+    if [[ ${#stackNumberLine} -gt ${#ZPM_WORKSPACE} && ${stackNumberLine:0:${#ZPM_WORKSPACE}} == ${ZPM_WORKSPACE} ]]; then
+        stackNumberLine=${stackNumberLine#${ZPM_WORKSPACE}/}
+    fi
+    fileCallStrace+=(${stackNumberLine})
+  done
+  
+  for (( i = ${funcFileTraceLevel}; i <= ${#fileCallStrace[@]}; i++ )); do
+      echo "${fileCallStrace[$i]}"
+  done
 }
 
 local sourceFile=''
