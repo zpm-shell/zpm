@@ -186,9 +186,9 @@ function import() {
     done
     # if initFunctionName was not empty and then call the function
     if [[ -n ${initFunctionName} ]]; then
-        CALL_STACE+=("${initFunctionName}")
+        ZPM_CALL_STACE+=("${initFunctionName}")
         ${initFunctionName}
-        CALL_STACE=(${CALL_STACE:0:-1})
+        ZPM_CALL_STACE=(${ZPM_CALL_STACE:0:-1})
     fi
 }
 
@@ -232,8 +232,8 @@ function call() {
     local prevFilePath="${prefFileLine%:*}"
     prevFilePath="${prevFilePath:A}"
 
-    if [[ -z ${prevFilePath} && ${#CALL_STACE[@]} -gt 0 ]]; then
-    local funcAliasName=${CALL_STACE[-1]}
+    if [[ -z ${prevFilePath} && ${#ZPM_CALL_STACE[@]} -gt 0 ]]; then
+    local funcAliasName=${ZPM_CALL_STACE[-1]}
      prevFilePath=${funcAliasName%%:*}
     fi
     
@@ -283,7 +283,7 @@ function call() {
         return ${FALSE}
     fi
     # 6 Add the loaded path to call stace
-    CALL_STACE+=("${funcAliasName}")
+    ZPM_CALL_STACE+=("${funcAliasName}")
 
     # 7 call the funcation with the args
     shift 1
@@ -291,7 +291,7 @@ function call() {
 
     # 8 remove the loaded path from call stace
 
-    CALL_STACE=(${CALL_STACE:0:-1})
+    ZPM_CALL_STACE=(${ZPM_CALL_STACE:0:-1})
 }
 
 local sourceFile=''

@@ -147,7 +147,7 @@ for (( i = 1; i <= ${#args[@]}; i++ )); do
   local lineNumber="${prevFileLine##*:}"
   #2.2 print the number line in the file
   if [[ -z ${filePath} ]]; then
-      local funcAliasName=${CALL_STACE[-1]}
+      local funcAliasName=${ZPM_CALL_STACE[-1]}
       local filePath=${funcAliasName%%:*}
       local newLineNumber=${funcAliasName#*:}
       newLineNumber=${newLineNumber%:*}
@@ -156,12 +156,12 @@ for (( i = 1; i <= ${#args[@]}; i++ )); do
   print_number_line --file-path "${filePath}" --line-number "${lineNumber}"
 
   #3 print the function call stack
-  local callStraceIndex=${#CALL_STACE[@]}
+  local callStraceIndex=${#ZPM_CALL_STACE[@]}
   for (( i = ${funcFileTraceLevel}; i <= ${#funcfiletrace[@]}; i++ )); do
     local stackNumberLine=${funcfiletrace[$i]}
     # if the file path was empty, then get the file path from call trace
     if [[ ${stackNumberLine:0:1} == ":" ]]; then
-      local funcAliasName=${CALL_STACE[$callStraceIndex]}
+      local funcAliasName=${ZPM_CALL_STACE[$callStraceIndex]}
       stackNumberLine=${funcAliasName%:*}
       callStraceIndex=$(( ${callStraceIndex} - 1 ))
     fi
