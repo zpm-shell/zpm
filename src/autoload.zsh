@@ -192,11 +192,6 @@ function import() {
     fi
 }
 
-typeset CALL_TRACE=()
-function get_call_trace_file() {
-    echo "${CALL_TRACE[@]}"
-}
-
 ##
 # call a function by alias name and function name
 # @param <alias-name>.<func-name>
