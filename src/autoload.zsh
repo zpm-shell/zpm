@@ -168,8 +168,8 @@ function import() {
     local functionNames=($(extract_functions --zsh-file "${absolutePath}" 2>&1))
 
     # 14 rename the function name in absolutePath as the new name with a prefix of absolutePath
+    local initFunctionName=''
     for lineNoAdnFunName in ${functionNames[@]}; do
-
         local lineNo=${lineNoAdnFunName%:*}
         local oldFunName="${lineNoAdnFunName##*:}"
 
@@ -178,7 +178,18 @@ function import() {
         functions[$newFunName]=${functions[$oldFunName]}
         # 14.2 remove the old function name
         unset "functions[$oldFunName]"
+
+        # if the init functi
+        if [[ ${oldFunName} == 'init' ]]; then
+            initFunctionName=${newFunName}
+        fi
     done
+    # if initFunctionName was not empty and then call the function
+    if [[ -n ${initFunctionName} ]]; then
+        CALL_STACE+=("${initFunctionName}")
+        ${initFunctionName}
+        CALL_STACE=(${CALL_STACE:0:-1})
+    fi
 }
 
 typeset CALL_TRACE=()
