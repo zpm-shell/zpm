@@ -55,3 +55,12 @@ function test_length() {
     local actual=$(call list.length -r $listRef)
     expect_equal --expected 1 --actual "$actual"
 }
+
+function test_values() {
+    local listRef=$(call ref.create)
+    call list.create --ref $listRef
+    call list.set -r $listRef -v "a"
+    call list.set -r $listRef -v "b"
+    local actual=$(call list.values -r $listRef)
+    expect_equal --expected "a b" --actual "$actual"
+}
