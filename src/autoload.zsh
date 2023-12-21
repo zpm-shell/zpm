@@ -283,10 +283,13 @@ function call() {
     # 7 call the funcation with the args
     shift 1
     ${funcAliasName} $@
+    local result=$?
 
     # 8 remove the loaded path from call stace
 
     ZPM_CALL_STACE=(${ZPM_CALL_STACE:0:-1})
+    
+    return ${result}
 }
 
 
