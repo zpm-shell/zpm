@@ -55,3 +55,36 @@ function set() {
         ${inputRef}+=(\"${inputValue}\")
     "
 }
+
+##
+# get the length of the list reference variable.
+# @--param --ref|-r: the reference variable name.
+# @echo <number>
+##
+function length() {
+    local inputRef=''
+    local args=("$@")
+    local i;
+    for (( i = 1; i <= ${#args}; i++ )); do
+        local arg="${args[$i]}"
+        if [[ "$arg" == '--ref' || "$arg" == '-r' ]]; then
+            inputRef="${args[$i+1]}"
+        fi
+    done
+    # check the input value
+    if [[ -z ${inputRef} ]]; then
+        throw --error-message "The param --ref|-r required"
+    fi
+
+    # check the reference variable type
+    local actualType=$(typeset -p ${inputRef} 2>/dev/null)
+    if [[ "$actualType" != 'typeset -g -a '* ]]; then
+        throw --error-message "The variable ${inputRef} is not a list reference variable"
+        return ${FALSE}
+    fi
+
+    # assign the value to the reference variable
+    eval "
+        echo \${#${inputRef}[@]}
+    "
+}
