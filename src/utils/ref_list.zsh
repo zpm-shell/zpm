@@ -57,11 +57,11 @@ function set() {
 }
 
 ##
-# get the length of the list reference variable.
+# get the size of the list reference variable.
 # @--param --ref|-r: the reference variable name.
 # @echo <number>
 ##
-function length() {
+function size() {
     local inputRef=''
     local args=("$@")
     local i;
