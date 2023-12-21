@@ -46,3 +46,12 @@ function test_set_with_undifind_ref() {
     call list.set -r $listRef -v "${expectVal}" >> /dev/null
     expect_equal --expected "1" --actual "$?"
 }
+
+function test_length() {
+    local listRef=$(call ref.create)
+    call list.create --ref $listRef
+    expect_equal --expected 0 --actual 0
+    call list.set -r $listRef -v "a"
+    local actual=$(call list.length -r $listRef)
+    expect_equal --expected 1 --actual "$actual"
+}
