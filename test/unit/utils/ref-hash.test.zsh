@@ -29,3 +29,14 @@ function test_set() {
     eval "actual=\"\${${hashRef}[bar]}\""
     expect_equal --expected "foo" --actual "$actual"
 }
+
+function test_keys() {
+    local hashRef=$(call ref.create)
+    call hash.create --ref "${hashRef}"
+    call hash.set -r "${hashRef}" -v "foo" -k "bar" >> /dev/null
+    local actual=''
+    eval "
+        actual=\"\${(@k)${hashRef}}\"
+    "
+    expect_equal --expected "bar" --actual "$actual"
+}
