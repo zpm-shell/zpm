@@ -20,3 +20,12 @@ function test_create() {
     local actual=$(typeset -p ${ref})
     expect_equal --expected "$expectVal" --actual "$actual"
 }
+
+function test_set() {
+    local hashRef=$(call ref.create)
+    call hash.create --ref "${hashRef}"
+    call hash.set -r "${hashRef}" -v "foo" -k "bar" >> /dev/null
+    local actual=''
+    eval "actual=\"\${${hashRef}[bar]}\""
+    expect_equal --expected "foo" --actual "$actual"
+}
