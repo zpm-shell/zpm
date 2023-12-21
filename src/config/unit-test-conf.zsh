@@ -22,6 +22,7 @@ local unitTestFiles=(
   "${ZPM_DIR}/test/unit/utils/log.test.zsh"
   
   "${ZPM_DIR}/test/unit/utils/ref_list.test.zsh"
+  "${ZPM_DIR}/test/unit/utils/ref.test.zsh"
 )
 
 local confFile=''
