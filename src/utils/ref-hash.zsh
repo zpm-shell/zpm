@@ -20,7 +20,7 @@ function create() {
         return ${FALSE}
     fi
 
-    eval " typeset -g -A ${inputRef}=() "
+    eval "typeset -g -A ${inputRef}=()"
 }
 
 function keys() { }

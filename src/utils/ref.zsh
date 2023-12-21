@@ -97,6 +97,7 @@ function  create() {
   # Replace '/' with '_' and '.' with '_'
   prefFile="${prefFile//\//_}"
   prefFile="${prefFile//\./_}"
+  prefFile="${prefFile//\-/_}"
   if [[ "${prefFile:0:1}" =~ [0-9] ]]; then
     # Replace the first character with '_'
     prefFile="_${prefFile:1}"

@@ -9,6 +9,7 @@ function test_create() {
     # convert the / to _
     currentFile=${currentFile//\//_}
     currentFile=${currentFile//\./_}
+    currentFile=${currentFile//\-/_}
     currentFile=${currentFile:1}
     local expectVal="${currentFile}_4_1"
     expect_equal --expected "${expectVal}" --actual "${actual}"

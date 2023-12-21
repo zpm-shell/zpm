@@ -21,10 +21,10 @@ local unitTestFiles=(
 
   "${ZPM_DIR}/test/unit/utils/log.test.zsh"
   
-  "${ZPM_DIR}/test/unit/utils/ref_list.test.zsh"
+  "${ZPM_DIR}/test/unit/utils/ref-list.test.zsh"
   "${ZPM_DIR}/test/unit/utils/ref.test.zsh"
 
-  "${ZPM_DIR}/test/unit/utils/ref_hash.test.zsh"
+  "${ZPM_DIR}/test/unit/utils/ref-hash.test.zsh"
 )
 
 local confFile=''

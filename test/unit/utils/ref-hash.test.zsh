@@ -1,4 +1,4 @@
-import ../../../src/utils/ref_hash.zsh --as hash
+import ../../../src/utils/ref-hash.zsh --as hash
 import ../../../src/utils/ref.zsh --as ref
 
 function test_create() {
@@ -12,9 +12,10 @@ function test_create() {
     currentFile=${currentFile:A}
     currentFile=${currentFile//\//_}
     currentFile=${currentFile//\./_}
+    currentFile=${currentFile//\-/_}
     currentFile=${currentFile:1}
     local expectVal="typeset -g -A ${currentFile}_8_1=( )"
-    # actual value.
+    # # actual value.
     call hash.create --ref "${ref}"
     local actual=$(typeset -p ${ref})
     expect_equal --expected "$expectVal" --actual "$actual"

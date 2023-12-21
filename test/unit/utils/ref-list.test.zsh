@@ -1,4 +1,4 @@
-import ../../../src/utils/ref_list.zsh --as list
+import ../../../src/utils/ref-list.zsh --as list
 import ../../../src/utils/ref.zsh --as ref
 
 function test_create() {
