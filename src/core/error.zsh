@@ -156,20 +156,8 @@ for (( i = 1; i <= ${#args[@]}; i++ )); do
   print_number_line --file-path "${filePath}" --line-number "${lineNumber}"
 
   #3 print the function call stack
-  local callStraceIndex=${#ZPM_CALL_STACE[@]}
-  for (( i = ${funcFileTraceLevel}; i <= ${#funcfiletrace[@]}; i++ )); do
-    local stackNumberLine=${funcfiletrace[$i]}
-    # if the file path was empty, then get the file path from call trace
-    if [[ ${stackNumberLine:0:1} == ":" ]]; then
-      local funcAliasName=${ZPM_CALL_STACE[$callStraceIndex]}
-      stackNumberLine=${funcAliasName%:*}
-      callStraceIndex=$(( ${callStraceIndex} - 1 ))
-    fi
-    if [[ ${#stackNumberLine} -gt ${#ZPM_WORKSPACE} && ${stackNumberLine:0:${#ZPM_WORKSPACE}} == ${ZPM_WORKSPACE} ]]; then
-        stackNumberLine=${stackNumberLine#${ZPM_WORKSPACE}/}
-    fi
-    printf " ${stackNumberLine}\n"
-  done
+  (( funcFileTraceLevel++ ))
+  zpm_calltrace -l ${funcFileTraceLevel} --prefix " "
 
   #4 if the exit code was not null and not 0, return the exit code
   if [[ ! -z "${exitCode}" && "${exitCode}" != 0 ]]; then
@@ -177,4 +165,58 @@ for (( i = 1; i <= ${#args[@]}; i++ )); do
   else
     return "${FALSE}"
   fi
+}
+
+##
+# @param --trace-levre|-l {number} the trace level
+# @param --message-prefix|-p {string} the message prefix
+# @example
+#  zpm_calltrace --trace-level 2
+#  path/file.zsh:lineNumber
+#  path/file.zsh:lineNumber
+#  ...
+# @echo {list string}
+##
+function zpm_calltrace() {
+  local msgPrefix=''
+  local funcFileTraceLevel=1
+  local args=("$@")
+  local i;
+  for (( i = 1; i <= ${#args[@]}; i++ )); do
+    local arg=${args[$i]}
+    if [[ $arg =~ ^(-l|--trace-level)$ ]]; then
+      funcFileTraceLevel=${args[$i+1]}
+    elif [[ $arg =~ ^(-p|--prefix)$ ]]; then
+      msgPrefix=${args[$i+1]}
+    fi
+  done
+
+  local callStraceIndex=${#ZPM_CALL_STACE[@]}
+  local fileCallStrace=()
+  for (( i = 1; i <= ${#funcfiletrace[@]}; i++ )); do
+    local stackNumberLine=${funcfiletrace[$i]}
+    # if the file path was empty, then get the file path from call trace
+    if [[ ${stackNumberLine:0:1} == ":" ]]; then
+      local funcAliasName=${ZPM_CALL_STACE[$callStraceIndex]}
+      local funcBodyLineNO=${stackNumberLine:1}
+      stackNumberLine=${funcAliasName%:*}
+      local fileName=${stackNumberLine%:*}
+      local lineNo=${stackNumberLine#*:}
+      lineNo=$(( ${lineNo} + ${funcBodyLineNO} ))
+      stackNumberLine="${fileName}:${lineNo}"
+      # if where has comment in the line from the function start line to the line of the call stack,
+      # then add the count of the comment line to the line number.
+
+      (( callStraceIndex-- ))
+    fi
+    if [[ ${#stackNumberLine} -gt ${#ZPM_WORKSPACE} && ${stackNumberLine:0:${#ZPM_WORKSPACE}} == ${ZPM_WORKSPACE} ]]; then
+        stackNumberLine=${stackNumberLine#${ZPM_WORKSPACE}/}
+    fi
+    local msg="${msgPrefix}${stackNumberLine}"
+    fileCallStrace+=("${msg}")
+  done
+  
+  for (( i = ${funcFileTraceLevel}; i <= ${#fileCallStrace[@]}; i++ )); do
+      echo "${fileCallStrace[$i]}"
+  done
 }
