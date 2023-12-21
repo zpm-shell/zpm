@@ -2,6 +2,7 @@ import ../../../src/utils/ref_list.zsh --as list
 import ../../../src/utils/ref.zsh --as ref
 
 function test_create() {
+    #TODO(fix): the following code was incorrect to test ref.create
     local listRef=$(call ref.create)
     call list.create --ref $listRef
     # get the type of the variable
