@@ -64,3 +64,21 @@ function test_values() {
     local actual=$(call list.values -r $listRef)
     expect_equal --expected "a b" --actual "$actual"
 }
+
+function test_get() {
+    local listRef=$(call ref.create)
+    call list.create --ref $listRef
+    call list.set -r $listRef -v "a"
+    call list.set -r $listRef -v "b"
+    local actual=$(call list.get -r $listRef -i 2)
+    expect_equal --expected "b" --actual "$actual"
+
+    actual=$(call list.get -r $listRef -i 1)
+    expect_equal --expected "a" --actual "$actual"
+
+    actual=$(call list.get -r $listRef -i 3 2> /dev/null)
+    expect_equal --expected "1" --actual "$?"
+
+    actual=$( call list.get -r $listRef -i 0 )
+    expect_equal --expected "1" --actual "$?"
+}
