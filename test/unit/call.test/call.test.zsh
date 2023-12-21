@@ -18,7 +18,6 @@ function test_call_self() {
     expect_equal --expected "hello" --actual "${actual}"
 }
 
-
 function test_call_with_error_code() {
     import ./m3.zsh --as m3
     call m3.return_error_code
