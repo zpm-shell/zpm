@@ -10,6 +10,6 @@ function test_create() {
     currentFile=${currentFile//\//_}
     currentFile=${currentFile//\./_}
     currentFile=${currentFile:1}
-    local expectVal="${currentFile}_3_1"
+    local expectVal="${currentFile}_4_1"
     expect_equal --expected "${expectVal}" --actual "${actual}"
 }
