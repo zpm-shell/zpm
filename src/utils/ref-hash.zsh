@@ -94,7 +94,53 @@ function values() {
     "
 }
 
-function get() { }
+##
+# @param --ref|-r <ref> The name of the variable to create.
+# @param --key|-k <key> The key to get.
+# @return <string>
+##
+function get() { 
+    local inputRef=''
+    local inputKey=''
+    local args=("$@")
+    local i;
+    for (( i = 1; i <= ${#args}; i++ )); do
+        local arg="${args[$i]}"
+        if [[ "$arg" == '--ref' || "$arg" == '-r' ]]; then
+            inputRef="${args[$i+1]}"
+        elif [[ "$arg" == '--key' || "$arg" == '-k' ]]; then
+            inputKey="${args[$i+1]}"
+        fi
+    done
+
+    # if the input ref was empty, then throw an error.
+    if [[ -z "$inputRef" ]]; then
+        throw --error-message "--ref|-r <ref> is required."
+        return ${FALSE}
+    elif [[ -z "$inputKey" ]]; then
+        throw --error-message "--key|-k <key> is required."
+        return ${FALSE}
+    fi
+
+    # if the input ref was not a hash list, then throw an error.
+    if [[ "$(typeset -p ${inputRef} 2>/dev/null)" != 'typeset -g -A '* ]]; then
+        throw --error-message "The reference variable --ref|-r <ref> must be a hash list."
+        return ${FALSE}
+    fi
+
+    # check the key exists.
+    eval "
+        if [[ ! -v ${inputRef}[\$inputKey] ]]; then
+            throw --error-message "The key:${inputKey} does not exist."
+            return ${FALSE}
+        fi
+    "
+
+    # get the value.
+    eval "
+        echo \"\${${inputRef}[$inputKey]}\"
+    "
+}
 
 ##
 # @param --ref|-r <ref> The name of the variable to create.

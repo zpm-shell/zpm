@@ -51,3 +51,27 @@ function test_keys() {
     "
     expect_equal --expected "bar" --actual "$actual"
 }
+
+function test_get() {
+    local hashRef=$(call ref.create)
+    call hash.create --ref "${hashRef}"
+    call hash.set -r "${hashRef}" -v "foo" -k "bar"
+    local actual=$(call hash.get -r "${hashRef}" -k "bar")
+    expect_equal --expected "foo" --actual "$actual"
+}
+
+function test_get_with_error_code() {
+    local hashRef=$(call ref.create)
+    call hash.create --ref "${hashRef}"
+    call hash.set -r "${hashRef}" -v "foo" -k "bar"
+    call hash.get -r "${hashRef}" -k "notFoundKey" >> /dev/null
+    expect_equal --expected "1" --actual "$?"
+}
+
+function test_get_with_empty_key() {
+    local hashRef=$(call ref.create)
+    call hash.create --ref "${hashRef}"
+    call hash.set -r "${hashRef}" -v "foo" -k bar
+    call hash.get -r "${hashRef}" >> /dev/null
+    expect_equal --expected "1" --actual "$?"
+}
