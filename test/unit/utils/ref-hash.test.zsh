@@ -104,3 +104,12 @@ function test_has() {
     call hash.has -r "${hashRef}" -k bara >> /dev/null
     expect_equal --expected 1 --actual "$?"
 }
+
+function test_size() {
+    local hashRef=$(call ref.create)
+    call hash.create --ref "${hashRef}"
+    call hash.set -r "${hashRef}" -v "foo" -k bar
+    call hash.set -r "${hashRef}" -v "foo2" -k bar2 
+    local actual=$( call hash.size -r "${hashRef}" )
+    expect_equal --expected 2 --actual "$actual"
+}
