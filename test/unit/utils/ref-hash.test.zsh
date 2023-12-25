@@ -93,3 +93,14 @@ function test_delete_key() {
     call hash.delete -r "${hashRef}" -k notFoundKey >> /dev/null
     expect_equal --expected "1" --actual "$?"
 }
+
+function test_has() {
+    local hashRef=$(call ref.create)
+    call hash.create --ref "${hashRef}"
+    call hash.set -r "${hashRef}" -v "foo" -k bar
+    call hash.has -r "${hashRef}" -k bar >> /dev/null
+    expect_equal --expected 0 --actual "$?"
+
+    call hash.has -r "${hashRef}" -k bara >> /dev/null
+    expect_equal --expected 1 --actual "$?"
+}
