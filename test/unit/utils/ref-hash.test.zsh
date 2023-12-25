@@ -75,3 +75,21 @@ function test_get_with_empty_key() {
     call hash.get -r "${hashRef}" >> /dev/null
     expect_equal --expected "1" --actual "$?"
 }
+
+function test_delete_key() {
+    local hashRef=$(call ref.create)
+    call hash.create --ref "${hashRef}"
+    call hash.set -r "${hashRef}" -v "foo" -k bar
+    call hash.delete -r "${hashRef}" -k bar
+    local size=''
+    eval "
+        size=\"\${#${hashRef}[@]}\"
+    "
+    expect_equal --expected "0" --actual "$size"
+
+    # test that the error code is 1 when the key is not found.
+    call hash.delete -r "${hashRef}" >> /dev/null
+    expect_equal --expected "1" --actual "$?"
+    call hash.delete -r "${hashRef}" -k notFoundKey >> /dev/null
+    expect_equal --expected "1" --actual "$?"
+}
