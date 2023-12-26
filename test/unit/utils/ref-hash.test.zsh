@@ -113,3 +113,13 @@ function test_size() {
     local actual=$( call hash.size -r "${hashRef}" )
     expect_equal --expected 2 --actual "$actual"
 }
+
+function test_clear() {
+    local hashRef=$(call ref.create)
+    call hash.create --ref "${hashRef}"
+    call hash.set -r "${hashRef}" -v "foo" -k bar
+    call hash.set -r "${hashRef}" -v "foo2" -k bar2 
+    call hash.clear -r "${hashRef}"
+    local actual=$( call hash.size -r "${hashRef}" )
+    expect_equal --expected 0 --actual "$actual"
+}

@@ -30,5 +30,6 @@ module.exports = {
   rules: {
     "@typescript-eslint/explicit-function-return-type": "error", // or "error" if you want it to fail the linting process
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "max-depth": ["error", 3],
   },
 };
