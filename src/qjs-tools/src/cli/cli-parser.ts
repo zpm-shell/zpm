@@ -1,3 +1,4 @@
+import { version } from "os";
 import JSON5 from "../lib/json5/json5.js";
 import * as std from "std";
 
@@ -386,7 +387,7 @@ function checkCommand(command: string, cliConf: CliConfType): void {
   }
 }
 
-function helpDoc(cliConf: CliConfType): void {
+function helpDoc(cliConf: CliConfType): string {
   const commandDocs: string[] = [];
   const formatLine = (cell: string, cell2: string): string =>
     `${cell}\t\t${cell2}`;
@@ -413,29 +414,47 @@ GLOBAL OPTIONS:
 --version, -v  show version (default: false)
 
 ${cliConf.name}@${cliConf.version}`;
-  console.log(doc);
+
+  return doc;
 }
 
+/**
+ * @param inputCliArgs
+ * @param cliConf
+ * @returns
+ */
 function inputParser(
   inputCliArgs: string[],
   cliConf: CliConfType
 ): InputActionType {
+  // if the first arg is version, and then print the version number.
+  if (isVersion(inputCliArgs)) {
+    return {
+      success: true,
+      action: "version",
+      output: `${cliConf.name}@${cliConf.version}`,
+    };
+  }
+  let isHelpe = false;
+  if (isArgsIncludeHelpFlag(inputCliArgs)) {
+    inputCliArgs = removeHelpFlag(inputCliArgs);
+    isHelpe = true;
+  }
   // check the first arg is a command, version, help or empty
   if (inputCliArgs.length === 0) {
-    helpDoc(cliConf);
     return {
       success: false,
-      output: "",
+      output: helpDoc(cliConf),
       action: "help",
     };
   }
 
-  // check if the first arg is a command
-  const command = inputCliArgs[0] as keyof typeof cliConf.commands;
+  // parse the command from args
+  const command = inputCliArgs[0];
   checkCommand(command, cliConf);
   const result: InputActionType = {
     success: true,
-    action: "command",
+    action: isHelpe ? "help" : "command",
     output: "",
     command: {
       name: command,
@@ -448,6 +467,14 @@ function inputParser(
   const cliArgs = inputCliArgs.slice(1);
   for (let i = 0; i < cliArgs.length; i++) {
     const arg = cliArgs[i];
+    // if the arg is --version -v
+    if (arg === "--version" || arg === "-v") {
+      result.action = "version";
+      result.output = `${cliConf.name}@${cliConf.version}`;
+      return result;
+    }
+
+    // check if the arg is a flag
     const flag =
       hasFlag(arg, commandConf) || hasAliasFlag(arg, commandConf, command);
     if (flag !== "") {
@@ -460,6 +487,7 @@ function inputParser(
       result.command!.flags[flag] = value;
       i = newArgIndex;
     } else {
+      // check if the arg is a command
       result.command!.args.push(arg);
     }
   }
@@ -467,8 +495,110 @@ function inputParser(
   return result;
 }
 
+function isVersion(inputCliArgs: string[]): boolean {
+  if (inputCliArgs.length === 0) {
+    return false;
+  }
+
+  const firstArg = inputCliArgs[0];
+  if (
+    firstArg === "--version" ||
+    (firstArg === "-v" && inputCliArgs.length === 1)
+  ) {
+    return true;
+  }
+
+  for (let i = 0; i < inputCliArgs.length; i++) {
+    const arg = inputCliArgs[i];
+    if (arg === "--version" || arg === "-v") {
+      throw new ExitError(`The --version|-v flag must be set alone`);
+    }
+  }
+
+  return false;
+}
+function isArgsIncludeHelpFlag(inputCliArgs: string[]): boolean {
+  let isDetectHelpFlag = false;
+  for (let i = 0; i < inputCliArgs.length; i++) {
+    const arg = inputCliArgs[i];
+    if (arg === "--help" || arg === "-h") {
+      if (isDetectHelpFlag) {
+        throw new ExitError(`The --help|-h flag must be set alone`);
+      }
+      isDetectHelpFlag = true;
+    }
+  }
+
+  return isDetectHelpFlag;
+}
+
+/**
+ * Remove the --help and -h flags from the cli args
+ * @param inputCliArgs
+ * @returns
+ */
+function removeHelpFlag(inputCliArgs: string[]): string[] {
+  const newCliArgs = [];
+  let isRemove = false;
+  for (let i = 0; i < inputCliArgs.length; i++) {
+    const arg = inputCliArgs[i];
+    // ignore --help and -h flags
+    if ((arg === "--help" || arg === "-h") && !isRemove) {
+      // remove index i from newCliArgs
+      isRemove = true;
+      i++;
+      continue;
+    }
+    newCliArgs.push(inputCliArgs[i]);
+  }
+
+  return newCliArgs;
+}
+
+/**
+ * Print the command help doc
+ * @param action
+ * @param cliConf
+ * @returns
+ */
+function commandHelpDoc(action: InputActionType, cliConf: CliConfType): string {
+  const name = action.command!.name;
+  const commandConf = cliConf.commands[name];
+  const argsDoc: string[] = [];
+  commandConf.args.forEach((arg) => {
+    argsDoc.push(`<${arg.name}>`);
+  });
+
+  const flagDocs: string[] = [];
+  Object.keys(commandConf.flags).forEach((flagName) => {
+    const flag = commandConf.flags[flagName];
+    flagDocs.push(`\t--${flagName}\t\t${flag.description}`);
+  });
+
+  let optionSectionDocs: string = "";
+  if (flagDocs.length > 0) {
+    optionSectionDocs = `\nOptions:
+${flagDocs.join("\n")}
+`;
+  }
+
+  const commandDoc = `Usage: 
+  ${cliConf.name} ${name} ${argsDoc.join(" ")}
+
+  ${cliConf.commands[action.command!.name].description}.${optionSectionDocs}
+`;
+  return commandDoc;
+}
+
 const cliArgs: string[] = scriptArgs.slice(1);
 checkConfFlag(cliArgs);
 const cliConf = cliConfParser(cliArgs);
-const input = inputParser(removeConfFlag(cliArgs), cliConf);
-console.log(JSON5.stringify(input));
+const result = inputParser(removeConfFlag(cliArgs), cliConf);
+if (result.action === "help" && result.command !== undefined) {
+  result.output = commandHelpDoc(result, cliConf);
+}
+
+console.log(JSON5.stringify(result));
+if (!result.success) {
+  std.exit(1);
+}
