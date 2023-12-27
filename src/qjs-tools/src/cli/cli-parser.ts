@@ -1,4 +1,3 @@
-import { version } from "os";
 import JSON5 from "../lib/json5/json5.js";
 import * as std from "std";
 
