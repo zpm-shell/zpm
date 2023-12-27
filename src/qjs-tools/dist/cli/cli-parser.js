@@ -294,7 +294,7 @@ ${cliConf.name}@${cliConf.version}`;
  * @param cliConf
  * @returns
  */
-function inputParser(inputCliArgs, cliConf) {
+function cliParser(inputCliArgs, cliConf) {
     // if the first arg is version, and then print the version number.
     if (isVersion(inputCliArgs)) {
         return {
@@ -440,12 +440,12 @@ ${flagDocs.join("\n")}
 const cliArgs = scriptArgs.slice(1);
 checkConfFlag(cliArgs);
 const cliConf = cliConfParser(cliArgs);
-const result = inputParser(removeConfFlag(cliArgs), cliConf);
-if (result.action === "help" && result.command !== undefined) {
-    result.output = commandHelpDoc(result, cliConf);
+const cliData = cliParser(removeConfFlag(cliArgs), cliConf);
+if (cliData.action === "help" && cliData.command !== undefined) {
+    cliData.output = commandHelpDoc(cliData, cliConf);
 }
-console.log(JSON5.stringify(result));
-if (!result.success) {
+console.log(JSON5.stringify(cliData));
+if (!cliData.success) {
     std.exit(1);
 }
 //# sourceMappingURL=cli-parser.js.map
