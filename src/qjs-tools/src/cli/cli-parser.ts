@@ -432,7 +432,7 @@ function parseCli(
   // check the first arg is a command, version, help or empty
   if (inputCliArgs.length === 0) {
     return {
-      success: false,
+      success: isHelpe ?? false,
       output: helpDoc(cliConf),
       action: "help",
     };

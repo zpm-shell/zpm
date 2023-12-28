@@ -1,0 +1,12 @@
+zpm - ZPM is a package manager for zsh.
+
+USAGE:
+zpm init                Create a zpm.json5 file
+zpm help                search for help on <term>
+zpm help <term>         search for help on <term>
+
+GLOBAL OPTIONS:
+--help, -h     show help (default: false)
+--version, -v  show version (default: false)
+
+zpm@0.0.1
