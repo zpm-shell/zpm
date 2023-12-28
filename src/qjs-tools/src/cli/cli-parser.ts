@@ -421,7 +421,7 @@ function parseCli(
     return {
       success: true,
       action: "version",
-      output: `${cliConf.name}@${cliConf.version}`,
+      output: `${cliConf.version}`,
     };
   }
   let isHelpe = false;

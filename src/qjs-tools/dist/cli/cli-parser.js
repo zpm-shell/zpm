@@ -300,7 +300,7 @@ function parseCli(inputCliArgs, cliConf) {
         return {
             success: true,
             action: "version",
-            output: `${cliConf.name}@${cliConf.version}`,
+            output: `${cliConf.version}`,
         };
     }
     let isHelpe = false;
