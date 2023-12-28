@@ -1,18 +1,18 @@
 import JSON5 from "../lib/json5/json5.js";
 import * as std from "std";
-const output = {
-    success: false,
-    message: "",
-};
 /**
  * ExitError
  */
 class ExitError extends Error {
     constructor(message) {
-        output.message = message;
-        console.log(JSON5.stringify(output));
-        super(message);
+        const outputError = {
+            success: false,
+            action: "help",
+            output: `\\e[1;41m ERROR \\e[0m ${message}`,
+        };
+        console.log(JSON5.stringify(outputError));
         std.exit(1);
+        super(message);
     }
 }
 /**
@@ -294,7 +294,7 @@ ${cliConf.name}@${cliConf.version}`;
  * @param cliConf
  * @returns
  */
-function cliParser(inputCliArgs, cliConf) {
+function parseCli(inputCliArgs, cliConf) {
     // if the first arg is version, and then print the version number.
     if (isVersion(inputCliArgs)) {
         return {
@@ -332,6 +332,7 @@ function cliParser(inputCliArgs, cliConf) {
     // parse the args and flags
     const commandConf = cliConf.commands[command];
     const cliArgs = inputCliArgs.slice(1);
+    const argIndex = 0;
     for (let i = 0; i < cliArgs.length; i++) {
         const arg = cliArgs[i];
         // if the arg is --version -v
@@ -349,9 +350,36 @@ function cliParser(inputCliArgs, cliConf) {
             i = newArgIndex;
         }
         else {
-            // check if the arg is a command
-            result.command.args.push(arg);
+            if (commandConf.args[argIndex]) {
+                const argConf = commandConf.args[argIndex];
+                // check if the arg is a command
+                result.command.args.push({
+                    name: argConf.name,
+                    value: arg,
+                });
+            }
+            else {
+                throw new ExitError(`The argument ${arg} is not a valid argument`);
+            }
         }
+    }
+    // check if the required arguments was missing. then print the error and help doc
+    const requiredArgNames = commandConf.args.map((arg) => arg.name);
+    if (result.command.args.length < requiredArgNames.length) {
+        const missingArgs = [];
+        const resultArgNames = result.command.args.map((arg) => arg.name);
+        requiredArgNames.forEach((argName) => {
+            if (!resultArgNames.includes(argName)) {
+                missingArgs.push(argName);
+            }
+        });
+        let errorMsg = `The required arguments ${missingArgs
+            .map((e) => `<${e}>`)
+            .join(", ")} was missing in command ${command}.`;
+        if (result.action === "command") {
+            errorMsg += `\n\n${commandHelpDoc(result, cliConf)}`;
+        }
+        throw new ExitError(errorMsg);
     }
     return result;
 }
@@ -440,7 +468,7 @@ ${flagDocs.join("\n")}
 const cliArgs = scriptArgs.slice(1);
 checkConfFlag(cliArgs);
 const cliConf = cliConfParser(cliArgs);
-const cliData = cliParser(removeConfFlag(cliArgs), cliConf);
+const cliData = parseCli(removeConfFlag(cliArgs), cliConf);
 if (cliData.action === "help" && cliData.command !== undefined) {
     cliData.output = commandHelpDoc(cliData, cliConf);
 }

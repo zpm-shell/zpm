@@ -29,9 +29,9 @@ function create_zpm_json5() {
     fi
 
     local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
-    local packageName=$($jq5 -j "${inputData}" -q "args.0")
+    local packageName=$($jq5 -j "${inputData}" -q "args.0.value")
 
-    local zpm_json5=$(cat <<EOF
+    local config=$(cat <<EOF
 {
     name: "${packageName}",
     version: "1.0.0",
@@ -46,7 +46,8 @@ function create_zpm_json5() {
 }
 EOF
 )
-    echo "${zpm_json5}" > zpm.json5
-    echo "${zpm_json5}"
-    echo "create zpm.json5 success"
+    local conf_file="zpm.json5"
+    echo "${config}" > ${conf_file}
+    echo "${config}"
+    echo "Create ${conf_file} success"
 }

@@ -2,15 +2,6 @@ import JSON5 from "../lib/json5/json5.js";
 import * as std from "std";
 
 type FlagValueType = string | number | boolean;
-type OutputType = {
-  success: boolean;
-  message: string;
-  data?: {
-    command: string;
-    args: string[];
-    flags: Record<string, FlagValueType>;
-  };
-};
 type FlagConfig = {
   type: "string" | "number" | "boolean";
   default: string | number | boolean;
@@ -30,20 +21,15 @@ type CliConfType = {
   commands: Record<string, CommandType>;
 };
 
-type InputActionType = {
+type OutputDataType = {
   success: boolean;
   action: "command" | "help" | "version";
   output: string;
   command?: {
     name: string;
-    args: string[];
+    args: { name: string; value: string }[];
     flags: Record<string, string | number | boolean>;
   };
-};
-
-const output: OutputType = {
-  success: false,
-  message: "",
 };
 
 /**
@@ -51,10 +37,14 @@ const output: OutputType = {
  */
 class ExitError extends Error {
   constructor(message: string) {
-    output.message = message;
-    console.log(JSON5.stringify(output));
-    super(message);
+    const outputError: OutputDataType = {
+      success: false,
+      action: "help",
+      output: `\\e[1;41m ERROR \\e[0m ${message}`,
+    };
+    console.log(JSON5.stringify(outputError));
     std.exit(1);
+    super(message);
   }
 }
 
@@ -422,10 +412,10 @@ ${cliConf.name}@${cliConf.version}`;
  * @param cliConf
  * @returns
  */
-function cliParser(
+function parseCli(
   inputCliArgs: string[],
   cliConf: CliConfType
-): InputActionType {
+): OutputDataType {
   // if the first arg is version, and then print the version number.
   if (isVersion(inputCliArgs)) {
     return {
@@ -451,7 +441,7 @@ function cliParser(
   // parse the command from args
   const command = inputCliArgs[0];
   checkCommand(command, cliConf);
-  const result: InputActionType = {
+  const result: OutputDataType = {
     success: true,
     action: isHelpe ? "help" : "command",
     output: "",
@@ -464,6 +454,7 @@ function cliParser(
   // parse the args and flags
   const commandConf: CommandType = cliConf.commands[command];
   const cliArgs = inputCliArgs.slice(1);
+  const argIndex: number = 0;
   for (let i = 0; i < cliArgs.length; i++) {
     const arg = cliArgs[i];
     // if the arg is --version -v
@@ -486,9 +477,37 @@ function cliParser(
       result.command!.flags[flag] = value;
       i = newArgIndex;
     } else {
-      // check if the arg is a command
-      result.command!.args.push(arg);
+      if (commandConf.args[argIndex]) {
+        const argConf = commandConf.args[argIndex];
+        // check if the arg is a command
+        result.command!.args.push({
+          name: argConf.name,
+          value: arg,
+        });
+      } else {
+        throw new ExitError(`The argument ${arg} is not a valid argument`);
+      }
     }
+  }
+
+  // check if the required arguments was missing. then print the error and help doc
+  const requiredArgNames = commandConf.args.map((arg) => arg.name);
+  if (result.command!.args.length < requiredArgNames.length) {
+    const missingArgs: string[] = [];
+    const resultArgNames = result.command!.args.map((arg) => arg.name);
+    requiredArgNames.forEach((argName) => {
+      if (!resultArgNames.includes(argName)) {
+        missingArgs.push(argName);
+      }
+    });
+    let errorMsg: string = `The required arguments ${missingArgs
+      .map((e) => `<${e}>`)
+      .join(", ")} was missing in command ${command}.`;
+    if (result.action === "command") {
+      errorMsg += `\n\n${commandHelpDoc(result, cliConf)}`;
+    }
+
+    throw new ExitError(errorMsg);
   }
 
   return result;
@@ -560,7 +579,7 @@ function removeHelpFlag(inputCliArgs: string[]): string[] {
  * @param cliConf
  * @returns
  */
-function commandHelpDoc(action: InputActionType, cliConf: CliConfType): string {
+function commandHelpDoc(action: OutputDataType, cliConf: CliConfType): string {
   const name = action.command!.name;
   const commandConf = cliConf.commands[name];
   const argsDoc: string[] = [];
@@ -592,7 +611,7 @@ ${flagDocs.join("\n")}
 const cliArgs: string[] = scriptArgs.slice(1);
 checkConfFlag(cliArgs);
 const cliConf = cliConfParser(cliArgs);
-const cliData = cliParser(removeConfFlag(cliArgs), cliConf);
+const cliData = parseCli(removeConfFlag(cliArgs), cliConf);
 if (cliData.action === "help" && cliData.command !== undefined) {
   cliData.output = commandHelpDoc(cliData, cliConf);
 }
