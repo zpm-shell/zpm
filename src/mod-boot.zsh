@@ -21,7 +21,13 @@ local cliData=$(${ZPM_DIR}/src/qjs-tools/bin/cli-parser -c "${zpm_cli_conf}" "$@
 local ok=$($jq5 -j "${cliData}" -q "success")
 local output=$($jq5 -j "${cliData}" -q "output")
 local action=$($jq5 -j "${cliData}" -q "action")
-echo "${output}"
+if [[ ${output} != "" ]]; then
+    if [[ "${ok}" == "true" ]]; then
+        echo "${output}"
+    else
+        echo "${output}" >&2
+    fi
+fi
 [[ "${ok}" == "false" ]] && exit 1
 
 if [[ "${action}" == "command" ]]; then
