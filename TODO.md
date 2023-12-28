@@ -36,3 +36,14 @@
         .zpm/src/utils/zpm.zsh:24
         .zpm/src/autoload.zsh:285
         .zpm/bin/zpm:31
+7. [ ] To execute a script in the "scripts" section of zpm.json5, like:
+    zpm.json5
+    {
+        ...
+        scripts: {
+            cmd1: "echo hello"
+        }
+        ...
+    }
+    and then execute the cmd:`zpm run cmd1`
+    
