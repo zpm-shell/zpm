@@ -1,7 +1,7 @@
 # TODO List
 
-1. [ ] rename js-scripts to js-tools
-2. [ ] add the create command in zpm-cli to create a new zpm project.
+1. [x] rename js-scripts to js-tools
+2. [x] add the create command in zpm-cli to create a new zpm project.
 3. [ ] the shellBootloader and shellBootloadProvider key name in zpm.json5 and it was an objest list, like: 
 ```json5
     {
@@ -36,6 +36,3 @@
         .zpm/src/utils/zpm.zsh:24
         .zpm/src/autoload.zsh:285
         .zpm/bin/zpm:31
-
-
-
