@@ -14,17 +14,18 @@ local zpm_cli_conf='
     commands: {
         init: { args: [{name: "package name"}], flags: {}, docs: [
             "zpm init <package name>        Create a zpm.json5 file in current directory."
-        ]}
+        ]},
+        run: { args: [{name: "script"}], flags: {}, docs: [
+            "zpm run  <script>              Run the script in zpm.json5."
+        ]},
     }
 }'
 
 local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
-# ${ZPM_DIR}/src/qjs-tools/bin/cli-parser -c "${zpm_cli_conf}" "$@"
-# return 0;
 local cliData=$(${ZPM_DIR}/src/qjs-tools/bin/cli-parser -c "${zpm_cli_conf}" "$@")
-local ok=$($jq5 -j "${cliData}" -q "success")
-local output=$($jq5 -j "${cliData}" -q "output")
-local action=$($jq5 -j "${cliData}" -q "action")
+local ok=$($jq5 -j "${cliData}" -q "success" -t get)
+local output=$($jq5 -j "${cliData}" -q "output" -t get)
+local action=$($jq5 -j "${cliData}" -q "action" -t get)
 if [[ ${output} != "" ]]; then
     if [[ "${ok}" == "true" ]]; then
         echo "${output}"
@@ -35,11 +36,14 @@ fi
 [[ "${ok}" == "false" ]] && exit 1
 
 if [[ "${action}" == "command" ]]; then
-    local commandName=$($jq5 -j "${cliData}" -q "command.name")
-    local commandData=$($jq5 -j "${cliData}" -q "command")
+    local commandName=$($jq5 -j "${cliData}" -q "command.name" -t get)
+    local commandData=$($jq5 -j "${cliData}" -q "command" -t get)
     case ${commandName} in
         init)
             call zpm.create_zpm_json5 -d "${commandData}"
+        ;;
+        run)
+            call zpm.run_script -d "${commandData}"
         ;;
     esac
 fi
