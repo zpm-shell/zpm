@@ -19,7 +19,7 @@ class ExitError extends Error {
  *
  * @param cliArgs
  */
-function cliConfParser(cliArgs) {
+function parseCliConf(cliArgs) {
     // Check if the user has passed a config file
     let cliConfig = "";
     cliArgs.forEach((arg, i) => {
@@ -467,7 +467,7 @@ ${flagDocs.join("\n")}
 }
 const cliArgs = scriptArgs.slice(1);
 checkConfFlag(cliArgs);
-const cliConf = cliConfParser(cliArgs);
+const cliConf = parseCliConf(cliArgs);
 const cliData = parseCli(removeConfFlag(cliArgs), cliConf);
 if (cliData.action === "help" && cliData.command !== undefined) {
     cliData.output = commandHelpDoc(cliData, cliConf);
