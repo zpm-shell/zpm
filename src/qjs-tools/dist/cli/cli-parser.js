@@ -372,6 +372,13 @@ function parseCli(inputCliArgs, cliConf) {
             }
         }
     }
+    // check if the help doc was required and then print the help doc for the command
+    if (isHelpe) {
+        const doc = `${cmdHelpDoc(result, cliConf)}`;
+        result.output = doc;
+        result.action = "help";
+        return result;
+    }
     // check if the required arguments was missing. then print the error and help doc
     const requiredArgNames = commandConf.args.map((arg) => arg.name);
     if (result.command.args.length < requiredArgNames.length) {

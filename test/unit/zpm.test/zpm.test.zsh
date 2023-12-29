@@ -77,3 +77,13 @@ function test_zpm_script() {
     expect_equal --expected 0 --actual "$?"
     expect_equal --expected "hello world" --actual "${actual}"
 }
+
+function test_zpm_run_help() {
+    local actual=$( zpm run --help )
+    expect_equal --expected 0 --actual "$?"
+    actual=$( zpm run -h )
+    expect_equal --expected 0 --actual "$?"
+
+    local expectVal=$( cat ${ZPM_DIR}/test/unit/zpm.test/expect_zpm_run_help_doc.txt )
+    expect_equal --expected "${expectVal}" --actual "${actual}"
+}

@@ -9,14 +9,15 @@ import ../src/utils/zpm.zsh --as zpm;
 local zpm_cli_conf='
 {
     name: "zpm",
-    description: "ZPM is a package manager for zsh.",
+    description: "zpm is a zsh package manager.",
     version: "0.0.1",
     commands: {
         init: { args: [{name: "package name"}], flags: {}, docs: [
             "zpm init <package name>        Create a zpm.json5 file in current directory."
         ]},
         run: { args: [{name: "script"}], flags: {}, docs: [
-            "zpm run  <script>              Run the script in zpm.json5."
+            "zpm run  <script>              Run a zpm.json5 script",
+            "         <./my-script.zsh>     Execute a file with zpm."
         ]},
     }
 }'
