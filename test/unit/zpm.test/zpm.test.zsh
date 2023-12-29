@@ -51,6 +51,7 @@ EOF
 )
     local effectFileContent=$(cat "${effectFile}")
     expect_equal --expected "${expectVal}" --actual "${effectFileContent}"
+    cd -
 }
 
 function test_help_doc() {
@@ -71,4 +72,8 @@ function test_zpm_cli() {
     expect_equal --expected "1" --actual "$?"
 }
 
-
+function test_zpm_script() {
+    local actual=$( zpm run hello)
+    expect_equal --expected 0 --actual "$?"
+    expect_equal --expected "hello world" --actual "${actual}"
+}
