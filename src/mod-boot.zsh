@@ -12,11 +12,15 @@ local zpm_cli_conf='
     description: "ZPM is a package manager for zsh.",
     version: "0.0.1",
     commands: {
-        init: { args: [{name: "package name"}], flags: {}, description: "Create a zpm.json5 file" }
+        init: { args: [{name: "package name"}], flags: {}, docs: [
+            "zpm init <package name>        Create a zpm.json5 file in current directory."
+        ]}
     }
 }'
 
 local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
+# ${ZPM_DIR}/src/qjs-tools/bin/cli-parser -c "${zpm_cli_conf}" "$@"
+# return 0;
 local cliData=$(${ZPM_DIR}/src/qjs-tools/bin/cli-parser -c "${zpm_cli_conf}" "$@")
 local ok=$($jq5 -j "${cliData}" -q "success")
 local output=$($jq5 -j "${cliData}" -q "output")

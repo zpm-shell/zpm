@@ -9,9 +9,9 @@ type FlagConfig = {
   alias: string;
 };
 type CommandType = {
-  description: string;
   args: { name: string }[];
   flags: Record<string, FlagConfig>;
+  docs: string[];
 };
 
 type CliConfType = {
@@ -115,17 +115,6 @@ function parseCliConf(cliArgs: string[]): CliConfType {
   // check if the commands object has the required keys
   Object.keys(cliConfObj.commands).forEach((commandName: string) => {
     const commandConf = cliConfObj!.commands[commandName];
-    // check the commands.command.description property must be existed in config.
-    if (!Object.keys(commandConf).includes("description")) {
-      throw new ExitError(
-        `the commands.${commandName}.description property in config was required`
-      );
-    }
-    if (typeof commandConf.description !== "string") {
-      throw new ExitError(
-        `the commands.${commandName}.description property must be a string`
-      );
-    }
 
     //  check the args property is an array of objects like: [{name: string}]
     if (!Object.prototype.hasOwnProperty.call(commandConf, "args")) {
@@ -210,6 +199,32 @@ function parseCliConf(cliArgs: string[]): CliConfType {
         if (typeof flagConf.alias !== "string") {
           throw new ExitError(
             `The command flag alias property must be a string in commands.${commandName}.flags.${flagName}`
+          );
+        }
+      });
+    }
+
+    // check the commandConf has the docs property as string[]
+    if (!Object.prototype.hasOwnProperty.call(commandConf, "docs")) {
+      throw new ExitError(
+        `The command must have a docs property in commands.${commandName}`
+      );
+    }
+    if (!Array.isArray(commandConf.docs)) {
+      throw new ExitError(
+        `The command docs property must be an array in commands.${commandName}.docs`
+      );
+    }
+    if (commandConf.docs.length == 0) {
+      throw new ExitError(
+        `The command docs property must not be empty in commands.${commandName}.docs`
+      );
+    }
+    if (commandConf.docs.length > 0) {
+      commandConf.docs.forEach((doc: string) => {
+        if (typeof doc !== "string") {
+          throw new ExitError(
+            `The command docs property must be an array of strings in commands.${commandName}.docs`
           );
         }
       });
@@ -377,26 +392,18 @@ function checkCommand(command: string, cliConf: CliConfType): void {
 }
 
 function helpDoc(cliConf: CliConfType): string {
-  const commandDocs: string[] = [];
-  const formatLine = (cell: string, cell2: string): string =>
-    `${cell}\t\t${cell2}`;
+  const cmdDocs: string[] = [];
   Object.keys(cliConf.commands).forEach((command) => {
-    const commandConf = cliConf.commands[command];
-    commandDocs.push(
-      formatLine(`${cliConf.name} ${command}`, commandConf.description)
-    );
+    const cmdConf = cliConf.commands[command];
+    cmdConf.docs.forEach((doc) => {
+      cmdDocs.push(doc);
+    });
   });
-  commandDocs.push(
-    formatLine(`${cliConf.name} help`, "search for help on <term>")
-  );
-  commandDocs.push(
-    formatLine(`${cliConf.name} help <term>`, "search for help on <term>")
-  );
 
   const doc = `${cliConf.name} - ${cliConf.description}
 
 USAGE:
-${commandDocs.join("\n")}
+${cmdDocs.join("\n")}
 
 GLOBAL OPTIONS:
 --help, -h     show help (default: false)
@@ -504,7 +511,7 @@ function parseCli(
       .map((e) => `<${e}>`)
       .join(", ")} was missing in command ${command}.`;
     if (result.action === "command") {
-      errorMsg += `\n\n${commandHelpDoc(result, cliConf)}`;
+      errorMsg += `\n\n${cmdHelpDoc(result, cliConf)}`;
     }
 
     throw new ExitError(errorMsg);
@@ -579,33 +586,35 @@ function removeHelpFlag(inputCliArgs: string[]): string[] {
  * @param cliConf
  * @returns
  */
-function commandHelpDoc(action: OutputDataType, cliConf: CliConfType): string {
+function cmdHelpDoc(action: OutputDataType, cliConf: CliConfType): string {
   const name = action.command!.name;
-  const commandConf = cliConf.commands[name];
+  const cmdConf = cliConf.commands[name];
   const argsDoc: string[] = [];
-  commandConf.args.forEach((arg) => {
+  cmdConf.args.forEach((arg) => {
     argsDoc.push(`<${arg.name}>`);
   });
 
   const flagDocs: string[] = [];
-  Object.keys(commandConf.flags).forEach((flagName) => {
-    const flag = commandConf.flags[flagName];
+  Object.keys(cmdConf.flags).forEach((flagName) => {
+    const flag = cmdConf.flags[flagName];
     flagDocs.push(`\t--${flagName}\t\t${flag.description}`);
   });
 
-  let optionSectionDocs: string = "";
+  let flagSectionDocs: string = "";
   if (flagDocs.length > 0) {
-    optionSectionDocs = `\nOptions:
+    flagSectionDocs = `\nFlags:
 ${flagDocs.join("\n")}
 `;
   }
 
-  const commandDoc = `Usage: 
-  ${cliConf.name} ${name} ${argsDoc.join(" ")}
-
-  ${cliConf.commands[action.command!.name].description}.${optionSectionDocs}
+  let cmdDoc: string = `Usage: 
+${cmdConf.docs.join("\n")}
 `;
-  return commandDoc;
+  if (flagDocs.length > 0) {
+    cmdDoc = `${cmdDoc}${flagSectionDocs}`;
+  }
+
+  return cmdDoc;
 }
 
 const cliArgs: string[] = scriptArgs.slice(1);
@@ -613,7 +622,7 @@ checkConfFlag(cliArgs);
 const cliConf = parseCliConf(cliArgs);
 const cliData = parseCli(removeConfFlag(cliArgs), cliConf);
 if (cliData.action === "help" && cliData.command !== undefined) {
-  cliData.output = commandHelpDoc(cliData, cliConf);
+  cliData.output = cmdHelpDoc(cliData, cliConf);
 }
 
 console.log(JSON5.stringify(cliData));
