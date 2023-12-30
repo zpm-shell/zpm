@@ -78,6 +78,37 @@ EOF
 }
 
 ##
+# exec a zsh script
+# @param --file|-f <string> The file path
+# @return <void>
+##
+function exec_zsh_script() {
+    local inputFile=''
+    local args=("$@")
+    for (( i = 1; i <= $#; i++ )); do
+        local arg="${args[$i]}"
+        case "${arg}" in
+            --file|-f)
+                (( i++ ))
+                inputFile="${args[$i]}"
+            ;;
+        esac
+    done
+    if [[ -z "${inputFile}" ]]; then
+        throw --error-message "The flag: --file|-f was requird" --exit-code 1
+    fi
+    
+    # check the file was zsh file
+    local fileExt=$(echo "${inputFile}" | awk -F '.' '{print $NF}')
+    if [[ "${fileExt}" != "zsh" ]]; then
+        call self.zpm_error -m "The file: ${inputFile} is not a zsh file"
+        return ${FALSE}
+    fi
+
+    . ${inputFile}
+}
+
+##
 # run a script in zpm.json5
 # @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm.json5 file"}
 # @return <void>
@@ -108,12 +139,28 @@ function run_script() {
     fi
     local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
     local scriptName=$($jq5 -j "${inputData}" -q "args.0.value" -t get)
+    if [[ -f ${scriptName} ]]; then
+        call self.exec_zsh_script -f ${scriptName}
+        return $?;
+    else
+        # check the script name was included dot
+        local hasDot=$(echo "${scriptName}" | grep -e "\.\\?.*\.[a-zA-Z0-9]\\+$" )
+        if [[ -n "${hasDot}" ]]; then
+            call self.zpm_error -m "the script file: ${scriptName} was not found in \"$(pwd)\""
+            return ${FALSE}
+        fi
+    fi
     # check if the script name was not exits and then print the error message
     local zpmJson5Data=$(cat ${zpmJson5})
     local hasScripName=$($jq5 -j "${zpmJson5Data}" -q "scripts.${scriptName}" -t has)
     if [[ ${hasScripName} == "false" ]]; then
-        call self.zpm_error -m "No script name: ${scriptName} was found in ${zpmJson5}"
-        return ${FALSE}
+        if [[ -f ${scriptName} ]]; then
+            call self.exec_zsh_script -f ${scriptName}
+
+        else
+            call self.zpm_error -m "No script name: ${scriptName} was found in ${zpmJson5}"
+            return ${FALSE}
+        fi
     fi
 
     # run the script

@@ -13,34 +13,46 @@ const json5Query = (
 ): unknown => {
   const json5Obj = JSON5.parse(json5);
   const queryArr = query.split(".");
-  let i: number = 0;
-  const resultObj = queryArr.reduce((acc, key) => {
-    const isLastKey = queryArr.length - 1 === i;
-    i++;
-    const getVal = (): unknown => {
-      if (Object.keys(acc).includes(key)) {
-        return acc[key];
-      } else {
-        throw new Error(`json5Query: ${key} is not a valid key`);
-      }
-    };
-    if (isLastKey) {
-      switch (queryType) {
-        case "get":
-          return getVal();
-        case "has":
-          return Object.keys(acc).includes(key);
-        case "size":
-          return Object.keys(acc).length;
-        default:
-          throw new Error(`json5Query: ${queryType} is not a valid queryType`);
-      }
-    } else {
-      return getVal();
+  const checkKeyExist = (obj: Record<string, string>, key: string): void => {
+    if (!Object.keys(obj).includes(key)) {
+      throw new Error(`key ${key} not exist`);
     }
-  }, json5Obj);
-
-  return resultObj;
+  };
+  let i = 0;
+  switch (queryType) {
+    case "get":
+      return queryArr.reduce((prev, curr) => {
+        checkKeyExist(prev, curr);
+        return prev[curr];
+      }, json5Obj);
+    case "has":
+      return queryArr.reduce((prev, curr) => {
+        const isLastElement = i === queryArr.length - 1;
+        i++;
+        if (isLastElement) {
+          return Object.keys(prev).includes(curr);
+        } else {
+          try {
+            checkKeyExist(prev, curr);
+            return prev[curr];
+          } catch (e) {
+            console.log(`query: ${query} is not exist`);
+            checkKeyExist(prev, curr);
+          }
+        }
+      }, json5Obj);
+    case "size":
+      return queryArr.reduce((prev, curr) => {
+        const isLastElement = i === queryArr.length - 1;
+        i++;
+        checkKeyExist(prev, curr);
+        if (isLastElement) {
+          return Object.keys(prev[curr]).length;
+        } else {
+          return prev[curr];
+        }
+      }, json5Obj).length;
+  }
 };
 
 const parserResult = optionParser(
