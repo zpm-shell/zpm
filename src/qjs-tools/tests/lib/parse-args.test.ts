@@ -38,7 +38,7 @@ describe("Test to parse args", () => {
       name: "zpm",
       commands: {
         init: {
-          description: "create a zpm.json5 file",
+          description: "create a zpm-package.json5 file",
           args: [],
           options: [],
         },
@@ -49,7 +49,7 @@ describe("Test to parse args", () => {
 
     expect(result.success).toBe(true);
     const expected =
-      "Usage: zpm [command] [options]\n\nVersion: 0.0.1\nzpm is a package manager for zsh\nCommands:\n  zpm init\t\tcreate a zpm.json5 file\n\nGlobal options:\n  -h, --help\t\tShow this help message and exit\n  -v, --version\t\tShow version information and exit\n";
+      "Usage: zpm [command] [options]\n\nVersion: 0.0.1\nzpm is a package manager for zsh\nCommands:\n  zpm init\t\tcreate a zpm-package.json5 file\n\nGlobal options:\n  -h, --help\t\tShow this help message and exit\n  -v, --version\t\tShow version information and exit\n";
 
     expect(result.printTxt).toBe(expected);
 

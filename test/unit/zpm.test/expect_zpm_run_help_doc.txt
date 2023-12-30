@@ -1,2 +1,2 @@
 Usage: 
-zpm run     <file or script>      Run a zpm.json5 script or a zsh file.
+zpm run     <file or script>      Run a zpm-package.json5 script or a zsh file.

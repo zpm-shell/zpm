@@ -26,8 +26,8 @@ function zpm_error() {
 }
 
 ##
-# create a zpm.json5 file
-# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm.json5 file"}
+# create a zpm-package.json5 file
+# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json5 file"}
 # @return <void>
 ##
 function create_zpm_json5() {
@@ -48,9 +48,9 @@ function create_zpm_json5() {
         throw --error-message "The flag: --data|-d was requird" --exit-code 1
     fi
 
-    # if the zpm.json5 file exists, then exit
-    if [[ -f "zpm.json5" ]]; then
-        throw --error-message "The zpm.json5 file already exists" --exit-code 1
+    # if the zpm-package.json5 file exists, then exit
+    if [[ -f "zpm-package.json5" ]]; then
+        throw --error-message "The zpm-package.json5 file already exists" --exit-code 1
     fi
 
     local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
@@ -71,7 +71,7 @@ function create_zpm_json5() {
 }
 EOF
 )
-    local conf_file="zpm.json5"
+    local conf_file="zpm-package.json5"
     echo "${config}" > ${conf_file}
     echo "${config}"
     echo "Create ${conf_file} success"
@@ -109,8 +109,8 @@ function exec_zsh_script() {
 }
 
 ##
-# run a script in zpm.json5
-# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm.json5 file"}
+# run a script in zpm-package.json5
+# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json5 file"}
 # @return <void>
 ##
 function run_script() {
@@ -131,8 +131,8 @@ function run_script() {
         throw --error-message "The flag: --data|-d was requird" --exit-code 1
     fi
 
-    local zpmJson5="zpm.json5"
-    # if the zpm.json5 file exists, then exit
+    local zpmJson5="zpm-package.json5"
+    # if the zpm-package.json5 file exists, then exit
     if [[ ! -f "${zpmJson5}" ]]; then
         call self.zpm_error -m "No ${zpmJson5} was found in \"$(pwd)\""
          return 1;

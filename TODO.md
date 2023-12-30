@@ -2,7 +2,7 @@
 
 * [x] rename js-scripts to js-tools
 * [x] add the create command in zpm-cli to create a new zpm project.
-* [ ] the shellBootloader and shellBootloadProvider key name in zpm.json5 and it was an objest list, like: 
+* [ ] the shellBootloader and shellBootloadProvider key name in zpm-package.json5 and it was an objest list, like: 
 ```json5
     {
         "shellBootloader": [
@@ -21,7 +21,7 @@
 
 * [ ] 🎉 If you call a function with emoji in it, the code will be messed up and not displayed.
 * [ ] the number line was incorect after throw an error, like:
-        Error: The zpm.json5 file already exists
+        Error: The zpm-package.json5 file already exists
         19 |     done
         20 | 
         21 |     # if the input data is empty, then exit
@@ -29,15 +29,15 @@
         23 |         throw --error-message "The flag: --data|-d was requird" --exit-code 1
         > 24 |     fi
         25 | 
-        26 |     # if the zpm.json5 file exists, then exit
-        27 |     if [[ -f "zpm.json5" ]]; then
-        28 |         throw --error-message "The zpm.json5 file already exists" --exit-code 1
+        26 |     # if the zpm-package.json5 file exists, then exit
+        27 |     if [[ -f "zpm-package.json5" ]]; then
+        28 |         throw --error-message "The zpm-package.json5 file already exists" --exit-code 1
         29 |     fi
         .zpm/src/utils/zpm.zsh:24
         .zpm/src/autoload.zsh:285
         .zpm/bin/zpm:31
-* [ ] To execute a script in the "scripts" section of zpm.json5, like:
-    zpm.json5
+* [ ] To execute a script in the "scripts" section of zpm-package.json5, like:
+    zpm-package.json5
     {
         ...
         scripts: {
