@@ -28,5 +28,22 @@ EOF
         isDownloadedPackage=${TRUE}
     fi
     expect_equal --actual "${isDownloadedPackage}" --expected "${TRUE}"
+
+    # check the zpm-package.json5 file was exists
+    local isExistsZpmPackageJson5=${FALSE}
+    if [[ -f "${tmpDir}/zpm-package.json5" ]]; then
+        isExistsZpmPackageJson5=${TRUE}
+    fi
+    expect_equal --actual "${isExistsZpmPackageJson5}" --expected "${TRUE}"
+
+    # check the package was added to the zpm-package.json5 file
+    local isAddedPackageToZpmPackageJson5=${FALSE}
+    local zpmPackageJson5=$(cat "${tmpDir}/zpm-package.json5")
+    local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
+    local isDependenceField=$(${jq5} -q dependencies -j "${zpmPackageJson5}" -t has)
+    expect_equal --actual "${isDependenceField}" --expected "true"
+    local dependenciesData=$(${jq5} -q dependencies -j "${zpmPackageJson5}" -t get)
+    expect_equal --actual "${dependenciesData%%:*}" --expected "{\"github.com/zpm-shell/lib-demo\""
+
     cd -
 }
