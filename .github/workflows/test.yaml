@@ -38,7 +38,7 @@ jobs:
       - id: set-matrix
         run: echo 'matrix=["centos:centos8.4.2105", "centos:centos8"]' >> $GITHUB_OUTPUT
   unit_test_on_centOS:
-    name: Unit est on centOS
+    name: Unit test on centOS
     needs:
       - setup_matrix_for_centOS
     runs-on: ubuntu-latest
@@ -66,7 +66,7 @@ jobs:
       - name: Unit test
         run: |
           docker exec ${CONTAINER_NAME} bash -c "
-            yum install -y make zsh;
+            yum install -y make zsh git;
             export PATH=\${PATH}:\$(pwd)/bin;
             bin/qjs --version
             make unit-test;
