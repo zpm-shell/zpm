@@ -80,7 +80,7 @@ function zpm_get_workspace_path() {
 ##
 function import() {
     local inputPath=''
-    local as=''
+    local inputAs=''
     #1 parse arguments
     local args=("$@")
     local isContinue=${FALSE}
@@ -92,7 +92,7 @@ function import() {
         local arg=${args[$i]}
         case $arg in
             --as*)
-                as="${args[ $i + 1 ]}"
+                inputAs="${args[ $i + 1 ]}"
                 isContinue=${TRUE}
                 continue
                 ;;
@@ -108,7 +108,7 @@ function import() {
     if [[ -z "${inputPath}" ]]; then
         throw --error-message "the arg of module path is required" --exit-code 1 --trace-level 2
     fi
-    if [[ -z "${as}" ]]; then
+    if [[ -z "${inputAs}" ]]; then
         throw --error-message "the --as arg is required" --exit-code 1 --trace-level 2
     fi
     #3 get the absolute path
@@ -154,7 +154,7 @@ function import() {
     if [[ -n ${GLOBAL_SOURCE_FILES[$absolutePath]} ]]; then
         return "${TRUE}"
     else
-        GLOBAL_SOURCE_FILES[$absolutePath]="${as}"
+        GLOBAL_SOURCE_FILES[$absolutePath]="${inputAs}"
     fi
 
     # 7 Verify circul importing file
@@ -182,16 +182,16 @@ function import() {
     local prefLineNo=${prevFileLine#*:}
     if [[ -n ${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]} ]]; then
         local aliasNamesJson="${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]}"
-        result=$(${ZPM_DIR}/src/qjs-tools/bin/alias-name-query "${aliasNamesJson}" -q "${as}" 2>&1)
+        result=$(${ZPM_DIR}/src/qjs-tools/bin/alias-name-query "${aliasNamesJson}" -q "${inputAs}" 2>&1)
         # if the command executed successfully with the exit code 0, then the output will be the alias name
         if [[ $? -eq 0 ]]; then
-            throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${workspace}/}'" --trace-level 2 --exit-code 1
+            throw --error-message "the as name '${inputAs}' is already used in the current file '${prefFile#${workspace}/}'" --trace-level 2 --exit-code 1
             return ${FALSE}
         else
-            IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="${aliasNamesJson:0:-1},\"${as}\":true}"
+            IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="${aliasNamesJson:0:-1},\"${inputAs}\":true}"
         fi
     else
-        IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="{\"${as}\":true}"
+        IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="{\"${inputAs}\":true}"
     fi
     # 10 add the import file path to stace
     STACE_SOURCE_FILE[${absolutePath}]="${inputPath}"
