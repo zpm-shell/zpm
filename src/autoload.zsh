@@ -64,6 +64,14 @@ typeset -A -g STACE_SOURCE_FILE=()
 typeset -A -g IMPORT_FILE_MAP_ALIAS_NAMES=()
 
 ##
+# get the current workspace path
+# @echo {string} the current workspace path
+##
+function zpm_get_workspace_path() {
+    echo "${ZPM_PACKAGE_WORKSPACE_STACK[-1]}"
+}
+
+##
 # @param {string} the module source path
 # @param --as {string} the alias name for for module
 # @example
@@ -107,7 +115,7 @@ function import() {
     local absolutePath="${from}"
     local isExists="${TRUE}"
     local prevFileLine="${funcfiletrace[1]}"
-    local workspace=${ZPM_WORKSPACE}
+    local workspace=$(zpm_get_workspace_path)
     case ${absolutePath} in
         /*)
             ;;
