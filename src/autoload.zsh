@@ -79,7 +79,7 @@ function zpm_get_workspace_path() {
 # @return {void}
 ##
 function import() {
-    local from=''
+    local inputPath=''
     local as=''
     #1 parse arguments
     local args=("$@")
@@ -101,18 +101,18 @@ function import() {
                continue
                ;;
         esac
-        from="${arg}"
+        inputPath="${arg}"
     done
     #2 check the args
     #2.1 check the args not empty
-    if [[ -z "${from}" ]]; then
+    if [[ -z "${inputPath}" ]]; then
         throw --error-message "the arg of module path is required" --exit-code 1 --trace-level 2
     fi
     if [[ -z "${as}" ]]; then
         throw --error-message "the --as arg is required" --exit-code 1 --trace-level 2
     fi
     #3 get the absolute path
-    local absolutePath="${from}"
+    local absolutePath="${inputPath}"
     local isExists="${TRUE}"
     local prevFileLine="${funcfiletrace[1]}"
     local workspace=$(zpm_get_workspace_path)
@@ -140,12 +140,12 @@ function import() {
             absolutePath="${workspace}/${absolutePath:2}"
             ;;
         *)
-            throw --error-message "the module file ${from} not exists" --exit-code 1 --trace-level 2
+            throw --error-message "the module file ${inputPath} not exists" --exit-code 1 --trace-level 2
             ;;
     esac
     # 4 check the file exists
     if [[ ! -f ${absolutePath} ]]; then
-        throw --error-message "the module file ${from} not exists" --exit-code 1 --trace-level 2
+        throw --error-message "the module file ${inputPath} not exists" --exit-code 1 --trace-level 2
     fi
     # 5 Simplify the path
     absolutePath=${absolutePath:A}
@@ -170,7 +170,7 @@ function import() {
                 errorMsg="${errorMsg}${staceFromPath}->"
             fi
         done
-        throw --error-message "${errorMsg}${from}" --exit-code 1 --trace-level 2
+        throw --error-message "${errorMsg}${inputPath}" --exit-code 1 --trace-level 2
     fi
     # 8 if the path is already in the stack, then return true
     if [[ -n ${STACE_SOURCE_FILE[${absolutePath}]} ]]; then
@@ -194,14 +194,14 @@ function import() {
         IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="{\"${as}\":true}"
     fi
     # 10 add the import file path to stace
-    STACE_SOURCE_FILE[${absolutePath}]="${from}"
+    STACE_SOURCE_FILE[${absolutePath}]="${inputPath}"
 
     # 11 source the file
     . ${absolutePath}
-    # 12 remove the import file path from stace
+    # 12 remove the import file path in stace
     unset "STACE_SOURCE_FILE[${absolutePath}]"
 
-    # 13 get the list of function names from the source file
+    # 13 get the list of function names in the source file
     local functionNames=($(extract_functions --zsh-file "${absolutePath}" 2>&1))
 
     # 14 rename the function name in absolutePath as the new name with a prefix of absolutePath
@@ -322,7 +322,7 @@ function call() {
     ${funcAliasName} $@
     local result=$?
 
-    # 8 remove the loaded path from call stace
+    # 8 remove the loaded path in call stace
 
     ZPM_CALL_STACE=(${ZPM_CALL_STACE:0:-1})
     
