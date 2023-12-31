@@ -14,7 +14,34 @@ if [[ -z ${ZPM_WORKSPACE} ]]; then
     ZPM_WORKSPACE=$(pwd)
 fi
 
-# global source files, which will be stored the loaded files
+# the stack is used to store the current workspace path in the call stack
+# because the workspace path will be changed in the third-party module,
+# like:
+# call current-module.func1 -> call third-party-module.func2 -> call third-party-module.func3 ...
+# so the workspace path must be changed correctly before the function was called.
+# so the ZPM_PACKAGE_WORKSPACE_STACK is used to store the workspace path in the call stack.
+# and get the correct workspace path in anywhere module.
+# e.g.
+# ZPM_PACKAGE_WORKSPACE_STACK=(
+#   "/home/xxx/workspace/project"
+#   "/home/xxx/zpm/packages/package1"
+#   "/home/xxx/zpm/packages/package2"
+# )
+typeset -A ZPM_PACKAGE_WORKSPACE_STACK=(
+    ${ZPM_WORKSPACE}
+)
+
+# The global variable will be stored the loaded files,
+# and the key is the absolute path of the file, and the value
+# is the alias name.
+# It is used to register all the files that have been loaded
+# andh then based on it to avoid the loop import or the file
+# was imported multiple times.
+# e.g.
+# GLOBAL_SOURCE_FILES=(
+#   ["/src/core/error.zsh"]="error"
+#   ...
+# )
 typeset -A -g GLOBAL_SOURCE_FILES=()
 
 ##
@@ -309,4 +336,3 @@ if [[ -f ${sourceFile} ]]; then
 elif [[ -n ${sourceFile} ]]; then
     throw --error-message "the file: ${sourceFile} was not exited" --exit-code 1
 fi
-
