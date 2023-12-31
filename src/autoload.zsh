@@ -107,13 +107,14 @@ function import() {
     local absolutePath="${from}"
     local isExists="${TRUE}"
     local prevFileLine="${funcfiletrace[1]}"
+    local workspace=${ZPM_WORKSPACE}
     case ${absolutePath} in
         /*)
             ;;
         .*)
             # 3.1 get the absolute prev file path
             if [[ ${prevFileLine:0:1} != '/' ]]; then
-                prevFileLine="${ZPM_WORKSPACE}/${prevFileLine}"
+                prevFileLine="${workspace}/${prevFileLine}"
             fi
             local prevFile="${prevFileLine%:*}"
             local prevDir="${prevFile%/*}"
@@ -128,7 +129,7 @@ function import() {
             esac
             ;;
         @/*)
-            absolutePath="${ZPM_WORKSPACE}/${absolutePath:2}"
+            absolutePath="${workspace}/${absolutePath:2}"
             ;;
         *)
             throw --error-message "the module file ${from} not exists" --exit-code 1 --trace-level 2
@@ -176,7 +177,7 @@ function import() {
         result=$(${ZPM_DIR}/src/qjs-tools/bin/alias-name-query "${aliasNamesJson}" -q "${as}" 2>&1)
         # if the command executed successfully with the exit code 0, then the output will be the alias name
         if [[ $? -eq 0 ]]; then
-            throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${ZPM_WORKSPACE}/}'" --trace-level 2 --exit-code 1
+            throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${workspace}/}'" --trace-level 2 --exit-code 1
             return ${FALSE}
         else
             IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]="${aliasNamesJson:0:-1},\"${as}\":true}"
