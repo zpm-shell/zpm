@@ -23,9 +23,10 @@ fi
 # and get the correct workspace path in anywhere module.
 # e.g.
 # ZPM_PACKAGE_WORKSPACE_STACK=(
-#   "/home/xxx/workspace/project"
+#   "/home/xxx/current/project"
 #   "/home/xxx/zpm/packages/package1"
 #   "/home/xxx/zpm/packages/package2"
+#   ...
 # )
 typeset -A ZPM_PACKAGE_WORKSPACE_STACK=(
     ${ZPM_WORKSPACE}
@@ -172,7 +173,7 @@ function import() {
     local prefLineNo=${prevFileLine#*:}
     if [[ -n ${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]} ]]; then
         local aliasNamesJson="${IMPORT_FILE_MAP_ALIAS_NAMES[${prefFile}]}"
-        result=$(${ZPM_WORKSPACE}/src/qjs-tools/bin/alias-name-query "${aliasNamesJson}" -q "${as}" 2>&1)
+        result=$(${ZPM_DIR}/src/qjs-tools/bin/alias-name-query "${aliasNamesJson}" -q "${as}" 2>&1)
         # if the command executed successfully with the exit code 0, then the output will be the alias name
         if [[ $? -eq 0 ]]; then
             throw --error-message "the as name '${as}' is already used in the current file '${prefFile#${ZPM_WORKSPACE}/}'" --trace-level 2 --exit-code 1
