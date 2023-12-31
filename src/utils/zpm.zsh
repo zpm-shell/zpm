@@ -204,7 +204,7 @@ function install_package() {
     fi
 
     # download the package to the packages directory.
-    local tmpSavePackageDir="${savePackageDir}/latest"
+    local tmpSavePackageDir=$(mktemp -d)
     git clone https://${packageName} ${tmpSavePackageDir}
     cd ${tmpSavePackageDir}
     # get the lastest commit id and rename the directory with the commit id
