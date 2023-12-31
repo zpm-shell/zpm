@@ -28,7 +28,7 @@ fi
 #   "/home/xxx/zpm/packages/package2"
 #   ...
 # )
-typeset -A ZPM_PACKAGE_WORKSPACE_STACK=(
+typeset -g ZPM_PACKAGE_WORKSPACE_STACK=(
     ${ZPM_WORKSPACE}
 )
 
