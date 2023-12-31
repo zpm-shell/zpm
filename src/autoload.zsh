@@ -112,12 +112,13 @@ function import() {
         throw --error-message "the --as arg is required" --exit-code 1 --trace-level 2
     fi
     #3 get the absolute path
-    local absolutePath="${inputPath}"
     local isExists="${TRUE}"
     local prevFileLine="${funcfiletrace[1]}"
     local workspace=$(zpm_get_workspace_path)
-    case ${absolutePath} in
+    local relativeImportPath=""
+    case ${inputPath} in
         /*)
+            relativeImportPath=${inputPath}
             ;;
         .*)
             # 3.1 get the absolute prev file path
@@ -127,28 +128,28 @@ function import() {
             local prevFile="${prevFileLine%:*}"
             local prevDir="${prevFile%/*}"
             # 3.2 get the absolute path
-            case ${absolutePath:1:1} in
+            case ${inputPath:1:1} in
                 /)
-                    absolutePath="${prevDir}/${absolutePath:2}"
+                    relativeImportPath="${prevDir}/${inputPath:2}"
                     ;;
                .)
-                    absolutePath="${prevDir}/${absolutePath}"
+                    relativeImportPath="${prevDir}/${inputPath}"
                     ;;
             esac
             ;;
         @/*)
-            absolutePath="${workspace}/${absolutePath:2}"
+            relativeImportPath="${workspace}/${inputPath:2}"
             ;;
         *)
             throw --error-message "the module file ${inputPath} not exists" --exit-code 1 --trace-level 2
             ;;
     esac
     # 4 check the file exists
-    if [[ ! -f ${absolutePath} ]]; then
+    if [[ ! -f ${relativeImportPath} ]]; then
         throw --error-message "the module file ${inputPath} not exists" --exit-code 1 --trace-level 2
     fi
     # 5 Simplify the path
-    absolutePath=${absolutePath:A}
+    local absolutePath=${relativeImportPath:A}
 
     # 6 if the file was imported and then return false.
     if [[ -n ${GLOBAL_SOURCE_FILES[$absolutePath]} ]]; then
