@@ -48,5 +48,8 @@ if [[ "${action}" == "command" ]]; then
         run)
             call zpm.run_script -d "${commandData}"
         ;;
+        install)
+            call zpm.install_package -d "${commandData}"
+        ;;
     esac
 fi

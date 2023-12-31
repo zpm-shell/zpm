@@ -1,13 +1,16 @@
 {
-    name: "github.com/wuchuheng/zpm-hello",
-    version: "1.0.0",
-    description: "A zpm package",
-    main: "src/main.zsh",
-    scripts: {
-        test: "echo \"Error: no test specified\" && exit 1",
-        hello: "echo \"hello world\""
-    },
-    keywords: [],
-    author: "",
-    license: "ISC"
+  name: 'github.com/wuchuheng/zpm-hello',
+  version: '1.0.0',
+  description: 'A zpm package',
+  main: 'src/main.zsh',
+  scripts: {
+    test: 'echo "Error: no test specified" && exit 1',
+    hello: 'echo "hello world"',
+  },
+  keywords: [],
+  author: '',
+  license: 'ISC',
+  dependencies: {
+    'github.com/wuchuheng/zpm': '37a1d53e1020ebabe61fed367cb6eed256b9e6c4',
+  },
 }

@@ -167,3 +167,58 @@ function run_script() {
     local cmdData=$($jq5 -j "${zpmJson5Data}" -q "scripts.${scriptName}" -t get)
     eval " ${cmdData}"
 }
+
+##
+# install a package
+# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json5 file"}
+# @return <void>
+##
+function install_package() {
+    local inputData=''
+    local args=("$@")
+    for (( i = 1; i <= $#; i++ )); do
+        local arg="${args[$i]}"
+        case "${arg}" in
+            --data|-d)
+                (( i++ ))
+                inputData="${args[$i]}"
+            ;;
+        esac
+    done
+
+    # if the input data is empty, then exit
+    if [[ -z "${inputData}" ]]; then
+        throw --error-message "The flag: --data|-d was requird" --exit-code 1
+    fi
+    local packageName=$($jq5 -j "${inputData}" -q "args.0.value" -t get)
+    
+    # check the git cmd was exists
+    if [[ ! -x "$(command -v git)" ]]; then
+        call self.zpm_error -m "The git command was required to install a package"
+        return ${FALSE}
+    fi
+
+    local savePackageDir="${ZPM_DIR}/packages/${packageName}"
+    if [[ ! -d ${savePackageDir} ]]; then
+        mkdir -p ${savePackageDir}
+    fi
+
+    # download the package to the packages directory.
+    local tmpSavePackageDir="${savePackageDir}/latest"
+    git clone https://${packageName} ${tmpSavePackageDir}
+    cd ${tmpSavePackageDir}
+    # get the lastest commit id and rename the directory with the commit id
+    local commitId=$(git rev-parse HEAD)
+    mv ${tmpSavePackageDir} ${savePackageDir}/${commitId}
+    cd -
+    # update the zpm-package.json5 file
+    local editZpmJson5Dependencies="${ZPM_DIR}/src/qjs-tools/bin/edit-zpm-json5-dependencies"
+    local zpmJson5="zpm-package.json5"
+    local newJson5Data=$(
+    ${editZpmJson5Dependencies} -f ${zpmJson5} \
+        -k "${packageName}" \
+        -v "${commitId}" -a set )
+    cat > ${zpmJson5} <<EOF
+${newJson5Data}
+EOF
+}

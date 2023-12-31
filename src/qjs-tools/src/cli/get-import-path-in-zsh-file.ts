@@ -10,7 +10,7 @@
 //
 
 import parseArgs from "../lib/quckjs-args-parser";
-import { readFile } from "../lib/std";
+import { readFile } from "../lib/io";
 import * as std from "std";
 
 function getAliasNameFromZshFile(filePath: string, aliasName: string): void {

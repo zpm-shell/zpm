@@ -38,4 +38,4 @@ const writeFile = (fileName, content) => {
     }
 };
 export { readFile, writeFile };
-//# sourceMappingURL=std.js.map
+//# sourceMappingURL=io.js.map
