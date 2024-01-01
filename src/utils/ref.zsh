@@ -29,11 +29,11 @@ function clean_ref_garbage_cache_dir() {
 
   # get all pid used reference variable
   local refCacheDir=$(dirname $(call self._get_cache_dir))
-  local refUsedPidList=($(ls ${refCacheDir}))
-  for refUsedPid in "${refUsedPidList[@]}"; do
-    if [[ ! -v pidArray[$refUsedPid] ]]; then
+  for refUsedPid in "${refCacheDir}/*"; do
+    local cacheDir="${refCacheDir}/${refUsedPid}"
+    if [[ ! -v pidArray[$refUsedPid] && -d ${cacheDir} ]]; then
       call log.debug "clean ref cache dir: ${refUsedPid}"
-      rm -rf "${refCacheDir}/${refUsedPid}"
+      rm -rf "${cacheDir}"
     fi
   done
 }

@@ -402,7 +402,7 @@ function call() {
     loadedFilePath=${loadedFilePath:A}
     # 4 contact the function name with the loaded path and function name
     local lineNumbers=($(
-        grep -En "^function[[:space:]]+${funcName}\(\)|[[:space:]]*${funcName}\(\)" "${loadedFilePath}"  \
+        grep -En "^function[[:space:]]+${funcName}\(\)|[[:space:]]+${funcName}\(\)" "${loadedFilePath}"  \
           | sed -E "s/^([0-9]+):[[:space:]]*(function[[:space:]]+)*(.*)\(\).*/\1/g" \
           | xargs
     ))
