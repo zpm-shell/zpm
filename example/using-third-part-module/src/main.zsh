@@ -1,3 +1,4 @@
+#!/usr/bin/env zpm
 import ./main.zsh --as self
 import github.com/zpm-shell/lib-demo --as demo
 

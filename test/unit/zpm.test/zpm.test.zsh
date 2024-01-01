@@ -16,8 +16,9 @@ function test_init() {
     name: "github.com/wuchuheng/zpm-hello",
     version: "1.0.0",
     description: "A zpm package",
-    main: "src/main.zsh",
+    main: "lib/main.zsh",
     scripts: {
+        start: "zpm run lib/main.zsh",
         test: "echo \"Error: no test specified\" && exit 1"
     },
     keywords: [],
@@ -39,8 +40,9 @@ EOF
     name: "github.com/wuchuheng/zpm-hello",
     version: "1.0.0",
     description: "A zpm package",
-    main: "src/main.zsh",
+    main: "lib/main.zsh",
     scripts: {
+        start: "zpm run lib/main.zsh",
         test: "echo \"Error: no test specified\" && exit 1"
     },
     keywords: [],

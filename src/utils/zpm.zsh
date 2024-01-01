@@ -61,8 +61,9 @@ function create_zpm_json5() {
     name: "${packageName}",
     version: "1.0.0",
     description: "A zpm package",
-    main: "src/main.zsh",
+    main: "lib/main.zsh",
     scripts: {
+        start: "zpm run lib/main.zsh",
         test: "echo \"Error: no test specified\" && exit 1"
     },
     keywords: [],
@@ -75,6 +76,18 @@ EOF
     echo "${config}" > ${conf_file}
     echo "${config}"
     echo "Create ${conf_file} success"
+    # create lib/main.zsh file
+    local libDir="lib"
+    if [[ ! -d ${libDir} ]]; then
+        mkdir -p ${libDir}
+    fi
+    cat > ${libDir}/main.zsh <<EOF
+#!/usr/bin/env zpm
+function() {
+    echo "Hello world"
+}
+EOF
+
 }
 
 ##
