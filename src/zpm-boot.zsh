@@ -13,13 +13,16 @@ local zpm_cli_conf='
     version: "0.0.1",
     commands: {
         init: { args: [{name: "package name"}], flags: {}, docs: [
-            "zpm init    <package name>        Create a zpm-package.json5 file in current directory."
+            "zpm init      <package name>        Create a zpm-package.json5 file in current directory."
         ]},
         run: { args: [{name: "script"}], flags: {}, docs: [
-            "zpm run     <file or script>      Run a zpm-package.json5 script or a zsh file.",
+            "zpm run       <file or script>      Run a zpm-package.json5 script or a zsh file.",
         ]},
         install: { args: [{name: "package name"}], flags: {}, docs: [
-            "zpm install <package name>        Install a package"
+            "zpm install   <package name>        Install a package"
+        ]},
+        uninstall: { args: [{name: "package name"}], flags: {}, docs: [
+            "zpm uninstall <package name>        Install a package"
         ]},
     }
 }'
@@ -50,6 +53,9 @@ if [[ "${action}" == "command" ]]; then
         ;;
         install)
             call zpm.install_package -d "${commandData}"
+        ;;
+        uninstall)
+            call zpm.uninstall_package -d "${commandData}"
         ;;
     esac
 fi

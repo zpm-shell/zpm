@@ -235,3 +235,12 @@ function install_package() {
 ${newJson5Data}
 EOF
 }
+
+##
+# uninstall a package
+# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json5 file"}
+# @return <void>
+##
+function uninstall_package() {
+    throw --error-message "The function: uninstall_package was not implemented" --exit-code 1
+}
