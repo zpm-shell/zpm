@@ -72,6 +72,78 @@ function zpm_get_workspace_path() {
 }
 
 ##
+# check the package exists
+# --param --package-name {string} the package name
+# --output-list-ref {string} the output list ref
+# @return list-reference: (
+#  0: the worksapce path of the package
+#  1: the relative path of the main file in the zpm-package.json5
+#)
+##
+function parse_package_name() {
+    local inputPackageName=''
+    local outputListRef=''
+    local args=("$@")
+    for (( i = 1; i <= ${#args[@]}; i++ )); do
+        local arg=${args[$i]}
+        case ${arg} in
+            --package-name)
+                inputPackageName="${args[ $i + 1 ]}"
+                continue
+                ;;
+            --output-list-ref)
+                outputListRef="${args[ $i + 1 ]}"
+                continue
+                ;;
+        esac
+    done
+    if [[ -z ${inputPackageName} ]]; then
+        throw --error-message "the --package-name arg is required" --exit-code 1 --trace-level 3
+    fi
+    if [[ -z ${outputListRef} ]]; then
+        throw --error-message "the --output-list-ref arg is required" --exit-code 1 --trace-level 3
+    fi
+    # check the dependence package was existed or not in the zpm-package.json5 of the current workspace
+    local dq="${ZPM_DIR}/src/qjs-tools/bin/zpm-json5-dependencies-query"
+    local workspace=$(zpm_get_workspace_path)
+    local packageJsonPath="${workspace}/zpm-package.json5"
+    local packageVersion=$( ${dq} -f ${packageJsonPath} -k ${inputPackageName} )
+    if [[ -z ${packageVersion} ]]; then
+        throw --error-message "the package ${inputPackageName} not exists, try to install with cmd: zpm install ${inputPackageName}" --exit-code 1 --trace-level 3
+    fi
+
+    # check the package was installed.
+    local packagePath="${ZPM_DIR}/packages/${inputPackageName}/${packageVersion}"
+    if [[ ! -d ${packagePath} ]]; then
+        throw --error-message "the package ${inputPackageName} not exists in ${packagePath}" --exit-code 1 --trace-level 3
+    fi
+    local packageJsonPath="${packagePath}/zpm-package.json5"
+    if [[ ! -f ${packageJsonPath} ]]; then
+        throw --error-message "the zpm-package.json5 was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
+    fi
+    # check the main file exists
+    local jq5="${ZPM_DIR}/src/qjs-tools/bin/json5-query"
+    local packageJson5Data="$(cat ${packageJsonPath})"
+    local isFieldExisted=$(${jq5} -q main -j "${packageJson5Data}" -t has)
+    if [[ ${isFieldExisted} == false ]]; then
+        throw --error-message "the main field was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
+    fi
+    
+    # check the main file exists
+    local relativeMainFile=$( ${jq5} -q main -j "${packageJson5Data}" -t get)
+    local mainFile="${packagePath}/${relativeMainFile}"
+    if [[ ! -f ${mainFile} ]]; then
+        throw --error-message \
+            "the main file ${relativeMainFile} was not existed in ${inputPackageName}" \
+            --exit-code 1 --trace-level 3
+    fi
+    eval " ${outputListRef}=( 
+        \"${packagePath}\"
+        \"${relativeMainFile}\"
+     )"
+}
+
+##
 # @param {string} the module source path
 # @param --as {string} the alias name for for module
 # @example
@@ -116,6 +188,7 @@ function import() {
     local prevFileLine="${funcfiletrace[1]}"
     local workspace=$(zpm_get_workspace_path)
     local relativeImportPath=""
+    local isThirdPardModule="${FALSE}"
     case ${inputPath} in
         /*)
             relativeImportPath=${inputPath}
@@ -141,7 +214,15 @@ function import() {
             relativeImportPath="${workspace}/${inputPath:2}"
             ;;
         *)
-            throw --error-message "the module file ${inputPath} not exists" --exit-code 1 --trace-level 2
+            typeset -g ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP=()
+            parse_package_name --package-name "${inputPath}" --output-list-ref ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP
+            if [[ ${#ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[@]} -eq 0 ]]; then
+                throw --error-message "the module file ${inputPath} not exists" --exit-code 1 --trace-level 2
+            fi
+            local packageWorkspace="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[1]}"
+            local packageMainFile="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[2]}"
+            relativeImportPath="${packageWorkspace}/${packageMainFile}"
+            isThirdPardModule="${TRUE}"
             ;;
     esac
     # 4 check the file exists
@@ -197,8 +278,17 @@ function import() {
     # 10 add the import file path to stace
     STACE_SOURCE_FILE[${absolutePath}]="${inputPath}"
 
+    # 10.1 if the file is third-party module, then add the package workspace to the stack
+    if [[ ${isThirdPardModule} == ${TRUE} ]]; then
+        ZPM_PACKAGE_WORKSPACE_STACK+=("${packageWorkspace}")
+    fi
+
     # 11 source the file
     . ${absolutePath}
+    # 11.1 if the file is third-party module, then remove the package workspace from the stack
+    if [[ ${isThirdPardModule} == ${TRUE} ]]; then
+        ZPM_PACKAGE_WORKSPACE_STACK=(${ZPM_PACKAGE_WORKSPACE_STACK:0:-1})
+    fi
     # 12 remove the import file path in stace
     unset "STACE_SOURCE_FILE[${absolutePath}]"
 

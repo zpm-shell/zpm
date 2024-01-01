@@ -1,0 +1,16 @@
+{
+    name: "github.com/zpm-shell/using-part-module",
+    version: "1.0.0",
+    description: "A zpm package",
+    main: "src/main.zsh",
+    scripts: {
+        test: "echo \"Error: no test specified\" && exit 1",
+        dev: "zpm run src/main.zsh",
+    },
+    keywords: [],
+    author: "",
+    license: "ISC",
+    dependencies: {
+        "github.com/zpm-shell/lib-demo": "1107815a1fe52bbd06581001fa2b377ec11c78b6",
+    },
+}
