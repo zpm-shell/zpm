@@ -53,6 +53,21 @@ EOF
 )
     local effectFileContent=$(cat "${effectFile}")
     expect_equal --expected "${expectVal}" --actual "${effectFileContent}"
+
+    # check the lib/main.zsh file was created or not.
+    local isCreated=$([[ -f "${tmpdir}/lib/main.zsh" ]] && echo "true" || echo "false")
+    expect_equal --expected "true" --actual "${isCreated}"
+    
+    # check the code of lib/main.zsh file.
+    local expectVal=$(cat <<EOF
+#!/usr/bin/env zpm
+function() {
+    echo "Hello world"
+}
+EOF
+)
+    local effectFileContent=$(cat "${tmpdir}/lib/main.zsh")
+    expect_equal --expected "${expectVal}" --actual "${effectFileContent}"
     cd -
 }
 
