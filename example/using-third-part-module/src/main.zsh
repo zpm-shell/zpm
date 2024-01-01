@@ -7,6 +7,7 @@ function hello() {
 
 function init() {
     call self.hello
+    call demo.main
 }
 
 

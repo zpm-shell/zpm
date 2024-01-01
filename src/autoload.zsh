@@ -321,7 +321,7 @@ function import() {
 }
 
 ##
-# call a function by alias name and function name
+# call the function from a module by alias and function name
 # @param <alias-name>.<func-name>
 # @example
 #   call <alias-name>.<func-name> [args...]
@@ -389,6 +389,15 @@ function call() {
         @/*)
             loadedFilePath="${ZPM_WORKSPACE}/${loadedFilePath:3}"
             ;;
+        *)
+            # the loaded path in the current file is the third-party module
+            # so the loaded path is the package name
+            typeset -g ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP=()
+            parse_package_name --package-name "${loadedFilePath}" --output-list-ref ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP
+            local packageWorkspace="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[1]}"
+            local packageMainFile="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[2]}"
+            loadedFilePath="${packageWorkspace}/${packageMainFile}"
+        ;;
     esac
     loadedFilePath=${loadedFilePath:A}
     # 4 contact the function name with the loaded path and function name
