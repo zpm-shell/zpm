@@ -293,7 +293,7 @@ function import() {
     unset "STACE_SOURCE_FILE[${absolutePath}]"
 
     # 13 get the list of function names in the source file
-    local functionNames=($(extract_functions --zsh-file "${absolutePath}" 2>&1))
+    local functionNames=($( extract_functions --zsh-file "${absolutePath}" ))
 
     # 14 rename the function name in absolutePath as the new name with a prefix of absolutePath
     local initFunctionName=''

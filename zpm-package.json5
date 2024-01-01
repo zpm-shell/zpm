@@ -11,6 +11,6 @@
   author: '',
   license: 'ISC',
   dependencies: {
-    'github.com/wuchuheng/zpm': '37a1d53e1020ebabe61fed367cb6eed256b9e6c4',
+    'github.com/zpm-shell/lib-demo': 'b24bf106505ada77f3a478cf89f31c4c7c3002ca',
   },
 }

@@ -1,9 +1,10 @@
 zpm - zpm is a zsh package manager.
 
 USAGE:
-zpm init    <package name>        Create a zpm-package.json5 file in current directory.
-zpm run     <file or script>      Run a zpm-package.json5 script or a zsh file.
-zpm install <package name>        Install a package
+zpm init      <package name>        Create a zpm-package.json5 file in current directory.
+zpm run       <file or script>      Run a zpm-package.json5 script or a zsh file.
+zpm install   <package name>        Install a package
+zpm uninstall <package name>        Install a package
 
 GLOBAL OPTIONS:
 --help, -h     show help (default: false)
