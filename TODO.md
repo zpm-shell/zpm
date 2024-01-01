@@ -47,4 +47,6 @@
     }
     and then execute the cmd:`zpm run cmd1`
     
-* [ ] To execute the zsh script by zpm, like: zpm run <zsh-script>
+* [x] Execute the zsh script by zpm, like: zpm run <zsh-script>
+* [ ] Implement the cli: zpm uninstall <domain>/username/repository, to
+    remove the dependence in zpm-package.json5.

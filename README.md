@@ -32,13 +32,10 @@ cd zpm
 After installation, you can manage your Zsh modules using simple commands:
 ```sh
 # To install a new module
-zpm install module-name
-
-# To update an existing module
-zpm update module-name
+zpm install <domain>/username/repository
 
 # To remove a module
-zpm remove module-name
+zpm remove <domain>/username/repository
 ```
 
 ## Contributing
