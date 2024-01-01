@@ -11,6 +11,6 @@
     author: "",
     license: "ISC",
     dependencies: {
-        "github.com/zpm-shell/lib-demo": "1107815a1fe52bbd06581001fa2b377ec11c78b6",
+        "github.com/zpm-shell/lib-demo": "b24bf106505ada77f3a478cf89f31c4c7c3002ca",
     },
 }
