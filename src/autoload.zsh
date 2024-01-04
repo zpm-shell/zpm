@@ -10,9 +10,7 @@ fi
 . ${ZPM_DIR}/src/core/error.zsh #{print_number_line, throw}
 . ${ZPM_DIR}/src/core/extract-functions.zsh #{extract_functions}
 
-if [[ -z ${ZPM_WORKSPACE} ]]; then
-    ZPM_WORKSPACE=$(pwd)
-fi
+ZPM_WORKSPACE=$(pwd)
 
 # the stack is used to store the current workspace path in the call stack
 # because the workspace path will be changed in the third-party module,

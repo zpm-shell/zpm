@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-function test_zpm_install_new_package() {
+function test_install_new_package() {
     local tmpDir=$(mktemp -d)
     cd ${tmpDir}
     cat > zpm-package.json5 <<EOF
@@ -46,4 +46,26 @@ EOF
     expect_equal --actual "${dependenciesData%%:*}" --expected "{\"github.com/zpm-shell/lib-demo\""
 
     cd -
+}
+
+function test_using_third_package_func() {
+    # local tmpDir=$(mktemp -d)
+    local tmpDir=$(pwd)/runtime/test_using_third_package_func;
+    [[ -d ${tmpDir} ]] && rm -rf ${tmpDir} && mkdir -p ${tmpDir}
+    cd ${tmpDir}
+    zpm init github.com/zpm-shell/demo
+    zpm install github.com/zpm-shell/lib-demo
+    cat > lib/main.zsh <<EOF
+#!/usr/bin/env zpm
+import ./main.zsh --as self
+import github.com/zpm-shell/lib-demo --as thirdPackage
+
+function init() {
+    call thirdPackage.main
+}
+
+EOF
+    local actual=$(zpm run start)
+    local expect="lib-demo: Hello!"
+    expect_equal --actual "${actual}" --expected "${expect}"
 }
