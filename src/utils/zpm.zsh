@@ -222,7 +222,11 @@ function install_package() {
     cd ${tmpSavePackageDir}
     # get the lastest commit id and rename the directory with the commit id
     local commitId=$(git rev-parse HEAD)
-    mv ${tmpSavePackageDir} ${savePackageDir}/${commitId}
+    # move the package directory to the package saved directory
+    local packageSaveDir="${savePackageDir}/${commitId}"
+    if [[ ! -d ${packageSaveDir} ]]; then
+        mv ${tmpSavePackageDir} ${savePackageDir}/${commitId}
+    fi
     cd -
     # update the zpm-package.json5 file
     local editZpmJson5Dependencies="${ZPM_DIR}/src/qjs-tools/bin/edit-zpm-json5-dependencies"
