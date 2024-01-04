@@ -49,9 +49,7 @@ EOF
 }
 
 function test_using_third_package_func() {
-    # local tmpDir=$(mktemp -d)
-    local tmpDir=$(pwd)/runtime/test_using_third_package_func;
-    [[ -d ${tmpDir} ]] && rm -rf ${tmpDir} && mkdir -p ${tmpDir}
+    local tmpDir=$(mktemp -d)
     cd ${tmpDir}
     zpm init github.com/zpm-shell/demo
     zpm install github.com/zpm-shell/lib-demo
