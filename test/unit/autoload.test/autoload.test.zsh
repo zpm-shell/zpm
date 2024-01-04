@@ -58,3 +58,10 @@ function test_relative_module_path2() {
   local actual=$(call m9.func)
   expect_equal --actual "${actual}" --expected "hello"
 }
+
+# test the as name with the character '-'
+function test_as_name_with_character_dash() {
+  import ./m10.zsh --as name-with-dash
+  local actual=$(call name-with-dash.func)
+  expect_equal --actual "${actual}" --expected "hello"
+}
