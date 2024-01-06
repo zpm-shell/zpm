@@ -49,8 +49,8 @@ jobs:
       
       - name: Commit and push changes
         run: |
-          git config --local user.email "root@wuchuheng.com"
-          git config --local user.name"wuchuheng"
+          git config --global user.email "root@wuchuheng.com"
+          git config --global user.name"wuchuheng"
           git add -A
           git commit -m "release: Update version name"
       - name: Push changes
