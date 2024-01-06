@@ -2,8 +2,6 @@ name: Release ZPM
 
 on:
   push:
-    branches:
-        - feat
     tags:
       - "*"
 
@@ -44,3 +42,15 @@ jobs:
         with:
           artifacts: "${{ env.TAR_FILE }}"
           bodyFile: "${{ env.VERSION_CHANGE_LOG_FILE }}"
+
+      - name: Update the version name in the asociated files
+        run: |
+          .github/release/update_version_name.sh "${GITHUB_REF#refs/tags/}"
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "root@wuchuheng.com"
+          git config --local user.name"wuchuheng"
+          git add -A
+          git commit -m "release: Update version name"
+          git push origin HEAD:refs/heads/feat

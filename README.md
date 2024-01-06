@@ -6,8 +6,6 @@
     </a>
 </p>
 
-
-
 `zpm` is a powerful module manager for zsh, designed to streamline and simplify the management of Zsh modules. It provides a user-friendly interface to install, update, and manage your zsh environment modules, enhancing your command-line productivity and experience.
 
 
@@ -18,14 +16,10 @@
 - Customizable settings for module management
 - Compatibility with a wide range of Zsh frameworks and plugins
 
-## Getting Started
-
-To get started with `zpm`, clone this repository and run the install script:
+## Install
 
 ```sh
-git clone https://github.com/wuchuheng/zpm.git
-cd zpm
-./install.sh
+curl -fsSL https://raw.githubusercontent.com/zpm-shell/zpm/master/install.sh | bash
 ```
 
 ## Usage
