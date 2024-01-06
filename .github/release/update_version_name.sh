@@ -6,7 +6,7 @@ version_name=$1
 # update the version name in the zpm-package.json5 file
 zpm_package_file="zpm-package.json5"
 new_conf=$(cat ${zpm_package_file} | \
-    sed -E "s/version:.*$/version: \"${version_name}\"/g" )
+    sed -E "s/version:.*$/version: \"${version_name}\",/g" )
 
 cat > ${zpm_package_file} << EOF
 ${new_conf}
