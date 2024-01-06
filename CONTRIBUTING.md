@@ -71,3 +71,14 @@ Unsure where to begin contributing to ProjectName? You can start by looking thro
 
 - [Beginner issues](https://github.com/zpm-shell/zpm/labels/beginner) - issues which should only require a few lines of code, and a test or two.
 - [Help wanted issues](https://github.com/zpm-shell/zpm/labels/help%20wanted) - issues which should be a bit more involved than `beginner` issues.
+
+
+## 4 Collaborative development approach
+
+there 2 main branches: 
+
+- `master` - the main branch.
+- `release` - the branch was commited on github actions after the tests passed and the version was updated.
+
+so, when the new version is ready, and the new version tag was created, the github actions will run the tests and if the tests passed, the new version will be commited to the `release` branch.
+and then all the developers can pull the `release` branch and get the new version.

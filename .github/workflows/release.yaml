@@ -55,7 +55,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: release
-          commit_message: "Update version name to ${{ env.GITHUB_REF }}"
+          commit_message: "release: Update version name to ${GITHUB_REF#refs/tags/}"
           # Optional commit user and author settings
           commit_user_name: My GitHub Actions Bot # defaults to "github-actions[bot]"
           commit_user_email: root@wuchuheng.com # defaults to "41898282+github-actions[bot]@users.noreply.github.com"
