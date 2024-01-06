@@ -5,7 +5,7 @@ on:
     branches:
         - feat
     tags:
-      - v*
+      - "*"
 
 jobs:
   test:
