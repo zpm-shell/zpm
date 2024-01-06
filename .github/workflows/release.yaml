@@ -50,6 +50,7 @@ jobs:
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
+          branch: feat
           commit_message: "Update version name to ${GITHUB_REF#refs/tags/}"
           # Optional commit user and author settings
           commit_user_name: My GitHub Actions Bot # defaults to "github-actions[bot]"
