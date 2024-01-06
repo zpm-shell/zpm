@@ -11,3 +11,5 @@ src/qjs-tools/**/tmp/*.{ts,js}
 **/dist/**/*.d.ts
 
 packages/
+
+.git_hooks/**.sh

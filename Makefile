@@ -17,3 +17,7 @@ integration-test:
 
 tmp:
 	ZPM_DIR=${PWD} ZPM_WORKSPACE=${PWD} zsh src/tmp/tmp.zsh
+
+# install the git hooks
+install_git_hooks:
+	git config core.hooksPath .git_hooks/
