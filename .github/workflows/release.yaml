@@ -1,0 +1,45 @@
+name: Release ZPM
+
+on:
+  push:
+    branches:
+        - feat
+    # tags:
+    #   - v*
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yaml
+
+  release:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set tar file name
+        id: vars
+        run: |
+          projectName=$(basename $PWD)
+          echo "TAR_FILE=${projectName}-${GITHUB_REF#refs/tags/}.tar.gz" >> $GITHUB_ENV
+
+      - name: Create Release Archive
+        run: |
+          tarFile=../${TAR_FILE}
+          tar -zcvf ${tarFile} .
+          mv ${tarFile} .
+      - name: Set change log
+        run: |
+            echo "VERSION_CHANGE_LOG_FILE=version-change.log" >> $GITHUB_ENV
+            echo "VERSION_CHANGE_LOG_FILE: ${VERSION_CHANGE_LOG_FILE}"
+            echo "version: ${GITHUB_REF#refs/tags/}"
+            .github/release/get_change_log.sh "${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
+            cat ${VERSION_CHANGE_LOG_FILE}
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "${{ env.TAR_FILE }}"
+          bodyFile: "${{ env.VERSION_CHANGE_LOG_FILE }}"
