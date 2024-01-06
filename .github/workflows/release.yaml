@@ -33,7 +33,8 @@ jobs:
           mv ${tarFile} .
       - name: Set change log
         run: |
-            echo "VERSION_CHANGE_LOG_FILE=version-change.log" >> $GITHUB_ENV
+            VERSION_CHANGE_LOG_FILE=version-change.log
+            echo "VERSION_CHANGE_LOG_FILE=${VERSION_CHANGE_LOG_FILE}" >> $GITHUB_ENV
             echo "VERSION_CHANGE_LOG_FILE: ${VERSION_CHANGE_LOG_FILE}"
             echo "version: ${GITHUB_REF#refs/tags/}"
             .github/release/get_change_log.sh "${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
