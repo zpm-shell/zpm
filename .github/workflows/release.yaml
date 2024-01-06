@@ -53,4 +53,5 @@ jobs:
           git config --local user.name"wuchuheng"
           git add -A
           git commit -m "release: Update version name"
-          git push origin HEAD:refs/heads/feat
+      - name: Push changes
+        run: git push origin HEAD:refs/heads/feat
