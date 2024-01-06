@@ -48,10 +48,10 @@ jobs:
           .github/release/update_version_name.sh "${GITHUB_REF#refs/tags/}"
       
       - name: Commit and push changes
-        run: |
-          git config --global user.email "root@wuchuheng.com"
-          git config --global user.name "wuchuheng"
-          git add -A
-          git commit -m "release: Update version name"
-      - name: Push changes
-        run: git push origin HEAD:refs/heads/feat
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update version name to ${GITHUB_REF#refs/tags/}"
+          # Optional commit user and author settings
+          commit_user_name: My GitHub Actions Bot # defaults to "github-actions[bot]"
+          commit_user_email: root@wuchuheng.com # defaults to "41898282+github-actions[bot]@users.noreply.github.com"
+          commit_author: wuchuheng<root@wuchuheng.com> # defaults to "username <username@users.noreply.github.com>", where "username" belongs to the author of the commit that triggered the run
