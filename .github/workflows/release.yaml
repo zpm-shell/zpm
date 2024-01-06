@@ -4,8 +4,8 @@ on:
   push:
     branches:
         - feat
-    # tags:
-    #   - v*
+    tags:
+      - v*
 
 jobs:
   test:
