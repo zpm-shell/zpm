@@ -45,7 +45,7 @@ jobs:
 
       - name: Update the version name in the asociated files
         run: |
-          .github/.dev_scripts/update_version_name.sh "${GITHUB_REF#refs/tags/}"
+          .dev_scripts/update_version_name.sh "${GITHUB_REF#refs/tags/}"
 
       - name: Remove the tar file and change log
         run: |
