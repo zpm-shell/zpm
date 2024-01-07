@@ -25,7 +25,7 @@ jobs:
       - name: merge the current branch to release
         run: |
           echo "current branch: ${GITHUB_REF}"
-          git checkout release && git merge ${{ github.ref }}
+          git checkout release && git merge ${{ env.TAG_NAME }}
 
       - name: Set tar file name
         id: vars
