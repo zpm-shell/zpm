@@ -72,5 +72,6 @@ fi
 eval "${config_in_zshrc}"
 # echo the message: the config ${config_in_zshrc} is added to ~/.zshrc
 echo "${config_in_zshrc}"
-echo "the zpm config is added to ~/.zshrc"
-echo "zpm installed successfully"
+echo "=> the zpm config is added to ~/.zshrc"
+echo "=> zpm installed successfully"
+echo "=> Close and reopen your terminal to start using zpm or run the following to use it now:"

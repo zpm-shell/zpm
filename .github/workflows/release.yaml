@@ -114,5 +114,5 @@ jobs:
         run: |
           docker exec ${CONTAINER_NAME} bash -c "
             curl -fsSL https://raw.githubusercontent.com/zpm-shell/zpm/master/install.sh | bash   
-            zpm -v
+            zsh -c 'source ~/.zshrc; zpm -h'
           "
