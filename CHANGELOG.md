@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.2] - 2024-01-07
+
+### Added
+
+- :tada: add installation script
+
+### Fixed
+
+- :bug: fix the installaction script was not executable in cli.
+
+### Changed
+
+- :champagne: make the workflows more robust.
+
 ## [0.0.1] - 2024-01-13
 
 ### Added
