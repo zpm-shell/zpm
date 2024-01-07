@@ -63,18 +63,16 @@ ${end_start_symbol}
 EOF
 )
 
-if [ -f ~/.zshrc ]; then
-    if grep -q "${start_start_symbol}" ~/.zshrc; then
-        echo "zpm already configured in ~/.zshrc"
-    else
-        echo "${config_in_zshrc}" >> ~/.zshrc
-    fi
-    # load the zpm in the current shell
-    eval "${config_in_zshrc}"
-    # echo the message: the config ${config_in_zshrc} is added to ~/.zshrc
-    echo "${config_in_zshrc}"
-    echo "the zpm config is added to ~/.zshrc"
-    echo "zpm installed successfully"
+# set the zpm config in the ~/.zshrc
+[ ! -f ~/.zshrc ] && touch ~/.zshrc
+if grep -q "${start_start_symbol}" ~/.zshrc; then
+    echo "zpm already configured in ~/.zshrc"
 else
     echo "${config_in_zshrc}" >> ~/.zshrc
 fi
+# load the zpm in the current shell
+eval "${config_in_zshrc}"
+# echo the message: the config ${config_in_zshrc} is added to ~/.zshrc
+echo "${config_in_zshrc}"
+echo "the zpm config is added to ~/.zshrc"
+echo "zpm installed successfully"
