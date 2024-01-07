@@ -35,7 +35,7 @@ jobs:
             echo "VERSION_CHANGE_LOG_FILE=${VERSION_CHANGE_LOG_FILE}" >> $GITHUB_ENV
             echo "VERSION_CHANGE_LOG_FILE: ${VERSION_CHANGE_LOG_FILE}"
             echo "version: ${GITHUB_REF#refs/tags/}"
-            .github/.dev_scripts/get_change_log.sh "${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
+            .dev_scripts/get_change_log.sh "${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
             cat ${VERSION_CHANGE_LOG_FILE}
       - name: Create Release
         uses: ncipollo/release-action@v1
