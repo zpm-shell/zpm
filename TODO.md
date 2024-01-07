@@ -57,3 +57,9 @@
     - update the new version name in `README.md`
     - update the new version name in `install.sh`
     and then to create a new commit and push it to the repository.
+
+* [ ] implement the frendly arguments in function, like:
+    ```zsh
+    function test(arg1, arg2, --flag flag1=true, --flag flag2=false) {
+    }
+    ```
