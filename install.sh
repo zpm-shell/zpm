@@ -47,10 +47,8 @@ if ! check_zsh_installed; then
 fi
 
 # download the zpm
-save_dir="~/.zpm"
-git clone https://github.com/zpm-shell/zpm ${save_dir}
-cd ${save_dir}
-git checkout ${VERSION_NAME}
+save_dir=~/.zpm
+git clone --branch ${VERSION_NAME} --single-branch https://github.com/zpm-shell/zpm ${save_dir}
 
 # add the zpm to the zshrc
 start_start_symbol="# zpm conf start"
