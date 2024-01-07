@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.12] - 2024-01-08
+
+### Added
+
+### Fixed
+
+- :bug: fix the installaction script was not executable in cli.
+
+### Changed
+
 ## [0.0.11] - 2024-01-07
 
 ### Added
