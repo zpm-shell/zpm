@@ -16,7 +16,7 @@ jobs:
           docker pull centos:centos8.4.2105
           docker run --rm -v $PWD:/workdir -w /workdir centos:8 bash -c "
           rm -rf /etc/yum.repos.d/*
-          cat .github/workflows/CentOS-Base.repo > /etc/yum.repos.d/CentOS-Base.repo
+          cat .github/conf/CentOS-Base.repo > /etc/yum.repos.d/CentOS-Base.repo
           cat /etc/yum.repos.d/CentOS-Base.repo
           ls -ahl /etc/yum.repos.d/*
           yum install -y make zsh git gcc cmake clang lld ninja-build clangd 

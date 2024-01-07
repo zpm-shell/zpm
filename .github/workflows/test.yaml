@@ -1,4 +1,4 @@
-name: Tests
+name: Test zpm
 
 on:
   workflow_call: # This makes the workflow reusable
@@ -61,7 +61,7 @@ jobs:
           docker run -itd -v $PWD:/workdir --name ${CONTAINER_NAME} -w /workdir ${CENTOS_VERSION}
           docker exec ${CONTAINER_NAME} bash -c "
             cd /etc/yum.repos.d/ && rm -rf * .??* && cd -
-            cat .github/workflows/CentOS-Base.repo > /etc/yum.repos.d/CentOS-Base.repo
+            cat .github/conf/CentOS-Base.repo > /etc/yum.repos.d/CentOS-Base.repo
             cat /etc/yum.repos.d/CentOS-Base.repo
           "
       - name: Unit test
