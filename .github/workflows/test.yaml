@@ -105,6 +105,8 @@ jobs:
         id: vars
         run: |
           echo "CONTAINER_NAME=centos" >> $GITHUB_ENV
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Conf the yum repository
         run: |
           docker run -itd -v $PWD:/workdir --name ${CONTAINER_NAME} -w /workdir ${CENTOS_VERSION}
@@ -113,6 +115,9 @@ jobs:
             cat .github/conf/CentOS-Base.repo > /etc/yum.repos.d/CentOS-Base.repo
             cat /etc/yum.repos.d/CentOS-Base.repo
           "
+      - name: Remove the repository files
+        run: |
+            rm -rf ./* .??*
       - name: Install zsh, git and curl
         run: |
           docker exec ${CONTAINER_NAME} bash -c "
