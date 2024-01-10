@@ -40,7 +40,7 @@ jobs:
             echo "VERSION_CHANGE_LOG_FILE=${VERSION_CHANGE_LOG_FILE}" >> $GITHUB_ENV
             echo "VERSION_CHANGE_LOG_FILE: ${VERSION_CHANGE_LOG_FILE}"
             echo "version: ${GITHUB_REF#refs/tags/}"
-            make change_log VERSION="${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
+            sudo make change_log VERSION="${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
             cat ${VERSION_CHANGE_LOG_FILE}
       - name: Create Release
         uses: ncipollo/release-action@v1
@@ -50,7 +50,7 @@ jobs:
 
       - name: Update the version in README.md
         run: |
-          make update_readme_version VERSION=${{ env.TAG_NAME }}
+          sudo make update_readme_version VERSION=${{ env.TAG_NAME }}
 
       - name: Remove the tar file and change log
         run: |
