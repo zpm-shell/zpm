@@ -35,11 +35,12 @@ jobs:
           mv ${tarFile} .
       - name: Set change log
         run: |
+            apt install -y make
             VERSION_CHANGE_LOG_FILE=version-change.log
             echo "VERSION_CHANGE_LOG_FILE=${VERSION_CHANGE_LOG_FILE}" >> $GITHUB_ENV
             echo "VERSION_CHANGE_LOG_FILE: ${VERSION_CHANGE_LOG_FILE}"
             echo "version: ${GITHUB_REF#refs/tags/}"
-            .dev_scripts/get_change_log.sh "${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
+            make change_log VERSION="${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
             cat ${VERSION_CHANGE_LOG_FILE}
       - name: Create Release
         uses: ncipollo/release-action@v1
@@ -47,9 +48,9 @@ jobs:
           artifacts: "${{ env.TAR_FILE }}"
           bodyFile: "${{ env.VERSION_CHANGE_LOG_FILE }}"
 
-      - name: Update the version name in the asociated files
+      - name: Update the version in README.md
         run: |
-          .dev_scripts/update_version_name.sh ${{ env.TAG_NAME }}
+          make update_readme_version VERSION=${{ env.TAG_NAME }}
 
       - name: Remove the tar file and change log
         run: |
@@ -59,7 +60,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: master 
-          commit_message: "release: Update version name to ${{ env.TAG_NAME }}"
+          commit_message: "docs: Update the version: ${{ env.TAG_NAME }} in README.md"
           # Optional commit user and author settings
           commit_user_name: GitHub Actions [Bot] # defaults to "github-actions[bot]"
           commit_user_email: root@wuchuheng.com # defaults to "41898282+github-actions[bot]@users.noreply.github.com"

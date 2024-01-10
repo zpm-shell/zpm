@@ -1,75 +1,12 @@
 #!/bin/bash
 
 
-##
-# check the tag name in the file provide was existed or not
-# @use check_tag_name_exists <tag name> <file path>
-##
-function check_tag_name_exists() {
-    local tagName=$1;
-    local filePath=$2;
-    local isTagNameExists=$( cat "${filePath}" | grep "${tagName}");
-    if [[ -z ${isTagNameExists} ]]; then
-	echo "The tag name: ${tagName} was not existed in ${filePath}";
-	exit 1
-    fi
-}
-
-##
-# check the tag name in CHANGELOG.md
-# @use check_tag_name_in_changelog_me <tag name>
-##
-function check_tag_name_in_changelog_me() {
-    # get the CHANGELOG.md from curreng tag name.
-    # Navigate to the root of the repository
-    REPO_ROOT=$(git rev-parse --show-toplevel)
-    cd "$REPO_ROOT"
-
-    # Get the contents of the CHANGELOG.md at the given tag
-    CHANGELOG_CONTENT=$(git show "$tag_name:CHANGELOG.md")
-    CHANGELOG_CONTENT=$(cat CHANGELOG.md)
-    lastTagNameInChangeLog=$( 
-        echo "${CHANGELOG_CONTENT}" \
-        | grep -E '^## +\[(\d+\.\d+\.\d+)\]' \
-        | head -n 1 \
-        | sed -E 's/^## +\[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/'
-    )
-    echo "Check the tag name: ${tag_name}."
-
-    # Check if the CHANGELOG.md has the change log for tag name
-    if ! [[ "${tag_name}" == "${lastTagNameInChangeLog}" ]]; then
-        echo "Tag name $tag_name was not existed in CHANGELOG.md', please to add the change log for the tag name ${tag_name}. look like the belowing code:"
-        cat <<EOF
-## [0.0.1] - 2021-01-01
-- feat: add some features for ${tag_name}
-- fix: fix some issue for ${tag_name}
-- chore: something unimportan.
-
-EOF
-            exit 1
-        fi
-}
-
-##
-# Check the tag name is valid 
-# @use check_tag_name_valid <tag name>
-##
-function check_tag_name_valid() {
-    # Check if tag name fits the pattern
-    if ! [[ $tag_name =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
-    then
-        echo "Tag name $tag_name does not match the pattern 'X.Y.Z'"
-        exit 1
-    fi
-}
-
 while read local_ref local_sha remote_ref remote_sha
 do
     # Check if we are pushing tags
     if [[ $local_ref == refs/tags/* ]]; then
         # Extract the tag name
         tag_name=${local_ref#refs/tags/}
-        check_tag_name_valid "${tag_name}"
-        check_tag_name_in_changelog_me "${tag_name}"
+        make check_release_version VERSION=${tag_name}
     fi
 done
