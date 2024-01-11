@@ -16,7 +16,7 @@
 tagName="$1"
 
 error_msg() {
-  echo "\033[31m$1\033[0m"
+  echo -e "\033[31m$1\033[0m"
   exit 1;
 }
 
@@ -52,4 +52,4 @@ while true; do
   fi
 done
 
-echo "${result}"
+echo -e "${result}"
