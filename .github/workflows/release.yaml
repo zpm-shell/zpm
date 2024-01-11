@@ -8,8 +8,8 @@ on:
 jobs:
   test:
     uses: ./.github/workflows/test.yaml
-
-  release:
+  
+  init_env:
     needs:
       - test
     runs-on: ubuntu-latest
@@ -21,6 +21,16 @@ jobs:
       - name: set the tag name to env
         run: |
           echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+  release:
+    needs:
+      - test
+      - init_env
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set tar file name
         id: vars
@@ -62,6 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: 
       - release
+      - init_env
       - setup_matrix_for_centOS
     strategy:
       fail-fast: false
@@ -94,9 +105,8 @@ jobs:
           "
       - name: Install zpm
         run: |
-          TAG_NAME=${GITHUB_REF#refs/tags/}
           docker exec ${CONTAINER_NAME} bash -c "
-            curl -fsSL -o https://raw.githubusercontent.com/zpm-shell/zpm/${TAG_NAME}/install.sh && source install.sh
+            curl -fsSL -o https://raw.githubusercontent.com/zpm-shell/zpm/${{ env.TAG_NAME }}/install.sh && source install.sh
           "
         
   update_readme_version:
@@ -106,14 +116,12 @@ jobs:
       - release
       - setup_matrix_for_centOS
       - release_test
+      - init_env
     permissions:
       contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: set the tag name to env
-        run: |
-          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       - name: Update the version in README.md
         run: |
           make update_readme_version VERSION=${{ env.TAG_NAME }}
