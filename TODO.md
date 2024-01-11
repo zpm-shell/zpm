@@ -63,3 +63,5 @@
     function test(arg1, arg2, --flag flag1=true, --flag flag2=false) {
     }
     ```
+
+* [ ] to update the new version in README.md, must be to test the release version on github action.
