@@ -9,6 +9,15 @@
 
 version_name=$1
 
+function error_msg() {
+    echo -e "\033[31m$1\033[0m"
+    exit 1
+}
+
+if [ -z "${version_name}" ]; then
+    error_msg "Please input the version name"
+fi
+
 # update the version name in the zpm-package.json5 file
 zpm_package_file="zpm-package.json5"
 new_conf=$(cat ${zpm_package_file} | \

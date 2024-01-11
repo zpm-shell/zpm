@@ -64,4 +64,4 @@
     }
     ```
 
-* [ ] to update the new version in README.md, must be to test the release version on github action.
+* [x] to update the new version in README.md, must be to test the release version on github action.

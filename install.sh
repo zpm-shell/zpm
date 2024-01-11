@@ -4,7 +4,33 @@
 TRUE=0
 FALSE=1
 
-VERSION_NAME="0.0.18"
+VERSION_NAME="0.0.19"
+
+##
+# check the current shell is zsh or not
+##
+function check_zsh_shell() {
+    if [ -n "${ZSH_VERSION}" ]; then
+        return ${TRUE}
+    fi
+    return ${FALSE}
+}
+
+##
+# check the current shell is bash or not
+##
+function check_bash_shell() {
+    if [ -n "${BASH_VERSION}" ]; then
+        return ${TRUE}
+    fi
+    return ${FALSE}
+}
+
+# if the current shell is not zsh or bash, exit
+if ! check_zsh_shell && ! check_bash_shell; then
+    echo "Please use zsh or bash to continue"
+    return 1
+fi
 
 ##
 # Check if the package manager is installed
@@ -47,7 +73,7 @@ if ! check_zsh_installed; then
 fi
 
 # download the zpm
-save_dir=~/.zpm
+save_dir=~/.zpm_tmp
 git clone --branch ${VERSION_NAME} --single-branch https://github.com/zpm-shell/zpm ${save_dir}
 
 # add the zpm to the zshrc
@@ -74,4 +100,7 @@ eval "${config_in_zshrc}"
 echo "${config_in_zshrc}"
 echo "=> the zpm config is added to ~/.zshrc"
 echo "=> zpm installed successfully"
-echo "=> Close and reopen your terminal to start using zpm or run the following to use it now:"
+
+if [ -f install.sh ]; then
+    rm install.sh
+fi

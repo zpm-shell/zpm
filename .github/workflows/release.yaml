@@ -96,8 +96,7 @@ jobs:
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}
           docker exec ${CONTAINER_NAME} bash -c "
-            curl -fsSL https://raw.githubusercontent.com/zpm-shell/zpm/${TAG_NAME}/install.sh | bash   
-            zsh -c 'source ~/.zshrc; zpm -h'
+            curl -fsSL -o https://raw.githubusercontent.com/zpm-shell/zpm/${TAG_NAME}/install.sh && source install.sh
           "
         
   update_readme_version:
