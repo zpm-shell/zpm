@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 version=$1
 
 red="\033[31m"
@@ -27,6 +29,6 @@ fi
 # curl -fsSL https://raw.githubusercontent.com/zpm-shell/zpm/0.0.12/install.sh | bash
 #...
  cat  README.md  | \
-    sed -E "s/(curl -fsSL https:\/\/raw.githubusercontent.com\/zpm-shell\/zpm\/)[0-9]+\.[0-9]+\.[0-9]+/\1$version/"  > README.md.tmp
+    sed -E "s/(curl -fsSL -o install.sh https:\/\/raw.githubusercontent.com\/zpm-shell\/zpm\/)[0-9]+\.[0-9]+\.[0-9]+/\1$version/"  > README.md.tmp
 
 mv README.md.tmp README.md
