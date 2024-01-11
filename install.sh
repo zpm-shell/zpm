@@ -4,7 +4,7 @@
 TRUE=0
 FALSE=1
 
-VERSION_NAME="0.0.21"
+VERSION_NAME="0.0.22"
 
 ##
 # check the current shell is zsh or not
@@ -73,7 +73,7 @@ if ! check_zsh_installed; then
 fi
 
 # download the zpm
-save_dir=~/.zpm_tmp
+save_dir=~/.zpm
 git clone --branch ${VERSION_NAME} --single-branch https://github.com/zpm-shell/zpm ${save_dir}
 
 # add the zpm to the zshrc
