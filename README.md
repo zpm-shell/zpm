@@ -19,7 +19,7 @@
 ## Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/zpm-shell/zpm/0.0.17/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/zpm-shell/zpm/0.0.18/install.sh | bash
 ```
 
 ## Usage
