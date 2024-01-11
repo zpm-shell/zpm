@@ -35,12 +35,12 @@ jobs:
           mv ${tarFile} .
       - name: Set change log
         run: |
-            apt install -y make
+            sudo apt install -y make
             VERSION_CHANGE_LOG_FILE=version-change.log
             echo "VERSION_CHANGE_LOG_FILE=${VERSION_CHANGE_LOG_FILE}" >> $GITHUB_ENV
             echo "VERSION_CHANGE_LOG_FILE: ${VERSION_CHANGE_LOG_FILE}"
             echo "version: ${GITHUB_REF#refs/tags/}"
-            sudo make change_log VERSION="${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
+            make change_log VERSION="${GITHUB_REF#refs/tags/}" > ${VERSION_CHANGE_LOG_FILE}
             cat ${VERSION_CHANGE_LOG_FILE}
       - name: Create Release
         uses: ncipollo/release-action@v1
@@ -50,7 +50,7 @@ jobs:
 
       - name: Update the version in README.md
         run: |
-          sudo make update_readme_version VERSION=${{ env.TAG_NAME }}
+          make update_readme_version VERSION=${{ env.TAG_NAME }}
 
       - name: Remove the tar file and change log
         run: |
