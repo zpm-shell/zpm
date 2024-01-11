@@ -108,7 +108,7 @@ jobs:
             TAG_NAME=${GITHUB_REF#refs/tags/}
             echo "tagName: $TAG_NAME"
             docker exec ${CONTAINER_NAME} bash -c "
-              curl -fsSL -o https://raw.githubusercontent.com/zpm-shell/zpm/${TAG_NAME}/install.sh && source install.sh
+              curl -fsSL -o install.sh https://raw.githubusercontent.com/zpm-shell/zpm/${TAG_NAME}/install.sh && source install.sh
             "
         
   update_readme_version:
