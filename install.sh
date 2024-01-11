@@ -4,7 +4,7 @@
 TRUE=0
 FALSE=1
 
-VERSION_NAME="0.0.17"
+VERSION_NAME="0.0.18"
 
 ##
 # Check if the package manager is installed
