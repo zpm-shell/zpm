@@ -34,3 +34,11 @@ new_conf=$(cat ${install_file} | \
 cat > ${install_file} << EOF
 ${new_conf}
 EOF
+
+# update the version in bin/zpm file
+zpm_file="bin/zpm"
+newZpm=$( cat ${zpm_file} | sed -E "s/version: *\"([0-9]+\.[0-9]+\.[0-9]+)\",/version: \"${version_name}\",/" )
+
+cat > ${zpm_file} << EOF
+${newZpm}
+EOF
