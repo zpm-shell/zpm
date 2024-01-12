@@ -50,8 +50,8 @@
 * [x] Execute the zsh script by zpm, like: zpm run <zsh-script>
 * [ ] Implement the cli: zpm uninstall <domain>/username/repository, to
     remove the dependence in zpm-package.json5.
-* [ ] Create and implement ./install.sh to install zpm cli.
-* [ ] release: update the version number after the zpm released on github.
+* [x] Create and implement ./install.sh to install zpm cli.
+* [x] release: update the version number after the zpm released on github.
     after the new version release successful on github, and then then version of the flowing files must be the changed with a bash script on github action:
     - update the new version name in the version field in `zpm-package.json5`
     - update the new version name in `README.md`
