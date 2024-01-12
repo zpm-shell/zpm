@@ -10,4 +10,4 @@ GLOBAL OPTIONS:
 --help, -h     show help (default: false)
 --version, -v  show version (default: false)
 
-zpm@0.0.1
+zpm@0.0.26
