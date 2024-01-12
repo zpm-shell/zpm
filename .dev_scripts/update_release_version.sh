@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ##
-# This script is used to update the version name in  zpm-package.json5 and install.sh
+# This script is used to update the version name in  zpm-package.json and install.sh
 # Usage: ./update_version_name.sh <version_name>
 # e.g. ./update_version_name.sh 0.0.1
 # @auther: wuchuheng<root@wuchuheng.com>
@@ -18,8 +18,8 @@ if [ -z "${version_name}" ]; then
     error_msg "Please input the version name"
 fi
 
-# update the version name in the zpm-package.json5 file
-zpm_package_file="zpm-package.json5"
+# update the version name in the zpm-package.json file
+zpm_package_file="zpm-package.json"
 new_conf=$(cat ${zpm_package_file} | \
     sed -E "s/version:.*$/version: \"${version_name}\",/g" )
 

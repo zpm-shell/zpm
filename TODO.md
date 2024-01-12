@@ -2,7 +2,7 @@
 
 * [x] rename js-scripts to js-tools
 * [x] add the create command in zpm-cli to create a new zpm project.
-* [ ] the shellBootloader and shellBootloadProvider key name in zpm-package.json5 and it was an objest list, like: 
+* [ ] the shellBootloader and shellBootloadProvider key name in zpm-package.json and it was an objest list, like: 
 ```json5
     {
         "shellBootloader": [
@@ -21,7 +21,7 @@
 
 * [ ] 🎉 If you call a function with emoji in it, the code will be messed up and not displayed.
 * [ ] the number line was incorect after throw an error, like:
-        Error: The zpm-package.json5 file already exists
+        Error: The zpm-package.json file already exists
         19 |     done
         20 | 
         21 |     # if the input data is empty, then exit
@@ -29,15 +29,15 @@
         23 |         throw --error-message "The flag: --data|-d was requird" --exit-code 1
         > 24 |     fi
         25 | 
-        26 |     # if the zpm-package.json5 file exists, then exit
-        27 |     if [[ -f "zpm-package.json5" ]]; then
-        28 |         throw --error-message "The zpm-package.json5 file already exists" --exit-code 1
+        26 |     # if the zpm-package.json file exists, then exit
+        27 |     if [[ -f "zpm-package.json" ]]; then
+        28 |         throw --error-message "The zpm-package.json file already exists" --exit-code 1
         29 |     fi
         .zpm/src/utils/zpm.zsh:24
         .zpm/src/autoload.zsh:285
         .zpm/bin/zpm:31
-* [ ] To execute a script in the "scripts" section of zpm-package.json5, like:
-    zpm-package.json5
+* [ ] To execute a script in the "scripts" section of zpm-package.json, like:
+    zpm-package.json
     {
         ...
         scripts: {
@@ -49,11 +49,11 @@
     
 * [x] Execute the zsh script by zpm, like: zpm run <zsh-script>
 * [ ] Implement the cli: zpm uninstall <domain>/username/repository, to
-    remove the dependence in zpm-package.json5.
+    remove the dependence in zpm-package.json.
 * [x] Create and implement ./install.sh to install zpm cli.
 * [x] release: update the version number after the zpm released on github.
     after the new version release successful on github, and then then version of the flowing files must be the changed with a bash script on github action:
-    - update the new version name in the version field in `zpm-package.json5`
+    - update the new version name in the version field in `zpm-package.json`
     - update the new version name in `README.md`
     - update the new version name in `install.sh`
     and then to create a new commit and push it to the repository.

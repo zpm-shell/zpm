@@ -13,10 +13,10 @@ local zpm_cli_conf='
     version: "0.0.27",
     commands: {
         init: { args: [{name: "package name"}], flags: {}, docs: [
-            "zpm init      <package name>        Create a zpm-package.json5 file in current directory."
+            "zpm init      <package name>        Create a zpm-package.json file in current directory."
         ]},
         run: { args: [{name: "script"}], flags: {}, docs: [
-            "zpm run       <file or script>      Run a zpm-package.json5 script or a zsh file.",
+            "zpm run       <file or script>      Run a zpm-package.json script or a zsh file.",
         ]},
         install: { args: [{name: "package name"}], flags: {}, docs: [
             "zpm install   <package name>        Install a package"

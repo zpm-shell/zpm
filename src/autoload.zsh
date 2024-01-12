@@ -75,7 +75,7 @@ function zpm_get_workspace_path() {
 # --output-list-ref {string} the output list ref
 # @return list-reference: (
 #  0: the worksapce path of the package
-#  1: the relative path of the main file in the zpm-package.json5
+#  1: the relative path of the main file in the zpm-package.json
 #)
 ##
 function parse_package_name() {
@@ -101,10 +101,10 @@ function parse_package_name() {
     if [[ -z ${outputListRef} ]]; then
         throw --error-message "the --output-list-ref arg is required" --exit-code 1 --trace-level 3
     fi
-    # check the dependence package was existed or not in the zpm-package.json5 of the current workspace
+    # check the dependence package was existed or not in the zpm-package.json of the current workspace
     local dq="${ZPM_DIR}/src/qjs-tools/bin/zpm-json5-dependencies-query"
     local workspace=$(zpm_get_workspace_path)
-    local packageJsonPath="${workspace}/zpm-package.json5"
+    local packageJsonPath="${workspace}/zpm-package.json"
     local packageVersion=$( ${dq} -f ${packageJsonPath} -k ${inputPackageName} )
     if [[ -z ${packageVersion} ]]; then
         throw --error-message "the package ${inputPackageName} not exists, try to install with cmd: zpm install ${inputPackageName}" --exit-code 1 --trace-level 3
@@ -115,9 +115,9 @@ function parse_package_name() {
     if [[ ! -d ${packagePath} ]]; then
         throw --error-message "the package ${inputPackageName} not exists in ${packagePath}" --exit-code 1 --trace-level 3
     fi
-    local packageJsonPath="${packagePath}/zpm-package.json5"
+    local packageJsonPath="${packagePath}/zpm-package.json"
     if [[ ! -f ${packageJsonPath} ]]; then
-        throw --error-message "the zpm-package.json5 was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
+        throw --error-message "the zpm-package.json was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
     fi
     # check the main file exists
     local jq5="${ZPM_DIR}/src/qjs-tools/bin/json5-query"

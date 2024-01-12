@@ -3,7 +3,7 @@
 function test_install_new_package() {
     local tmpDir=$(mktemp -d)
     cd ${tmpDir}
-    cat > zpm-package.json5 <<EOF
+    cat > zpm-package.json <<EOF
 {
     name: "github.com/zpm-shell/demo",
     version: "1.0.0",
@@ -29,16 +29,16 @@ EOF
     fi
     expect_equal --actual "${isDownloadedPackage}" --expected "${TRUE}"
 
-    # check the zpm-package.json5 file was exists
+    # check the zpm-package.json file was exists
     local isExistsZpmPackageJson5=${FALSE}
-    if [[ -f "${tmpDir}/zpm-package.json5" ]]; then
+    if [[ -f "${tmpDir}/zpm-package.json" ]]; then
         isExistsZpmPackageJson5=${TRUE}
     fi
     expect_equal --actual "${isExistsZpmPackageJson5}" --expected "${TRUE}"
 
-    # check the package was added to the zpm-package.json5 file
+    # check the package was added to the zpm-package.json file
     local isAddedPackageToZpmPackageJson5=${FALSE}
-    local zpmPackageJson5=$(cat "${tmpDir}/zpm-package.json5")
+    local zpmPackageJson5=$(cat "${tmpDir}/zpm-package.json")
     local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
     local isDependenceField=$(${jq5} -q dependencies -j "${zpmPackageJson5}" -t has)
     expect_equal --actual "${isDependenceField}" --expected "true"

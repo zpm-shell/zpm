@@ -25,11 +25,11 @@ function test_init() {
     author: "",
     license: "ISC"
 }
-Create zpm-package.json5 success
+Create zpm-package.json success
 EOF
 )
     expect_equal --expected "${expectVal}" --actual "${successOutput}"
-    local effectFile="${tmpdir}/zpm-package.json5"
+    local effectFile="${tmpdir}/zpm-package.json"
 
     local isExist=$([[ -f ${effectFile} ]] && echo "true" || echo "false")
     expect_equal --expected "true" --actual "${isExist}"

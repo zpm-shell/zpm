@@ -6,7 +6,7 @@ import JSON5 from "../lib/json5/json5";
 // zpm install <foo>                          add the <foo> dependency to your project
 // zpm test                                   run this project's tests
 // zpm run <foo>                              run the script named <foo>
-// zpm init <repository/username/module-name> create a zpm-package.json5 file
+// zpm init <repository/username/module-name> create a zpm-package.json file
 // zpm --help,-h                              print the help documentation
 // zpm -v,--version                           print the help documentation
 // zpm [script.zsh]                           execute the script
@@ -16,11 +16,11 @@ const programArgsConf = {
     description: "zpm is a package manager for zsh",
     commands: {
         init: {
-            description: "create a zpm-package.json5 file",
+            description: "create a zpm-package.json file",
             args: [
                 {
                     name: "<repository/username/module-name>",
-                    description: "create a zpm-package.json5 file",
+                    description: "create a zpm-package.json file",
                 },
             ],
             options: [],
