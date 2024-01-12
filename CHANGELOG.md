@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.27] - 2024-01-11
+
+### Added
+
+- feat(zpm-cli): add cli: zpm uninstall <package name>
+
+### Fixed
+
+### Changed
+
+
+
 ## [0.0.26] - 2024-01-11
 
 ### Added

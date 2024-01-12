@@ -43,7 +43,8 @@ EOF
     local isDependenceField=$(${jq5} -q dependencies -j "${zpmPackageJson5}" -t has)
     expect_equal --actual "${isDependenceField}" --expected "true"
     local dependenciesData=$(${jq5} -q dependencies -j "${zpmPackageJson5}" -t get)
-    expect_equal --actual "${dependenciesData%%:*}" --expected "{\"github.com/zpm-shell/lib-demo\""
+    expect_equal --actual "${dependenciesData%%:*}" --expected "{
+  \"github.com/zpm-shell/lib-demo\""
 
     cd -
 }

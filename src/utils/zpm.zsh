@@ -242,9 +242,54 @@ EOF
 
 ##
 # uninstall a package
-# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json5 file"}
+# @param --data|-d <json5> like: {name: "uninstall", args: [], flags: {}, description: "Create a zpm-package.json5 file"}
 # @return <void>
 ##
 function uninstall_package() {
-    throw --error-message "The function: uninstall_package was not implemented" --exit-code 1
+    local inputData=''
+    local args=("$@")
+    for (( i = 1; i <= $#; i++ )); do
+        local arg="${args[$i]}"
+        case "${arg}" in
+            --data|-d)
+                (( i++ ))
+                inputData="${args[$i]}"
+            ;;
+        esac
+    done
+
+    # if the input data is empty, then exit
+    if [[ -z "${inputData}" ]]; then
+        throw --error-message "The flag: --data|-d was requird" --exit-code 1
+    fi
+    local packageName=$($jq5 -j "${inputData}" -q "args.0.value" -t get)
+    
+    # check if the package name was not empty.
+    if [[ -z "${packageName}" ]]; then
+        call self.zpm_error -m "The package name was required"
+        return ${FALSE}
+    fi
+
+    # check the zpm-package.json5 was existed or not.
+    local zpmJson5="zpm-package.json5"
+    if [[ ! -f ${zpmJson5} ]]; then
+        call self.zpm_error -m "No ${zpmJson5} was found in \"$(pwd)\""
+        return ${FALSE}
+    fi
+
+    local zpmJson5Data=$(cat ${zpmJson5})
+    # check if the package was installed.
+    local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
+    packageName=$(echo "${packageName}" | sed 's/\./\\./g')
+    local hasPackage=$($jq5 -j "${zpmJson5Data}" -q "dependencies.${packageName}" -t has)
+    if [[ ${hasPackage} == "false" ]]; then
+        packageName=$(echo "${packageName}" | sed 's/\\./\./g')
+        call self.zpm_error -m "The package: ${packageName} was not installed"
+        return ${FALSE}
+    fi
+
+    local jsonStr=$($jq5 -j "${zpmJson5Data}" -q "dependencies.${packageName}" -t delete)
+    cat > ${zpmJson5} <<EOF
+${jsonStr}
+EOF
 }

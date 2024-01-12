@@ -34,6 +34,11 @@ switch (action) {
         }
         data.dependencies[key] = value;
         break;
+    case "delete":
+        if (Object.keys(data.dependencies).includes(key)) {
+            delete data.dependencies[key];
+        }
+        break;
 }
 const res = JSON5.stringify(data, null, 2);
 console.log(res);
