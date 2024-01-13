@@ -1,4 +1,3 @@
-import JSON5 from "../lib/json5/json5.js";
 import * as std from "std";
 
 type FlagValueType = string | number | boolean;
@@ -42,7 +41,7 @@ class ExitError extends Error {
       action: "help",
       output: `\\e[1;41m ERROR \\e[0m ${message}`,
     };
-    console.log(JSON5.stringify(outputError));
+    console.log(JSON.stringify(outputError));
     std.exit(1);
     super(message);
   }
@@ -74,7 +73,7 @@ function parseCliConf(cliArgs: string[]): CliConfType {
   // check if the config was valid
   let cliConfObj;
   try {
-    cliConfObj = JSON5.parse(cliConfig);
+    cliConfObj = JSON.parse(cliConfig);
   } catch (e) {
     throw new ExitError("Invalid config");
   }
