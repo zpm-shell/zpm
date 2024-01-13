@@ -68,3 +68,20 @@ EOF
     local expect="lib-demo: Hello!"
     expect_equal --actual "${actual}" --expected "${expect}"
 }
+
+function test_uninstall_package() {
+    local tmpDir=$(mktemp -d)
+    cd ${tmpDir}
+    zpm init github.com/zpm-shell/demo
+    zpm install github.com/zpm-shell/lib-demo
+    zpm uninstall github.com/zpm-shell/lib-demo
+    local isExistsPackage=${FALSE}
+    local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
+    local zpmPackagejson=$(cat "${tmpDir}/zpm-package.json")
+    local isDependenceField=$(${jq} -q dependencies.github\\.com/zpm-shell/lib-demo -j "${zpmPackagejson}" -t has)
+
+    if [[ ${isDependenceField} == "true" ]]; then
+        isExistsPackage=${TRUE}
+    fi
+    expect_equal --actual "${isExistsPackage}" --expected "${FALSE}"
+}
