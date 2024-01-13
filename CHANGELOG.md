@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.28] - 2024-01-13
+
+### Changed
+
+- Transitioned from JSON5 to standard JSON for project configuration. All instances of 'zpm-package.json5' have been renamed to 'zpm-package.json', ensuring compatibility with standard JSON parsing tools. (3cff713, 1289023)
+- Finalized the transition to standard JSON throughout the project, simplifying the tooling and increasing compatibility with common JSON utilities. (8f28ebe)
+- Renamed zpm-json5-dependencies-query to zpm-json-dependencies-query. Updated references in autoload.zsh to point to the new standard JSON query tool. (bc5117b)
+- Renamed json5-query tools to jq to align with standard JSON tool naming conventions. (8f28ebe)
+- Removed JSON5 parser dependencies and replaced them with standard JSON parsing. (8f28ebe)
+
+## Fixed
+
+- Corrected JSON string format in jq CLI tests to use double quotes for object keys, ensuring valid JSON input. (aa04ef5)
+## Documentation
+
+- Updated TODO.md and README.md with the new version information and relevant changes. (74f8f7b, 3dfdc47)
+
+## Testing
+
+- Modified test cases to check for zpm-package.json instead of zpm-package.json5. (1289023)
+- Ensured all automated tests pass with the new configuration format and manually verified the installation and uninstallation processes. (3cff713)
+
 ## [0.0.27] - 2024-01-11
 
 ### Added

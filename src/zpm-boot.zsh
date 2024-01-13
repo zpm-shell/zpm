@@ -10,7 +10,7 @@ local zpm_cli_conf='
 {
     name: "zpm",
     description: "zpm is a zsh package manager.",
-    version: "0.0.27",
+    version: "0.0.28",
     commands: {
         init: { args: [{name: "package name"}], flags: {}, docs: [
             "zpm init      <package name>        Create a zpm-package.json file in current directory."

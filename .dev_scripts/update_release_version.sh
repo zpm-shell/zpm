@@ -21,7 +21,7 @@ fi
 # update the version name in the zpm-package.json file
 zpm_package_file="zpm-package.json"
 new_conf=$(cat ${zpm_package_file} | \
-    sed -E "s/version:.*$/version: \"${version_name}\",/g" )
+    sed -E "s/\"version\":.*$/\"version\": \"${version_name}\",/g" )
 
 cat > ${zpm_package_file} << EOF
 ${new_conf}
