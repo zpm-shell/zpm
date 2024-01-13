@@ -3,7 +3,7 @@
 * [x] rename js-scripts to js-tools
 * [x] add the create command in zpm-cli to create a new zpm project.
 * [ ] the shellBootloader and shellBootloadProvider key name in zpm-package.json and it was an objest list, like: 
-```json5
+```json
     {
         "shellBootloader": [
             "<repository>/<username>/<package 1>",

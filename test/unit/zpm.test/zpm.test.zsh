@@ -13,17 +13,17 @@ function test_init() {
     local successOutput=$(zpm init github.com/wuchuheng/zpm-hello )
     local expectVal=$(cat <<EOF
 {
-    name: "github.com/wuchuheng/zpm-hello",
-    version: "1.0.0",
-    description: "A zpm package",
-    main: "lib/main.zsh",
-    scripts: {
-        start: "zpm run lib/main.zsh",
-        test: "echo \"Error: no test specified\" && exit 1"
+    "name": "github.com/wuchuheng/zpm-hello",
+    "version": "1.0.0",
+    "description": "A zpm package",
+    "main": "lib/main.zsh",
+    "scripts": {
+        "start": "zpm run lib/main.zsh",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
-    keywords: [],
-    author: "",
-    license: "ISC"
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
 }
 Create zpm-package.json success
 EOF
@@ -37,17 +37,17 @@ EOF
 
     expectVal=$(cat <<EOF
 {
-    name: "github.com/wuchuheng/zpm-hello",
-    version: "1.0.0",
-    description: "A zpm package",
-    main: "lib/main.zsh",
-    scripts: {
-        start: "zpm run lib/main.zsh",
-        test: "echo \"Error: no test specified\" && exit 1"
+    "name": "github.com/wuchuheng/zpm-hello",
+    "version": "1.0.0",
+    "description": "A zpm package",
+    "main": "lib/main.zsh",
+    "scripts": {
+        "start": "zpm run lib/main.zsh",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
-    keywords: [],
-    author: "",
-    license: "ISC"
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
 }
 EOF
 )

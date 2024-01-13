@@ -30,19 +30,19 @@ EOF
     expect_equal --actual "${isDownloadedPackage}" --expected "${TRUE}"
 
     # check the zpm-package.json file was exists
-    local isExistsZpmPackageJson5=${FALSE}
+    local isExistsZpmPackagejson=${FALSE}
     if [[ -f "${tmpDir}/zpm-package.json" ]]; then
-        isExistsZpmPackageJson5=${TRUE}
+        isExistsZpmPackagejson=${TRUE}
     fi
-    expect_equal --actual "${isExistsZpmPackageJson5}" --expected "${TRUE}"
+    expect_equal --actual "${isExistsZpmPackagejson}" --expected "${TRUE}"
 
     # check the package was added to the zpm-package.json file
-    local isAddedPackageToZpmPackageJson5=${FALSE}
-    local zpmPackageJson5=$(cat "${tmpDir}/zpm-package.json")
+    local isAddedPackageToZpmPackagejson=${FALSE}
+    local zpmPackagejson=$(cat "${tmpDir}/zpm-package.json")
     local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
-    local isDependenceField=$(${jq5} -q dependencies -j "${zpmPackageJson5}" -t has)
+    local isDependenceField=$(${jq5} -q dependencies -j "${zpmPackagejson}" -t has)
     expect_equal --actual "${isDependenceField}" --expected "true"
-    local dependenciesData=$(${jq5} -q dependencies -j "${zpmPackageJson5}" -t get)
+    local dependenciesData=$(${jq5} -q dependencies -j "${zpmPackagejson}" -t get)
     expect_equal --actual "${dependenciesData%%:*}" --expected "{
   \"github.com/zpm-shell/lib-demo\""
 

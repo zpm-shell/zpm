@@ -46,7 +46,7 @@ if [[ "${action}" == "command" ]]; then
     local commandData=$($jq5 -j "${cliData}" -q "command" -t get)
     case ${commandName} in
         init)
-            call zpm.create_zpm_json5 -d "${commandData}"
+            call zpm.create_zpm_json -d "${commandData}"
         ;;
         run)
             call zpm.run_script -d "${commandData}"

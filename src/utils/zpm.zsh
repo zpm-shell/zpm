@@ -27,10 +27,10 @@ function zpm_error() {
 
 ##
 # create a zpm-package.json file
-# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json file"}
+# @param --data|-d <json> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json file"}
 # @return <void>
 ##
-function create_zpm_json5() {
+function create_zpm_json() {
     local inputData=''
     local args=("$@")
     for (( i = 1; i <= $#; i++ )); do
@@ -58,17 +58,17 @@ function create_zpm_json5() {
 
     local config=$(cat <<EOF
 {
-    name: "${packageName}",
-    version: "1.0.0",
-    description: "A zpm package",
-    main: "lib/main.zsh",
-    scripts: {
-        start: "zpm run lib/main.zsh",
-        test: "echo \"Error: no test specified\" && exit 1"
+    "name": "${packageName}",
+    "version": "1.0.0",
+    "description": "A zpm package",
+    "main": "lib/main.zsh",
+    "scripts": {
+        "start": "zpm run lib/main.zsh",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
-    keywords: [],
-    author: "",
-    license: "ISC"
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
 }
 EOF
 )
@@ -123,7 +123,7 @@ function exec_zsh_script() {
 
 ##
 # run a script in zpm-package.json
-# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json file"}
+# @param --data|-d <json> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json file"}
 # @return <void>
 ##
 function run_script() {
@@ -144,10 +144,10 @@ function run_script() {
         throw --error-message "The flag: --data|-d was requird" --exit-code 1
     fi
 
-    local zpmJson5="zpm-package.json"
+    local zpmjson="zpm-package.json"
     # if the zpm-package.json file exists, then exit
-    if [[ ! -f "${zpmJson5}" ]]; then
-        call self.zpm_error -m "No ${zpmJson5} was found in \"$(pwd)\""
+    if [[ ! -f "${zpmjson}" ]]; then
+        call self.zpm_error -m "No ${zpmjson} was found in \"$(pwd)\""
          return 1;
     fi
     local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
@@ -164,26 +164,26 @@ function run_script() {
         fi
     fi
     # check if the script name was not exits and then print the error message
-    local zpmJson5Data=$(cat ${zpmJson5})
-    local hasScripName=$($jq5 -j "${zpmJson5Data}" -q "scripts.${scriptName}" -t has)
+    local zpmjsonData=$(cat ${zpmjson})
+    local hasScripName=$($jq5 -j "${zpmjsonData}" -q "scripts.${scriptName}" -t has)
     if [[ ${hasScripName} == "false" ]]; then
         if [[ -f ${scriptName} ]]; then
             call self.exec_zsh_script -f ${scriptName}
 
         else
-            call self.zpm_error -m "No script name: ${scriptName} was found in ${zpmJson5}"
+            call self.zpm_error -m "No script name: ${scriptName} was found in ${zpmjson}"
             return ${FALSE}
         fi
     fi
 
     # run the script
-    local cmdData=$($jq5 -j "${zpmJson5Data}" -q "scripts.${scriptName}" -t get)
+    local cmdData=$($jq5 -j "${zpmjsonData}" -q "scripts.${scriptName}" -t get)
     eval " ${cmdData}"
 }
 
 ##
 # install a package
-# @param --data|-d <json5> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json file"}
+# @param --data|-d <json> like: {name: "init", args: [], flags: {}, description: "Create a zpm-package.json file"}
 # @return <void>
 ##
 function install_package() {
@@ -230,19 +230,19 @@ function install_package() {
     cd -
     # update the zpm-package.json file
     local editZpmJson5Dependencies="${ZPM_DIR}/src/qjs-tools/bin/edit-zpm-json5-dependencies"
-    local zpmJson5="zpm-package.json"
-    local newJson5Data=$(
-    ${editZpmJson5Dependencies} -f ${zpmJson5} \
+    local zpmjson="zpm-package.json"
+    local newjsonData=$(
+    ${editZpmJson5Dependencies} -f ${zpmjson} \
         -k "${packageName}" \
         -v "${commitId}" -a set )
-    cat > ${zpmJson5} <<EOF
-${newJson5Data}
+    cat > ${zpmjson} <<EOF
+${newjsonData}
 EOF
 }
 
 ##
 # uninstall a package
-# @param --data|-d <json5> like: {name: "uninstall", args: [], flags: {}, description: "Create a zpm-package.json file"}
+# @param --data|-d <json> like: {name: "uninstall", args: [], flags: {}, description: "Create a zpm-package.json file"}
 # @return <void>
 ##
 function uninstall_package() {
@@ -271,25 +271,25 @@ function uninstall_package() {
     fi
 
     # check the zpm-package.json was existed or not.
-    local zpmJson5="zpm-package.json"
-    if [[ ! -f ${zpmJson5} ]]; then
-        call self.zpm_error -m "No ${zpmJson5} was found in \"$(pwd)\""
+    local zpmjson="zpm-package.json"
+    if [[ ! -f ${zpmjson} ]]; then
+        call self.zpm_error -m "No ${zpmjson} was found in \"$(pwd)\""
         return ${FALSE}
     fi
 
-    local zpmJson5Data=$(cat ${zpmJson5})
+    local zpmjsonData=$(cat ${zpmjson})
     # check if the package was installed.
     local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
     packageName=$(echo "${packageName}" | sed 's/\./\\./g')
-    local hasPackage=$($jq5 -j "${zpmJson5Data}" -q "dependencies.${packageName}" -t has)
+    local hasPackage=$($jq5 -j "${zpmjsonData}" -q "dependencies.${packageName}" -t has)
     if [[ ${hasPackage} == "false" ]]; then
         packageName=$(echo "${packageName}" | sed 's/\\./\./g')
         call self.zpm_error -m "The package: ${packageName} was not installed"
         return ${FALSE}
     fi
 
-    local jsonStr=$($jq5 -j "${zpmJson5Data}" -q "dependencies.${packageName}" -t delete)
-    cat > ${zpmJson5} <<EOF
+    local jsonStr=$($jq5 -j "${zpmjsonData}" -q "dependencies.${packageName}" -t delete)
+    cat > ${zpmjson} <<EOF
 ${jsonStr}
 EOF
 }
