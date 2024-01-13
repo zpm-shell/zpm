@@ -36,7 +36,7 @@
         .zpm/src/utils/zpm.zsh:24
         .zpm/src/autoload.zsh:285
         .zpm/bin/zpm:31
-* [ ] To execute a script in the "scripts" section of zpm-package.json, like:
+* [x] To execute a script in the "scripts" section of zpm-package.json, like:
     zpm-package.json
     {
         ...
@@ -66,4 +66,4 @@
 
 * [x] to update the new version in README.md, must be to test the release version on github action.
 
-* [ ] Instead of the json format, use the pure json format to write the zpm-package.json file.
+* [x] Instead of the json format, use the pure json format to write the zpm-package.json file.
