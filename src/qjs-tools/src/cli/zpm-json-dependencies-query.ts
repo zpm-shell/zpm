@@ -1,6 +1,5 @@
 import optionParser from "../lib/cli-option-parser";
 import * as io from "../lib/io";
-import JSON5 from "../lib/json5/json5";
 
 type InputDataType = {
   file: string;
@@ -12,7 +11,7 @@ const cliData = optionParser(
     file: {
       type: "string",
       alias: "f",
-      description: "JSON5 file to edit",
+      description: "JSON file to edit",
     },
     key: {
       type: "string",
@@ -25,7 +24,7 @@ const cliData = optionParser(
 
 const { file, key } = cliData;
 const fileContent = io.readFile(file);
-const data = JSON5.parse(fileContent);
+const data = JSON.parse(fileContent);
 
 let result: string = "";
 // init the key path

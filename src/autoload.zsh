@@ -102,7 +102,7 @@ function parse_package_name() {
         throw --error-message "the --output-list-ref arg is required" --exit-code 1 --trace-level 3
     fi
     # check the dependence package was existed or not in the zpm-package.json of the current workspace
-    local dq="${ZPM_DIR}/src/qjs-tools/bin/zpm-json5-dependencies-query"
+    local dq="${ZPM_DIR}/src/qjs-tools/bin/zpm-json-dependencies-query"
     local workspace=$(zpm_get_workspace_path)
     local packageJsonPath="${workspace}/zpm-package.json"
     local packageVersion=$( ${dq} -f ${packageJsonPath} -k ${inputPackageName} )

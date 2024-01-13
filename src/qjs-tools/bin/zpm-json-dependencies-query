@@ -3,4 +3,4 @@
 # get current directory 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-qjs ${DIR}/../dist/cli/zpm-json5-dependencies-query.js "$@"
+qjs ${DIR}/../dist/cli/zpm-json-dependencies-query.js "$@"
