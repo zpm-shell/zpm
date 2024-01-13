@@ -65,5 +65,16 @@
     ```
 
 * [x] to update the new version in README.md, must be to test the release version on github action.
-
 * [x] Instead of the json format, use the pure json format to write the zpm-package.json file.
+* [ ] Add a alias name for a longer package name, like:
+    ```json
+    {
+        "alias": {
+            "demo": "github.com/zpm-zpm/lib-demo"
+        }
+    }
+    ```
+    and then the package name can be used as `demo` instead of `github.com/zpm-zpm/lib-demo`. like:
+    ```zsh
+    import demo --as demo # instead of import github.com/zpm-zpm/lib-demo --as demo
+    ```
