@@ -23,6 +23,9 @@ local zpm_cli_conf='
         ]},
         "uninstall": { "args": [{"name": "package name"}], "flags": {}, "docs": [
             "zpm uninstall <package name>        Install a package"
+        ]},
+        "test": { "args": [], "flags": {}, "docs": [
+            "zpm test                            Test the scripts flowing the test folder, if the folder is exists."
         ]}
     }
 }'
@@ -56,6 +59,9 @@ if [[ "${action}" == "command" ]]; then
         ;;
         uninstall)
             call zpm.uninstall_package -d "${commandData}"
+        ;;
+        test)
+            call zpm.test -d "${commandData}"
         ;;
     esac
 fi

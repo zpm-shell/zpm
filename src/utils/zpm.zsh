@@ -293,3 +293,7 @@ function uninstall_package() {
 ${jsonStr}
 EOF
 }
+
+function test() {
+    throw --error-message "The test function was not implemented" --exit-code 1
+}
