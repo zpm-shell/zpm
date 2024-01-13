@@ -5,6 +5,7 @@ zpm init      <package name>        Create a zpm-package.json file in current di
 zpm run       <file or script>      Run a zpm-package.json script or a zsh file.
 zpm install   <package name>        Install a package
 zpm uninstall <package name>        Install a package
+zpm test                            Test the scripts flowing the test folder, if the folder is exists.
 
 GLOBAL OPTIONS:
 --help, -h     show help (default: false)
