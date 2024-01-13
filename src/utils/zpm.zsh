@@ -53,8 +53,8 @@ function create_zpm_json() {
         throw --error-message "The zpm-package.json file already exists" --exit-code 1
     fi
 
-    local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
-    local packageName=$($jq5 -j "${inputData}" -q "args.0.value" -t get)
+    local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
+    local packageName=$($jq -j "${inputData}" -q "args.0.value" -t get)
 
     local config=$(cat <<EOF
 {
@@ -150,8 +150,8 @@ function run_script() {
         call self.zpm_error -m "No ${zpmjson} was found in \"$(pwd)\""
          return 1;
     fi
-    local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
-    local scriptName=$($jq5 -j "${inputData}" -q "args.0.value" -t get)
+    local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
+    local scriptName=$($jq -j "${inputData}" -q "args.0.value" -t get)
     if [[ -f ${scriptName} ]]; then
         call self.exec_zsh_script -f ${scriptName}
         return $?;
@@ -165,7 +165,7 @@ function run_script() {
     fi
     # check if the script name was not exits and then print the error message
     local zpmjsonData=$(cat ${zpmjson})
-    local hasScripName=$($jq5 -j "${zpmjsonData}" -q "scripts.${scriptName}" -t has)
+    local hasScripName=$($jq -j "${zpmjsonData}" -q "scripts.${scriptName}" -t has)
     if [[ ${hasScripName} == "false" ]]; then
         if [[ -f ${scriptName} ]]; then
             call self.exec_zsh_script -f ${scriptName}
@@ -177,7 +177,7 @@ function run_script() {
     fi
 
     # run the script
-    local cmdData=$($jq5 -j "${zpmjsonData}" -q "scripts.${scriptName}" -t get)
+    local cmdData=$($jq -j "${zpmjsonData}" -q "scripts.${scriptName}" -t get)
     eval " ${cmdData}"
 }
 
@@ -203,7 +203,7 @@ function install_package() {
     if [[ -z "${inputData}" ]]; then
         throw --error-message "The flag: --data|-d was requird" --exit-code 1
     fi
-    local packageName=$($jq5 -j "${inputData}" -q "args.0.value" -t get)
+    local packageName=$($jq -j "${inputData}" -q "args.0.value" -t get)
     
     # check the git cmd was exists
     if [[ ! -x "$(command -v git)" ]]; then
@@ -229,7 +229,7 @@ function install_package() {
     fi
     cd -
     # update the zpm-package.json file
-    local editZpmJson5Dependencies="${ZPM_DIR}/src/qjs-tools/bin/edit-zpm-json5-dependencies"
+    local editZpmJson5Dependencies="${ZPM_DIR}/src/qjs-tools/bin/edit-zpm-json-dependencies"
     local zpmjson="zpm-package.json"
     local newjsonData=$(
     ${editZpmJson5Dependencies} -f ${zpmjson} \
@@ -262,7 +262,7 @@ function uninstall_package() {
     if [[ -z "${inputData}" ]]; then
         throw --error-message "The flag: --data|-d was requird" --exit-code 1
     fi
-    local packageName=$($jq5 -j "${inputData}" -q "args.0.value" -t get)
+    local packageName=$($jq -j "${inputData}" -q "args.0.value" -t get)
     
     # check if the package name was not empty.
     if [[ -z "${packageName}" ]]; then
@@ -279,16 +279,16 @@ function uninstall_package() {
 
     local zpmjsonData=$(cat ${zpmjson})
     # check if the package was installed.
-    local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
+    local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
     packageName=$(echo "${packageName}" | sed 's/\./\\./g')
-    local hasPackage=$($jq5 -j "${zpmjsonData}" -q "dependencies.${packageName}" -t has)
+    local hasPackage=$($jq -j "${zpmjsonData}" -q "dependencies.${packageName}" -t has)
     if [[ ${hasPackage} == "false" ]]; then
         packageName=$(echo "${packageName}" | sed 's/\\./\./g')
         call self.zpm_error -m "The package: ${packageName} was not installed"
         return ${FALSE}
     fi
 
-    local jsonStr=$($jq5 -j "${zpmjsonData}" -q "dependencies.${packageName}" -t delete)
+    local jsonStr=$($jq -j "${zpmjsonData}" -q "dependencies.${packageName}" -t delete)
     cat > ${zpmjson} <<EOF
 ${jsonStr}
 EOF

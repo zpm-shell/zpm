@@ -120,15 +120,15 @@ function parse_package_name() {
         throw --error-message "the zpm-package.json was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
     fi
     # check the main file exists
-    local jq5="${ZPM_DIR}/src/qjs-tools/bin/json5-query"
-    local packageJson5Data="$(cat ${packageJsonPath})"
-    local isFieldExisted=$(${jq5} -q main -j "${packageJson5Data}" -t has)
+    local jq="${ZPM_DIR}/src/qjs-tools/bin/jq"
+    local packageJsonData="$(cat ${packageJsonPath})"
+    local isFieldExisted=$(${jq} -q main -j "${packageJsonData}" -t has)
     if [[ ${isFieldExisted} == false ]]; then
         throw --error-message "the main field was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
     fi
     
     # check the main file exists
-    local relativeMainFile=$( ${jq5} -q main -j "${packageJson5Data}" -t get)
+    local relativeMainFile=$( ${jq} -q main -j "${packageJsonData}" -t get)
     local mainFile="${packagePath}/${relativeMainFile}"
     if [[ ! -f ${mainFile} ]]; then
         throw --error-message \

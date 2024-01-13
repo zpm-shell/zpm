@@ -66,4 +66,4 @@
 
 * [x] to update the new version in README.md, must be to test the release version on github action.
 
-* [ ] Instead of the json5 format, use the pure json format to write the zpm-package.json file.
+* [ ] Instead of the json format, use the pure json format to write the zpm-package.json file.

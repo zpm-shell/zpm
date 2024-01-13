@@ -1,17 +1,16 @@
 import optionParser from "../lib/cli-option-parser";
-import JSON5 from "../lib/json5/json5";
 
 /**
- * to query json5 string by query string
- * @param json5 the json5 string
+ * to query json string by query string
+ * @param json the json string
  * @param query the query string
  */
-const json5Query = (
-  json5: string,
+const jsonQuery = (
+  json: string,
   query: string,
   queryType: QueryType
 ): unknown => {
-  const json5Obj = JSON5.parse(json5);
+  const jsonObj = JSON.parse(json);
   const queryArr: string[] = [];
   let itemPrefix = "";
   query.split(".").forEach((item) => {
@@ -50,7 +49,7 @@ const json5Query = (
       return queryArr.reduce((prev, curr) => {
         checkKeyExist(prev, curr);
         return prev[curr];
-      }, json5Obj);
+      }, jsonObj);
     case "has":
       i = 0;
       return queryArr.reduce((prev, curr) => {
@@ -67,7 +66,7 @@ const json5Query = (
             checkKeyExist(prev, curr);
           }
         }
-      }, json5Obj);
+      }, jsonObj);
     case "size":
       i = 0;
       return queryArr.reduce((prev, curr) => {
@@ -79,7 +78,7 @@ const json5Query = (
         } else {
           return prev[curr];
         }
-      }, json5Obj);
+      }, jsonObj);
     case "keys":
       i = 0;
       return queryArr.reduce((prev, curr) => {
@@ -91,12 +90,12 @@ const json5Query = (
         } else {
           return prev[curr];
         }
-      }, json5Obj);
+      }, jsonObj);
     case "delete":
       i = 0;
       queryArr.forEach((item) => {
         if (i === 0) {
-          tmpData = json5Obj[item];
+          tmpData = jsonObj[item];
         } else if (i === queryArr.length - 1) {
           delete tmpData[item];
         } else {
@@ -105,7 +104,7 @@ const json5Query = (
         i++;
       });
 
-      return json5Obj;
+      return jsonObj;
   }
 };
 
@@ -116,10 +115,10 @@ const parserResult = optionParser(
       type: "string",
       description: "query string",
     },
-    json5String: {
+    jsonString: {
       alias: "j",
       type: "string",
-      description: "json5 string",
+      description: "json string",
     },
     queryType: {
       alias: "t",
@@ -131,8 +130,8 @@ const parserResult = optionParser(
 );
 type QueryType = "get" | "has" | "size" | "keys" | "delete";
 
-const result = json5Query(
-  parserResult["json5String"] as string,
+const result = jsonQuery(
+  parserResult["jsonString"] as string,
   parserResult["query"] as string,
   parserResult.queryType as QueryType
 );

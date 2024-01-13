@@ -5,16 +5,16 @@ function test_install_new_package() {
     cd ${tmpDir}
     cat > zpm-package.json <<EOF
 {
-    name: "github.com/zpm-shell/demo",
-    version: "1.0.0",
-    description: "A zpm package",
-    main: "lib/main.zsh",
-    scripts: {
-        test: "echo \"Error: no test specified\" && exit 1"
+    "name": "github.com/zpm-shell/demo",
+    "version": "1.0.0",
+    "description": "A zpm package",
+    "main": "lib/main.zsh",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
-    keywords: [],
-    author: "",
-    license: "ISC"
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
 }
 EOF
     local packageName="github.com/zpm-shell/lib-demo"
@@ -39,10 +39,10 @@ EOF
     # check the package was added to the zpm-package.json file
     local isAddedPackageToZpmPackagejson=${FALSE}
     local zpmPackagejson=$(cat "${tmpDir}/zpm-package.json")
-    local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
-    local isDependenceField=$(${jq5} -q dependencies -j "${zpmPackagejson}" -t has)
+    local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
+    local isDependenceField=$(${jq} -q dependencies -j "${zpmPackagejson}" -t has)
     expect_equal --actual "${isDependenceField}" --expected "true"
-    local dependenciesData=$(${jq5} -q dependencies -j "${zpmPackagejson}" -t get)
+    local dependenciesData=$(${jq} -q dependencies -j "${zpmPackagejson}" -t get)
     expect_equal --actual "${dependenciesData%%:*}" --expected "{
   \"github.com/zpm-shell/lib-demo\""
 

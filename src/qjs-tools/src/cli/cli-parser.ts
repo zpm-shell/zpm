@@ -631,7 +631,7 @@ if (cliData.action === "help" && cliData.command !== undefined) {
   cliData.output = cmdHelpDoc(cliData, cliConf);
 }
 
-console.log(JSON5.stringify(cliData));
+console.log(JSON.stringify(cliData));
 if (!cliData.success) {
   std.exit(1);
 }

@@ -27,11 +27,11 @@ local zpm_cli_conf='
     }
 }'
 
-local jq5=${ZPM_DIR}/src/qjs-tools/bin/json5-query
+local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
 local cliData=$(${ZPM_DIR}/src/qjs-tools/bin/cli-parser -c "${zpm_cli_conf}" "$@")
-local ok=$($jq5 -j "${cliData}" -q "success" -t get)
-local output=$($jq5 -j "${cliData}" -q "output" -t get)
-local action=$($jq5 -j "${cliData}" -q "action" -t get)
+local ok=$($jq -j "${cliData}" -q "success" -t get)
+local output=$($jq -j "${cliData}" -q "output" -t get)
+local action=$($jq -j "${cliData}" -q "action" -t get)
 if [[ ${output} != "" ]]; then
     if [[ "${ok}" == "true" ]]; then
         echo "${output}"
@@ -42,8 +42,8 @@ fi
 [[ "${ok}" == "false" ]] && exit 1
 
 if [[ "${action}" == "command" ]]; then
-    local commandName=$($jq5 -j "${cliData}" -q "command.name" -t get)
-    local commandData=$($jq5 -j "${cliData}" -q "command" -t get)
+    local commandName=$($jq -j "${cliData}" -q "command.name" -t get)
+    local commandData=$($jq -j "${cliData}" -q "command" -t get)
     case ${commandName} in
         init)
             call zpm.create_zpm_json -d "${commandData}"
