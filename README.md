@@ -26,10 +26,10 @@ curl -fsSL -o install.sh https://raw.githubusercontent.com/zpm-shell/zpm/0.0.28/
 After installation, you can manage your Zsh modules using simple commands:
 ```sh
 # To install a new module
-zpm install <domain>/username/repository
+zpm install <domain>/username/repository # e.g. zpm install github/zpm-shell/lib-demo
 
 # To remove a module
-zpm remove <domain>/username/repository
+zpm uninstall <domain>/username/repository # e.g. zpm uninstall github/zpm-shell/lib-demo
 ```
 
 ## Contributing
