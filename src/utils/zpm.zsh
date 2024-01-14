@@ -1,6 +1,9 @@
 #!/usr/bin/env zsh
 
 import ./zpm.zsh --as self
+import ../core/test_beta.zsh --as test
+import ./global.zsh --as global
+import ./color.zsh --as color
 
 ##
 # print a message
@@ -295,5 +298,75 @@ EOF
 }
 
 function test() {
-    throw --error-message "The test function was not implemented" --exit-code 1
+
+    typeset -g TRUE=0
+    typeset -g FALSE=1
+    
+    typeset -g TOTAL_TESTS=0
+    typeset -g TOTAL_FAILED_TESTS=0
+    typeset -g TOTAL_PASSED_TESTS=0
+    
+    typeset -g START_TIME=$(date +%s )
+    typeset -g TOTAL_FILES=0
+    
+    typeset -g IS_CURRENT_TEST_OK=${FALSE}
+    typeset -g CURRENT_TEST_FILE=''
+    typeset -g CURRENT_TEST_NAME=''
+
+    # TODO(feat): The cmd exclude the test directory,and when the test feature was implemented, then remove this limit. like: 
+    # find . -name '*.test.zsh'
+    local testFiles=($(find . -path './test' -prune -o -name '*.test.zsh' -print))
+for testFile in ${testFiles[@]}; do
+  local relativeTestFile=${testFile#./}
+  local block="\e[1m"
+  local noColor="\e[0m"
+  echo "${block}TEST${noColor}  ${relativeTestFile}"
+# load the test file
+  . ${testFile}
+
+  call global.set "TOTAL_FILES" "$(( TOTAL_FILES + 1 ))"
+  
+  # loop the test functions
+  call global.set "CURRENT_TEST_FILE" "${relativeTestFile}"
+  local testFunctions=($(call test.extract_test_functions ${testFile}))
+  local testFunc=''
+  for testFunc in ${testFunctions[@]}; do
+    # execute the test function
+    call global.set "CURRENT_TEST_NAME" "${testFunc}"
+    call global.set IS_CURRENT_TEST_OK "${TRUE}"
+    ${testFunc}
+    call test.print_current_test_result ${testFunc} ${IS_CURRENT_TEST_OK}
+    # Collecting test data
+    call global.set "TOTAL_TESTS" "$(( TOTAL_TESTS + 1 ))"
+    if [[ ${IS_CURRENT_TEST_OK} -eq ${TRUE} ]]; then
+      call global.set "TOTAL_PASSED_TESTS" "$(( TOTAL_PASSED_TESTS + 1 ))"
+    else
+      call global.set "TOTAL_FAILED_TESTS" "$(( TOTAL_FAILED_TESTS + 1 ))"
+    fi
+  done
+done
+
+    call color.reset
+    call color.light_red
+    call color.shape_bold
+    local COLOR_TOTAL_FAILED_TESTS=$(call color.print ${TOTAL_FAILED_TESTS})
+
+    call color.reset
+    call color.light_green
+    call color.shape_bold
+    local COLOR_TOTAL_PASSED_TESTS=$(call color.print ${TOTAL_PASSED_TESTS})
+
+    call color.reset
+    call color.shape_bold
+    local COLOR_TOTAL_FILES=$(call color.print ${TOTAL_TESTS})
+    
+echo "
+Tests:        ${COLOR_TOTAL_FAILED_TESTS} failed, ${COLOR_TOTAL_PASSED_TESTS} passed, ${COLOR_TOTAL_FILES} total
+Time:         $(( $(date +%s) - ${START_TIME} )) s
+Test files:   ${TOTAL_FILES} f
+Ran all test files."
+
+    if [[ ${TOTAL_FAILED_TESTS} -gt 0 ]]; then
+        exit 1;
+    fi
 }
