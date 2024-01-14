@@ -7,13 +7,16 @@ endef
 
 all: test
 
-test: unit-test integration-test
+test: unit-test integration-test zpm-test
 
 unit-test:
 	$(call exec-test,src/config/unit-test-conf.zsh)
 
 integration-test:
 	$(call exec-test,src/config/integrate-test-conf.zsh)
+
+zpm-test:
+	zpm test
 
 tmp:
 	ZPM_DIR=${PWD} ZPM_WORKSPACE=${PWD} zsh src/tmp/tmp.zsh
