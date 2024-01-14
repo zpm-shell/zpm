@@ -78,3 +78,5 @@
     ```zsh
     import demo --as demo # instead of import github.com/zpm-zpm/lib-demo --as demo
     ```
+
+* [ ] implement the cli: zpm install, to install all the dependence in zpm-package.json.
