@@ -377,7 +377,9 @@ function parseCli(inputCliArgs, cliConf) {
         return result;
     }
     // check if the required arguments was missing. then print the error and help doc
-    const requiredArgNames = commandConf.args.map((arg) => arg.name);
+    const requiredArgNames = commandConf.args
+        .filter((a) => a.required)
+        .map((arg) => arg.name);
     if (result.command.args.length < requiredArgNames.length) {
         const missingArgs = [];
         const resultArgNames = result.command.args.map((arg) => arg.name);

@@ -1,16 +1,1 @@
-{
-  "name": "github.com/wuchuheng/zpm-hello",
-  "version": "0.0.28",
-  "description": "A zpm package",
-  "main": "src/main.zsh",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "hello": "echo \"hello world\""
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "github.com/zpm-shell/lib-demo": "b24bf106505ada77f3a478cf89f31c4c7c3002ca"
-  }
-}
+

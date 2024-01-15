@@ -8,7 +8,7 @@ type FlagConfig = {
   alias: string;
 };
 type CommandType = {
-  args: { name: string }[];
+  args: { name: string; required: boolean }[];
   flags: Record<string, FlagConfig>;
   docs: string[];
 };
@@ -503,7 +503,9 @@ function parseCli(
   }
 
   // check if the required arguments was missing. then print the error and help doc
-  const requiredArgNames = commandConf.args.map((arg) => arg.name);
+  const requiredArgNames = commandConf.args
+    .filter((a) => a.required)
+    .map((arg) => arg.name);
   if (result.command!.args.length < requiredArgNames.length) {
     const missingArgs: string[] = [];
     const resultArgNames = result.command!.args.map((arg) => arg.name);

@@ -206,6 +206,15 @@ function install_package() {
     if [[ -z "${inputData}" ]]; then
         throw --error-message "The flag: --data|-d was requird" --exit-code 1
     fi
+
+    local totalArgs=$($jq -j "${inputData}" -q "args" -t size)
+    # install all dependences
+    if [[ ${totalArgs} -eq 0 ]]; then
+        call self.install_all_dependence -d ${inputData}
+        return $?
+    fi
+
+    # install a dependence
     local packageName=$($jq -j "${inputData}" -q "args.0.value" -t get)
     
     # check the git cmd was exists
@@ -368,5 +377,36 @@ Ran all test files."
 
     if [[ ${TOTAL_FAILED_TESTS} -gt 0 ]]; then
         exit 1;
+    fi
+}
+
+##
+# install all dependences for the current project
+# @param --data|-d <json> like: {name: "install", args: [], flags: {}, description: "Create a zpm-package.json file"}
+# @return <boolean>
+##
+function install_all_dependence() {
+    local inputData=''
+    local args=("$@")
+    for (( i = 1; i <= $#; i++ )); do
+        local arg="${args[$i]}"
+        case "${arg}" in
+            --data|-d)
+                (( i++ ))
+                inputData="${args[$i]}"
+            ;;
+        esac
+    done
+
+    # if the input data is empty, then exit
+    if [[ -z "${inputData}" ]]; then
+        throw --error-message "The flag: --data|-d was requird" --exit-code 1
+    fi
+
+    # check the zpm-package.json file was existed or not.
+    local zpmjson="zpm-package.json"
+    if [[ ! -f ${zpmjson} ]]; then
+        call self.zpm_error -m "No ${zpmjson} was found in \"$(pwd)\""
+        return ${FALSE}
     fi
 }
