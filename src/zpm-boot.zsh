@@ -12,14 +12,15 @@ local zpm_cli_conf='
     "description": "zpm is a zsh package manager.",
     "version": "0.0.28",
     "commands": {
+        "install": { "args": [{"name": "package name"}], "flags": {}, "docs": [
+            "zpm install                         Install all dependences",
+            "zpm install   <package name>        Install a dependence"
+        ]},
         "init": { "args": [{"name": "package name"}], "flags": {}, "docs": [
             "zpm init      <package name>        Create a zpm-package.json file in current directory."
         ]},
         "run": { "args": [{"name": "script"}], "flags": {}, "docs": [
             "zpm run       <file or script>      Run a zpm-package.json script or a zsh file."
-        ]},
-        "install": { "args": [{"name": "package name"}], "flags": {}, "docs": [
-            "zpm install   <package name>        Install a package"
         ]},
         "uninstall": { "args": [{"name": "package name"}], "flags": {}, "docs": [
             "zpm uninstall <package name>        Install a package"

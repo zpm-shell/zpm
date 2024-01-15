@@ -1,9 +1,10 @@
 zpm - zpm is a zsh package manager.
 
 USAGE:
+zpm install                         Install all dependences
+zpm install   <package name>        Install a dependence
 zpm init      <package name>        Create a zpm-package.json file in current directory.
 zpm run       <file or script>      Run a zpm-package.json script or a zsh file.
-zpm install   <package name>        Install a package
 zpm uninstall <package name>        Install a package
 zpm test                            Test the scripts flowing the test folder, if the folder is exists.
 

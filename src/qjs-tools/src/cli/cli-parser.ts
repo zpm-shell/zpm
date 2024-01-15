@@ -394,7 +394,7 @@ function helpDoc(cliConf: CliConfType): string {
   const cmdDocs: string[] = [];
   Object.keys(cliConf.commands).forEach((command) => {
     const cmdConf = cliConf.commands[command];
-    cmdDocs.push(cmdConf.docs[0]);
+    cmdConf.docs.forEach((doc) => cmdDocs.push(doc));
   });
 
   const doc = `${cliConf.name} - ${cliConf.description}
