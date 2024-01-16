@@ -4,6 +4,7 @@ import ./zpm.zsh --as self
 import ../core/test_beta.zsh --as test
 import ./global.zsh --as global
 import ./color.zsh --as color
+import ./log.zsh --as log
 
 local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
 
@@ -421,11 +422,13 @@ function install_all_dependence() {
     typeset -A dependencies=()
     local dependence=$( $jq -j "${zpmJsonData}" -q "dependencies" -t keys )
     local dependenceCount=$( $jq -j "${zpmJsonData}" -q "dependencies" -t size )
-    for (( i = 0; i < ${dependenceCount}; i++ )); do
-        local packageName=$( $jq -j "$dependence" -q "${i}" -t get )
+    local index=0;
+    while [[ ${index} -lt ${dependenceCount} ]]; do
+        local packageName=$( $jq -j "$dependence" -q "${index}" -t get )
         local query=dependencies.$( sed 's/\./\\./g' <<< ${packageName} )
         local version=$( $jq -j "$zpmJsonData" -q "$query" -t get )
-        call self.loop_install_package --name "${packageName}" --version "${version}"
+        call self.loop_install_package --name "${packageName}" --version "${version}" --prefix "${packageName}"
+        index=$(( index + 1 ))
     done
 }
 
@@ -433,11 +436,13 @@ function install_all_dependence() {
 # loop install a package
 # @param --name|-n <string> The package name
 # @param --version|-v <string> The package version
+# @param --prefix|-p <string> The prefix for debug log
 # @return <void>
 ##
 function loop_install_package() {
     local inputName=''
     local inputVersion=''
+    local inputPrefix=''
     local args=("$@")
     for (( i = 1; i <= $#; i++ )); do
         local arg="${args[$i]}"
@@ -450,6 +455,9 @@ function loop_install_package() {
                 (( i++ ))
                 inputVersion="${args[$i]}"
             ;;
+            --prefix|-p)
+                (( i++ ))
+                inputPrefix="${args[$i]}"
         esac
     done
 
@@ -463,9 +471,12 @@ function loop_install_package() {
         throw --error-message "The flag: --version|-v was requird" --exit-code 1
     fi
 
+    call log.debug "install package path: ${inputPrefix}"
+
     local saveDir="${ZPM_DIR}/packages/${inputName}/${inputVersion}"
+    call log.info "Install ${inputName}@${inputVersion} ..."
     if [[ -d ${saveDir} ]]; then
-        echo "The package: ${inputName}@${inputVersion} was installed"
+        call log.info "The package: ${inputName}@${inputVersion} was installed"
     else
         # download the package to the packages directory.
         local tmpDir=$(mktemp -d)
@@ -477,13 +488,14 @@ function loop_install_package() {
         [[ ! -d  ${saveDir} ]] && mkdir -p $( dirname ${saveDir} )
         mv ${tmpDir} ${saveDir}
     fi
+    call log.success "Install ${inputName}@${inputVersion} success"
 
     # download the dependence of the package
     local zpmjson="${saveDir}/zpm-package.json"
     local zpmJsonData=$(cat ${zpmjson})
     local hasDependencies=$( $jq -j "${zpmJsonData}" -q "dependencies" -t has )
     if [[ ${hasDependencies} == 'false' ]]; then
-        return ${FALSE}
+        return ${TRUE}
     fi
      
     local hasDependenciesField=$( $jq -j "${zpmJsonData}" -q "dependencies" -t has )
@@ -491,12 +503,14 @@ function loop_install_package() {
     
     local size=$( $jq -j "${zpmJsonData}" -q "dependencies" -t size )
     if [[ $size -gt 0 ]]; then
-        for (( i = 0; i < ${size}; i++ )); do
+        local packageIndex=0
+        while [[ ${packageIndex} -lt ${size} ]]; do
             local packageNames=$( $jq -j "${zpmJsonData}" -q "dependencies" -t keys )
-            local name=$( $jq -j "$packageNames" -q "${i}" -t get )
+            local name=$( $jq -j "$packageNames" -q "${packageIndex}" -t get )
             local query="dependencies.$( echo ${name} | sed 's/\./\\./g' )"
             local version=$( $jq -j "${zpmJsonData}" -q "${query}" -t get )
-            call self.loop_install_package --name ${name} --version ${version}
+            call self.loop_install_package --name ${name} --version ${version} --prefix "${inputPrefix}->${name}"
+            packageIndex=$(( packageIndex + 1 ))
         done
     fi
 }
