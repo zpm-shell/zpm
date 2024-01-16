@@ -251,6 +251,8 @@ function install_package() {
     cat > ${zpmjson} <<EOF
 ${newjsonData}
 EOF
+    # install the other dependences under the package.
+    call self.install_all_dependence -d ${newjsonData}
 }
 
 ##
