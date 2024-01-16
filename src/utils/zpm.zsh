@@ -409,9 +409,16 @@ function install_all_dependence() {
         return ${FALSE}
     fi
 
+    # check if the dependencies field was existed or not.
+    local zpmJsonData=$(cat ${zpmjson})
+    local hasDependenceFiled=$( $jq -j "${zpmJsonData}" -q "dependencies" -t has )
+    if [[ ${hasDependenceFiled} == 'false' ]]; then
+        call self.zpm_error -m "No any dependence was found in ${zpmjson}"
+        return ${TRUE}
+    fi
+
     # get dependencies from the zpm-package.json file
     typeset -A dependencies=()
-    local zpmJsonData=$(cat ${zpmjson})
     local dependence=$( $jq -j "${zpmJsonData}" -q "dependencies" -t keys )
     local dependenceCount=$( $jq -j "${zpmJsonData}" -q "dependencies" -t size )
     for (( i = 0; i < ${dependenceCount}; i++ )); do
@@ -479,6 +486,9 @@ function loop_install_package() {
         return ${FALSE}
     fi
      
+    local hasDependenciesField=$( $jq -j "${zpmJsonData}" -q "dependencies" -t has )
+    [[ ${hasDependenciesField} == 'false' ]] && return ${TRUE}
+    
     local size=$( $jq -j "${zpmJsonData}" -q "dependencies" -t size )
     if [[ $size -gt 0 ]]; then
         for (( i = 0; i < ${size}; i++ )); do
