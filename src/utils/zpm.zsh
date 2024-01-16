@@ -252,7 +252,7 @@ function install_package() {
 ${newjsonData}
 EOF
     # install the other dependences under the package.
-    call self.install_all_dependence -d ${newjsonData}
+    call self.loop_install_package --name "${packageName}" --version "${commitId}" --prefix "${packageName}"
 }
 
 ##

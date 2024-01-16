@@ -68,3 +68,54 @@ EOF
         call test.equal -e ${hasInstalledPackage} -a ${TRUE}
     done
 }
+
+function test_install_single_lib() {
+    local flowingLiberies=(
+        github.com/zpm-shell/test-lib-1-1
+    )
+    local willBeInstalledLibs=(
+        github.com/zpm-shell/test-lib-1
+    )
+
+
+    # clean the package cache
+    local packageCacheDir="${ZPM_DIR}/packages"
+    local package='';
+    for packae in ${flowingLiberies[@]}; do
+        local saveDir="${packageCacheDir}/${packae}"
+        [[ -d ${saveDir} ]] && rm -rf ${saveDir}
+    done
+    for packae in ${willBeInstalledLibs[@]}; do
+        local saveDir="${packageCacheDir}/${packae}"
+        [[ -d ${saveDir} ]] && rm -rf ${saveDir}
+    done
+
+    local currentDir=$(pwd)
+
+    # install the packages
+    local tmpDir=$(mktemp -d)
+    cd ${tmpDir}
+    zpm init github.com/zpm-shell/demo-test
+    for package in ${willBeInstalledLibs[@]}; do
+        zpm install ${package}
+    done
+    cd ${currentDir}
+    
+    # assert the packages for the current project.
+    for package in ${willBeInstalledLibs[@]}; do
+        local saveDir="${packageCacheDir}/${package}"
+        local hasInstalledPackage=${FALSE}
+        if [[ -d ${saveDir} ]]; then
+            hasInstalledPackage=${TRUE}
+        fi
+        call test.equal -e ${hasInstalledPackage} -a ${TRUE}
+    done
+    for package in ${flowingLiberies[@]}; do
+        local saveDir="${packageCacheDir}/${package}"
+        local hasInstalledPackage=${FALSE}
+        if [[ -d ${saveDir} ]]; then
+            hasInstalledPackage=${TRUE}
+        fi
+        call test.equal -e ${hasInstalledPackage} -a ${TRUE}
+    done
+}
