@@ -425,7 +425,7 @@ function install_all_dependence() {
         local packageName=$( $jq -j "$dependence" -q "${i}" -t get )
         local query=dependencies.$( sed 's/\./\\./g' <<< ${packageName} )
         local version=$( $jq -j "$zpmJsonData" -q "$query" -t get )
-        call self.loop_install_package --name ${packageName} --version ${version}
+        call self.loop_install_package --name "${packageName}" --version "${version}"
     done
 }
 
@@ -494,7 +494,7 @@ function loop_install_package() {
         for (( i = 0; i < ${size}; i++ )); do
             local packageNames=$( $jq -j "${zpmJsonData}" -q "dependencies" -t keys )
             local name=$( $jq -j "$packageNames" -q "${i}" -t get )
-            local query=$( sed sed 's/\./\\./g' <<< ${name} )
+            local query="dependencies.$( echo ${name} | sed 's/\./\\./g' )"
             local version=$( $jq -j "${zpmJsonData}" -q "${query}" -t get )
             call self.loop_install_package --name ${name} --version ${version}
         done
