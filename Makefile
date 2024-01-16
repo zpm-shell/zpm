@@ -17,7 +17,7 @@ integration-test:
 
 zpm-test:
 	PATH=${PWD}/bin:${PATH} \
-	ZPM_DIR=${PWD}\
+	ZPM_DIR=${PWD} \
 	ZPM_WORKSPACE=${PWD} \
 	zpm test
 
