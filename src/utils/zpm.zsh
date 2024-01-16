@@ -5,6 +5,8 @@ import ../core/test_beta.zsh --as test
 import ./global.zsh --as global
 import ./color.zsh --as color
 
+local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
+
 ##
 # print a message
 # @param --message|-m <string> The error message
@@ -56,7 +58,6 @@ function create_zpm_json() {
         throw --error-message "The zpm-package.json file already exists" --exit-code 1
     fi
 
-    local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
     local packageName=$($jq -j "${inputData}" -q "args.0.value" -t get)
 
     local config=$(cat <<EOF
@@ -153,7 +154,6 @@ function run_script() {
         call self.zpm_error -m "No ${zpmjson} was found in \"$(pwd)\""
          return 1;
     fi
-    local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
     local scriptName=$($jq -j "${inputData}" -q "args.0.value" -t get)
     if [[ -f ${scriptName} ]]; then
         call self.exec_zsh_script -f ${scriptName}
@@ -291,7 +291,6 @@ function uninstall_package() {
 
     local zpmjsonData=$(cat ${zpmjson})
     # check if the package was installed.
-    local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
     packageName=$(echo "${packageName}" | sed 's/\./\\./g')
     local hasPackage=$($jq -j "${zpmjsonData}" -q "dependencies.${packageName}" -t has)
     if [[ ${hasPackage} == "false" ]]; then
@@ -408,5 +407,86 @@ function install_all_dependence() {
     if [[ ! -f ${zpmjson} ]]; then
         call self.zpm_error -m "No ${zpmjson} was found in \"$(pwd)\""
         return ${FALSE}
+    fi
+
+    # get dependencies from the zpm-package.json file
+    typeset -A dependencies=()
+    local zpmJsonData=$(cat ${zpmjson})
+    local dependence=$( $jq -j "${zpmJsonData}" -q "dependencies" -t keys )
+    local dependenceCount=$( $jq -j "${zpmJsonData}" -q "dependencies" -t size )
+    for (( i = 0; i < ${dependenceCount}; i++ )); do
+        local packageName=$( $jq -j "$dependence" -q "${i}" -t get )
+        local query=dependencies.$( sed 's/\./\\./g' <<< ${packageName} )
+        local version=$( $jq -j "$zpmJsonData" -q "$query" -t get )
+        call self.loop_install_package --name ${packageName} --version ${version}
+    done
+}
+
+##
+# loop install a package
+# @param --name|-n <string> The package name
+# @param --version|-v <string> The package version
+# @return <void>
+##
+function loop_install_package() {
+    local inputName=''
+    local inputVersion=''
+    local args=("$@")
+    for (( i = 1; i <= $#; i++ )); do
+        local arg="${args[$i]}"
+        case "${arg}" in
+            --name|-n)
+                (( i++ ))
+                inputName="${args[$i]}"
+            ;;
+            --version|-v)
+                (( i++ ))
+                inputVersion="${args[$i]}"
+            ;;
+        esac
+    done
+
+    # if the input name is empty, then exit
+    if [[ -z "${inputName}" ]]; then
+        throw --error-message "The flag: --name|-n was requird" --exit-code 1
+    fi
+
+    # if the input version is empty, then exit
+    if [[ -z "${inputVersion}" ]]; then
+        throw --error-message "The flag: --version|-v was requird" --exit-code 1
+    fi
+
+    local saveDir="${ZPM_DIR}/packages/${inputName}/${inputVersion}"
+    if [[ -d ${saveDir} ]]; then
+        echo "The package: ${inputName}@${inputVersion} was installed"
+    else
+        # download the package to the packages directory.
+        local tmpDir=$(mktemp -d)
+        git clone https://${inputName} ${tmpDir}
+        cd ${tmpDir}
+        git reset --hard ${inputVersion}
+        cd -
+        
+        [[ ! -d  ${saveDir} ]] && mkdir -p $( dirname ${saveDir} )
+        mv ${tmpDir} ${saveDir}
+    fi
+
+    # download the dependence of the package
+    local zpmjson="${saveDir}/zpm-package.json"
+    local zpmJsonData=$(cat ${zpmjson})
+    local hasDependencies=$( $jq -j "${zpmJsonData}" -q "dependencies" -t has )
+    if [[ ${hasDependencies} == 'false' ]]; then
+        return ${FALSE}
+    fi
+     
+    local size=$( $jq -j "${zpmJsonData}" -q "dependencies" -t size )
+    if [[ $size -gt 0 ]]; then
+        for (( i = 0; i < ${size}; i++ )); do
+            local packageNames=$( $jq -j "${zpmJsonData}" -q "dependencies" -t keys )
+            local name=$( $jq -j "$packageNames" -q "${i}" -t get )
+            local query=$( sed sed 's/\./\\./g' <<< ${name} )
+            local version=$( $jq -j "${zpmJsonData}" -q "${query}" -t get )
+            call self.loop_install_package --name ${name} --version ${version}
+        done
     fi
 }
