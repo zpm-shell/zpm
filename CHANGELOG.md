@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.29] - 2024-01-17
+
+#### Features
+- Add Test for Cascade Installation of Dependencies in `zpm.zsh`. Implemented `test_install_single_lib` to ensure correct installation of dependencies. (2d5766d)
+- Auto-Install Dependencies After Installing a Single Package in `zpm.zsh`. Added automatic initiation of project dependencies installation. (97ee8c3)
+- Improved 'zpm install' Command for Comprehensive Dependency Installation. Enhanced command to support nested and multiple dependencies. (bcb2a9a)
+- Enhanced Dependency Checks and Configuration Loading. Added checks to verify the existence of the dependencies field in 'zpm-package.json'. (ae4a0f8)
+- Advanced Dependency Installation Logic in `zpm.zsh`. Moved `jq` variable declaration to global scope and enhanced `install_package` function. (2ffe678)
+- Enhanced CLI Argument Handling and Dependency Installation. Updated CLI argument parsing to recognize required arguments. (21ea6a2)
+- Implement advanced testing framework and color utilities. Added `test_beta.zsh` and `color.zsh` for improved testing and console output. (413a0a5)
+
+#### Fixes
+- Resolved Dependency Installation Issue in `zpm.zsh`. Fixed bugs in `install_all_dependence` and `loop_install_package` functions. (8d9825e)
+- Fixed Formatting in Makefile's `zpm-test` Target. Corrected a missing space for better consistency and readability. (d724b12)
+
+#### Refactoring
+- Refinement of Dependency Handling Logic. Streamlined the process of retrieving dependencies. (ae4a0f8)
+- Replace JSON5 with standard JSON in the project. Transitioned to using standard JSON for configuration handling. (d12f60d)
+
+#### Documentation
+- Update CLI Documentation for Enhanced Clarity. Improved documentation for the `install` command and CLI usage. (fc66d55)
+- Update `README.md` with new version and usage examples. Provided clear examples for install and uninstall commands. (b1f6996)
+- Update 'implement zpm install for dependencies' task to `TODO.md`. Reflected planned enhancements for bulk dependency installation. (523a57b)
+- Update TODO.md to reflect completed tasks. Marked the execution of scripts and transition to pure JSON format as completed. (b3448f7)
+
+#### Testing
+- Add integration test for package uninstallation. Extended testing to cover the uninstallation process. (123843b)
+
+#### Chores
+- Restore `zpm-package.json` to Project's Configuration. Reverted to full configuration with updated dependency version. (chore: Restore zpm-package.json to Project's Configuration)
+- Update Makefile for Enhanced Testing Environment Setup. Included new environment variables for better testing setup. (46fea54)
+- Correct `CHANGELOG.md` for 0.0.28. (cb2cce7)
+- Update the new version: 0.0.28 to `README.md`. (68bb4c0)
+
 ## [0.0.28] - 2024-01-13
 
 ### Changed
