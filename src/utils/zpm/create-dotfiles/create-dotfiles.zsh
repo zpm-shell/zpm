@@ -51,5 +51,5 @@ function create_dotfiles() {
     find . -mindepth 1 -print
     cd -
     echo 
-    call log.success "The dotfiles project was created in $(pwd)/${projectName}"
+    call log.success "The ${projectName} project was created successfully."
 }

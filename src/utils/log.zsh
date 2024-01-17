@@ -22,3 +22,12 @@ function success() {
     call color.shape_bold
     echo -e "$(call color.print SUCCESS): $1"
 }
+
+function error() {
+    local calltrace=($(zpm_calltrace -l 3))
+    call color.reset
+    call color.light_red
+    call color.shape_bold
+    local colorSymbol="$( call color.print ERROR )"
+    echo "${calltrace[1]} ${colorSymbol} $1"
+}
