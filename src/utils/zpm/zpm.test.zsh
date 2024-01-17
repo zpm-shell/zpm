@@ -1,4 +1,4 @@
-import ../core/test_beta.zsh --as test
+import ../../core/test_beta.zsh --as test
 
 ##
 # test the docs for the cmd: zpm create -h

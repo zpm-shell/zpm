@@ -33,7 +33,7 @@
         27 |     if [[ -f "zpm-package.json" ]]; then
         28 |         throw --error-message "The zpm-package.json file already exists" --exit-code 1
         29 |     fi
-        .zpm/src/utils/zpm.zsh:24
+        .zpm/src/utils/zpm/zpm.zsh:24
         .zpm/src/autoload.zsh:285
         .zpm/bin/zpm:31
 * [x] To execute a script in the "scripts" section of zpm-package.json, like:

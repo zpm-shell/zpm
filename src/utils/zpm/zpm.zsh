@@ -1,12 +1,18 @@
 #!/usr/bin/env zsh
 
 import ./zpm.zsh --as self
-import ../core/test_beta.zsh --as test
-import ./global.zsh --as global
-import ./color.zsh --as color
-import ./log.zsh --as log
+import ../../core/test_beta.zsh --as test
+import ../global.zsh --as global
+import ../color.zsh --as color
+import ../log.zsh --as log
+import ./create-dotfiles/create-dotfiles.zsh --as create_dotfiles
+import ../bin.zsh --as bin
 
-local jq=${ZPM_DIR}/src/qjs-tools/bin/jq
+local jq;
+
+function init() {
+    jq=$( call bin.jq )
+}
 
 ##
 # print a message
@@ -515,4 +521,38 @@ function loop_install_package() {
             packageIndex=$(( packageIndex + 1 ))
         done
     fi
+}
+
+##
+# create a new zpm project.
+# @param --data|-d <json> like: {name: "create", args: [], flags: {}, description: "Create a zpm-package.json file"}
+# @return <boolean>
+##
+function create() {
+    local inputData=''
+    local args=("$@")
+    for (( i = 1; i <= $#; i++ )); do
+        local arg="${args[$i]}"
+        case "${arg}" in
+            --data|-d)
+                (( i++ ))
+                inputData="${args[$i]}"
+            ;;
+        esac
+    done
+
+    # if the input data is empty, then exit
+    if [[ -z "${inputData}" ]]; then
+        throw --error-message "The flag: --data|-d was requird" --exit-code 1
+    fi
+
+    local template=$( $jq -j "${inputData}" -q flags.template -t get )
+    case ${template} in
+        dotfiles)
+            call create_dotfiles.create_dotfiles -d ${inputData}
+        ;;
+        *)
+            throw --error-message "The template: ${template} was not supported" --exit-code 1
+        ;;
+    esac
 }

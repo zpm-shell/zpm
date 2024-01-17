@@ -335,8 +335,15 @@ function parseCli(inputCliArgs, cliConf) {
             args: [],
         },
     };
-    // parse the args and flags
+    // set the default values for the flags
     const commandConf = cliConf.commands[command];
+    Object.keys(commandConf.flags).forEach((key) => {
+        const flagConf = commandConf.flags[key];
+        if (flagConf.required && flagConf.default !== "") {
+            result.command.flags[key] = flagConf.default;
+        }
+    });
+    // parse the args and flags
     const cliArgs = inputCliArgs.slice(1);
     const argIndex = 0;
     for (let i = 0; i < cliArgs.length; i++) {

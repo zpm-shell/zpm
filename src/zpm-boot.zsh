@@ -6,7 +6,7 @@ fi
 . ${ZPM_DIR}/src/autoload.zsh || exit 1;
 import ../src/utils/ref.zsh --as ref;
 import ../src/utils/ref-hash.zsh --as hash;
-import ../src/utils/zpm.zsh --as zpm;
+import ../src/utils/zpm/zpm.zsh --as zpm;
 
 local zpm_cli_conf='
 {
@@ -30,7 +30,7 @@ local zpm_cli_conf='
         "test": { "args": [], "flags": {}, "docs": [
             "zpm test                            Test the scripts flowing the test folder, if the folder is exists."
         ]},
-        "create": { "args": [{"name": "<package name>", "required": true}], "flags": {
+        "create": { "args": [{"name": "package name", "required": true}], "flags": {
             "template": {
                 "type": "string",
                 "default": "package",
@@ -76,6 +76,9 @@ if [[ "${action}" == "command" ]]; then
         ;;
         test)
             call zpm.test -d "${commandData}"
+        ;;
+        create)
+            call zpm.create -d "${commandData}"
         ;;
     esac
 fi
