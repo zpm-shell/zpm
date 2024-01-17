@@ -1,5 +1,20 @@
 import ../core/test_beta.zsh --as test
 
+##
+# test the docs for the cmd: zpm create -h
+#
+##
+function test_zpm_create_cmd_docs() {
+    local actual=$(zpm create -h)
+    local expect='Usage: 
+zpm create    <project name>        Create a new zpm project.
+
+Flags:
+	--template		create a project template,options: package(default),plugin,dotfiles'
+
+    call test.equal -a "${actual}" -e "${expect}"
+}
+
 function test_install_all_dependenceis() {
     local currentDir=$(pwd)
     local tmpDir=$(mktemp -d)

@@ -29,6 +29,17 @@ local zpm_cli_conf='
         ]},
         "test": { "args": [], "flags": {}, "docs": [
             "zpm test                            Test the scripts flowing the test folder, if the folder is exists."
+        ]},
+        "create": { "args": [{"name": "<package name>", "required": true}], "flags": {
+            "template": {
+                "type": "string",
+                "default": "package",
+                "description": "create a project template,options: package(default),plugin,dotfiles",
+                "alias": "t",
+                "required": true
+            }
+        }, "docs": [
+            "zpm create    <project name>        Create a new zpm project."
         ]}
     }
 }'

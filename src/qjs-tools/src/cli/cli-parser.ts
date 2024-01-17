@@ -6,6 +6,7 @@ type FlagConfig = {
   default: string | number | boolean;
   description: string;
   alias: string;
+  required: boolean;
 };
 type CommandType = {
   args: { name: string; required: boolean }[];
