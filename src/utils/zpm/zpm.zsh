@@ -333,35 +333,35 @@ function test() {
     # TODO(feat): The cmd exclude the test directory,and when the test feature was implemented, then remove this limit. like: 
     # find . -name '*.test.zsh'
     local testFiles=($(find . -path './test' -prune -o -name '*.test.zsh' -print))
-for testFile in ${testFiles[@]}; do
-  local relativeTestFile=${testFile#./}
-  local block="\e[1m"
-  local noColor="\e[0m"
-  echo "${block}TEST${noColor}  ${relativeTestFile}"
-# load the test file
-  . ${testFile}
+    for testFile in ${testFiles[@]}; do
+    local relativeTestFile=${testFile#./}
+    call color.reset
+    call color.shape_bold
+    echo "$(call color.print TEST) ${relativeTestFile}"
+    # load the test file
+    . ${testFile}
 
-  call global.set "TOTAL_FILES" "$(( TOTAL_FILES + 1 ))"
-  
-  # loop the test functions
-  call global.set "CURRENT_TEST_FILE" "${relativeTestFile}"
-  local testFunctions=($(call test.extract_test_functions ${testFile}))
-  local testFunc=''
-  for testFunc in ${testFunctions[@]}; do
-    # execute the test function
-    call global.set "CURRENT_TEST_NAME" "${testFunc}"
-    call global.set IS_CURRENT_TEST_OK "${TRUE}"
-    ${testFunc}
-    call test.print_current_test_result ${testFunc} ${IS_CURRENT_TEST_OK}
-    # Collecting test data
-    call global.set "TOTAL_TESTS" "$(( TOTAL_TESTS + 1 ))"
-    if [[ ${IS_CURRENT_TEST_OK} -eq ${TRUE} ]]; then
-      call global.set "TOTAL_PASSED_TESTS" "$(( TOTAL_PASSED_TESTS + 1 ))"
-    else
-      call global.set "TOTAL_FAILED_TESTS" "$(( TOTAL_FAILED_TESTS + 1 ))"
-    fi
-  done
-done
+    call global.set "TOTAL_FILES" "$(( TOTAL_FILES + 1 ))"
+    
+    # loop the test functions
+    call global.set "CURRENT_TEST_FILE" "${relativeTestFile}"
+    local testFunctions=($(call test.extract_test_functions ${testFile}))
+    local testFunc=''
+        for testFunc in ${testFunctions[@]}; do
+            # execute the test function
+            call global.set "CURRENT_TEST_NAME" "${testFunc}"
+            call global.set IS_CURRENT_TEST_OK "${TRUE}"
+            ${testFunc}
+            call test.print_current_test_result ${testFunc} ${IS_CURRENT_TEST_OK}
+            # Collecting test data
+            call global.set "TOTAL_TESTS" "$(( TOTAL_TESTS + 1 ))"
+            if [[ ${IS_CURRENT_TEST_OK} -eq ${TRUE} ]]; then
+            call global.set "TOTAL_PASSED_TESTS" "$(( TOTAL_PASSED_TESTS + 1 ))"
+            else
+            call global.set "TOTAL_FAILED_TESTS" "$(( TOTAL_FAILED_TESTS + 1 ))"
+            fi
+        done
+    done
 
     call color.reset
     call color.light_red
