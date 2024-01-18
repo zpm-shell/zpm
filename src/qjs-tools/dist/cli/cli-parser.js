@@ -267,6 +267,23 @@ function parseFlag(flagConf, cliArgs, i) {
         return [true, i];
     }
 }
+class ExitWithScriptFile extends Error {
+    constructor(scriptFile) {
+        const outputError = {
+            success: true,
+            action: "command",
+            output: "",
+            command: {
+                name: "run",
+                args: [{ name: "script", value: scriptFile }],
+                flags: {},
+            },
+        };
+        console.log(JSON.stringify(outputError));
+        std.exit(0);
+        super(scriptFile);
+    }
+}
 /**
  * check if the command is a valid command
  * @param command
@@ -274,6 +291,10 @@ function parseFlag(flagConf, cliArgs, i) {
  */
 function checkCommand(command, cliConf) {
     if (!Object.keys(cliConf.commands).includes(command)) {
+        // check the command is a file path.
+        if (std.loadFile(command) !== null) {
+            throw new ExitWithScriptFile(command);
+        }
         throw new ExitError(`The command ${command} is not a valid command`);
     }
 }
