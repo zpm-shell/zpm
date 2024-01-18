@@ -1,6 +1,6 @@
 // std.d.ts
 declare module "std" {
-  function loadFile(filePath: string): Uint8Array | null;
+  function loadFile(filePath: string, mod?: string): Uint8Array | null;
   function open(filename: string, flags: string): File | undefined;
 
   interface File {

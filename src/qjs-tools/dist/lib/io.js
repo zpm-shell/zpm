@@ -37,5 +37,5 @@ const writeFile = (fileName, content) => {
         throw new Error(`Could not open file: ${fileName}`);
     }
 };
-export { readFile, writeFile };
+export { readFile, writeFile, fileExists };
 //# sourceMappingURL=io.js.map

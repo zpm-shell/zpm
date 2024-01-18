@@ -1,7 +1,7 @@
 {
-    "name": "${{name}}",
-    "version": "${{version}}",
-    "description": "${{description}}",
+    "name": "${{NAME}}",
+    "version": "${{VERSION}}",
+    "description": "${{DESCRIPTION}}",
     "main": "src/main.zsh",
     "scripts": {
       "test": "zpm test"

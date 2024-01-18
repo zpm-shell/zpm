@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+
+#/**
+# * replace a variable in a file, like a json file
+# * {
+# * "name": "${{NAME}}",
+# * "version": "${{VERSION}}",
+# * "description": "${{DESCRIPTION}}"
+# * }
+# * and then replace it with the value in scriptArgs, like: Name=xxx Version=xxx Description=xxx
+# * and then to save the changes in the file.
+# */
+
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+
+
+qjs ${ZPM_DIR}/src/qjs-tools/dist/cli/replace-variable.js "$@"

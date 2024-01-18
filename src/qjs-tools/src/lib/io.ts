@@ -39,4 +39,4 @@ const writeFile = (fileName: string, content: string): void => {
   }
 };
 
-export { readFile, writeFile };
+export { readFile, writeFile, fileExists };

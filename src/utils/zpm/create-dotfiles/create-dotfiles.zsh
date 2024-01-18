@@ -46,6 +46,12 @@ function create_dotfiles() {
     fi
 
     cp -r "${ZPM_DIR}/src/utils/zpm/create-dotfiles/template" "${projectName}"
+    call bin.rv \
+        VERSION=0.0.1 \
+        NAME="${projectName}" \
+        DESCRIPTION="a zpm dotfiles" \
+        -f "${projectName}/zpm-package.json" \
+        -o "${projectName}/zpm-package.json"
     cd ${projectName}
     echo 
     find . -type f
