@@ -12,5 +12,9 @@
     "license": "ISC",
     "dependencies": {
       "github.com/zpm-shell/lib-demo": "fcbf562e97384d6ad90d985c23ba6a9a7aaed484"
-    }
+    },
+    "testIgnore": [
+      "./test/*",
+      "./src/utils/zpm/create-dotfiles/template/*"
+    ]
   }

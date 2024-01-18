@@ -48,7 +48,7 @@ function create_dotfiles() {
     cp -r "${ZPM_DIR}/src/utils/zpm/create-dotfiles/template" "${projectName}"
     cd ${projectName}
     echo 
-    find . -mindepth 1 -print
+    find . -type f
     cd -
     echo 
     call log.success "The ${projectName} project was created successfully."

@@ -330,9 +330,21 @@ function test() {
     typeset -g CURRENT_TEST_FILE=''
     typeset -g CURRENT_TEST_NAME=''
 
-    # TODO(feat): The cmd exclude the test directory,and when the test feature was implemented, then remove this limit. like: 
-    # find . -name '*.test.zsh'
-    local testFiles=($(find . -path './test' -prune -o -name '*.test.zsh' -print))
+    local testFiles=($( find . -name '*.test.zsh' -type f ))
+
+    # filter the test files with the testIgnore field in zpm-package.json.
+    local packageJson=$(cat zpm-package.json)
+    local hasTestIgnoreField=$( $jq -j "${packageJson}" -q "testIgnore" -t has )
+    if [[ ${hasTestIgnoreField} == 'true' ]]; then
+        local testIgnoreListCount=$( $jq -j "${packageJson}" -q "testIgnore" -t size )
+        local testIgnoreListIndex=0
+        while [[ ${testIgnoreListIndex} -lt ${testIgnoreListCount} ]]; do
+            local testIgnore=$( $jq -j "${packageJson}" -q "testIgnore.${testIgnoreListIndex}" -t get )
+            testFiles=($(printf '%s\n' ${testFiles[@]} | grep -vE "${testIgnore}"))
+            testIgnoreListIndex=$(( testIgnoreListIndex + 1 ))
+        done
+    fi
+
     for testFile in ${testFiles[@]}; do
     local relativeTestFile=${testFile#./}
     call color.reset
