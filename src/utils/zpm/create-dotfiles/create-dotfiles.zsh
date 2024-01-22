@@ -46,6 +46,7 @@ function create_dotfiles() {
     fi
 
     cp -r "${ZPM_DIR}/src/utils/zpm/create-dotfiles/template" "${projectName}"
+    chmod +x ${projectName}/install.zsh
     call bin.rv \
         VERSION=0.0.1 \
         NAME="${projectName}" \
