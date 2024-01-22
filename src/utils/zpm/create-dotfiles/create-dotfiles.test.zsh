@@ -15,6 +15,7 @@ function test_create_dotfiles() {
         [install.zsh]='ok'
         [src/main.zsh]='ok'
         [src/plugins/first-plugin.zsh]='ok'
+        [README.md]='ok'
     )
   
     local actualFileCount=0;
