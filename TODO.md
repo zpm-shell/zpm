@@ -80,3 +80,19 @@
     ```
 
 * [ ] implement the cli: zpm install, to install all the dependence in zpm-package.json.
+* [ ] add a new feature to set a workspace directory when execute a script, like:
+```zsh
+    zpm run <script> --workspace <workspace>
+```
+    and then the script will be executed in the workspace directory and used the zpm-package.json file in the workspace directory.
+
+* [ ] impreve the zpm docs, the actual docs is not friendly for the new user. for example, the zpm create command:
+``` zsh
+$ zpm create -h
+Usage: 
+zpm create    <project name>        Create a new zpm project.
+
+Flags:
+        --template              create a project template,options: package(default),plugin,dotfiles
+```
+the flag `--template` has been seted the alias name `-t`, but the `-t` was not displayed in the help docs.
