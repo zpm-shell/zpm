@@ -107,3 +107,25 @@ Flags:
         --template              create a project template,options: package(default),plugin,dotfiles
 ```
 the flag `--template` has been seted the alias name `-t`, but the `-t` was not displayed in the help docs.
+
+* [ ] Add a new feature to call a function self, like:
+> demo.zsh
+``` zsh 
+import ./demo.zsh --as self
+function init() {
+    call self.foo
+}
+function foo() {
+    echo "hello"
+}
+```
+to instead of:
+```zsh
+function init() {
+    call foo # call the foo function
+}
+function foo() {
+    echo "hello"
+}
+```
+this feature to make the code more readable and clear.
