@@ -10,7 +10,7 @@ function test_zpm_create_cmd_docs() {
 zpm create    <project name>        Create a new zpm project.
 
 Flags:
-	--template		create a project template,options: package(default),plugin,dotfiles'
+	-t, --template		create a project template,options: package(default),plugin,dotfiles'
 
     call test.equal -a "${actual}" -e "${expect}"
 

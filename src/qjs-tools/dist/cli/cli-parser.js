@@ -493,7 +493,8 @@ function cmdHelpDoc(action, cliConf) {
     const flagDocs = [];
     Object.keys(cmdConf.flags).forEach((flagName) => {
         const flag = cmdConf.flags[flagName];
-        flagDocs.push(`\t--${flagName}\t\t${flag.description}`);
+        const aliasDoc = flag.alias ? `-${flag.alias}, ` : "";
+        flagDocs.push(`\t${aliasDoc}--${flagName}\t\t${flag.description}`);
     });
     let flagSectionDocs = "";
     if (flagDocs.length > 0) {
