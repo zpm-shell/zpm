@@ -155,6 +155,15 @@ function run_script() {
         throw --error-message "The flag: --data|-d was requird" --exit-code 1
     fi
 
+    # check if the workspace path was set in the flags, and then set the workspace path as the zpm workspace
+    local hasWorkspace=$($jq -j "${inputData}" -q "flags.workspace" -t has)
+    if [[ ${hasWorkspace} == "true" ]]; then
+        local workspace=$($jq -j "${inputData}" -q "flags.workspace" -t get)
+        if [[ -n "${workspace}" ]]; then
+            ZPM_WORKSPACE=${workspace}
+        fi
+    fi
+
     local zpmjson="zpm-package.json"
     # if the zpm-package.json file exists, then exit
     if [[ ! -f "${zpmjson}" ]]; then

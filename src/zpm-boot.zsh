@@ -21,7 +21,15 @@ local zpm_cli_conf='
         "init": { "args": [{"name": "package name", "required": true}], "flags": {}, "docs": [
             "zpm init      <package name>        Create a zpm-package.json file in current directory."
         ]},
-        "run": { "args": [{"name": "script", "required": true}], "flags": {}, "docs": [
+        "run": { "args": [{"name": "script", "required": true}], "flags": {
+            "workspace": {
+                "type": "string",
+                "default": "",
+                "description": "the workspace path",
+                "alias": "w",
+                "required": false
+            }
+        }, "docs": [
             "zpm run       <file or script>      Run a zpm-package.json script or a zsh file."
         ]},
         "uninstall": { "args": [{"name": "package name", "required": true}], "flags": {}, "docs": [

@@ -137,3 +137,25 @@ function test_install_single_lib() {
         call test.equal -e ${hasInstalledPackage} -a ${TRUE}
     done
 }
+
+function test_workspace_in_runing_script() {
+    local tmpDir=$(mktemp -d)
+    local currentDir=$(pwd)
+    cd ${tmpDir}
+    zpm init github.com/zpm-shell/demo-test
+    cat > lib/main.zsh <<EOF
+#!/usr/bin/env zsh
+
+echo "$ZPM_WORKSPACE"
+EOF
+    local expectWorkspace="${tmpDir}/lib"
+
+    zpm run -w ${expectWorkspace} lib/main.zsh > result.log
+    local actualWorkspace=$(cat result.log)
+    local actualVal1=$(cat result.log)
+    zpm run --workspace ${expectWorkspace} lib/main.zsh > result.log
+    local actualVal2=$(cat result.log)
+    cd ${currentDir}
+    call test.equal -e "${actualWorkspace}" -a "${actualVal1}"
+    call test.equal -e "${actualWorkspace}" -a "${actualVal2}"
+}

@@ -1,2 +1,5 @@
 Usage: 
 zpm run       <file or script>      Run a zpm-package.json script or a zsh file.
+
+Flags:
+	-w, --workspace		the workspace path

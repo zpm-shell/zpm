@@ -17,8 +17,17 @@
     }
 ```
 
-* [ ] add cli: zpm test in zpm-cli, the cli will execute the test/test.zsh script to test the zsh scripts under the test/**
+* [x] Implement the feature to execute all test files like`**/*.test.zsh` in anywhere of the project,the lanch command is `zpm test`, and the test file must be end with `.test.zsh`.
 
+* [x] Implement the feature to include the test files in the zpm-package.json, like:
+```json
+    {
+        "testIgnore": [
+            "./test"
+        ]
+    }
+```
+    and then the test files will be executed when execute the command `zpm test`.
 * [ ] 🎉 If you call a function with emoji in it, the code will be messed up and not displayed.
 * [ ] the number line was incorect after throw an error, like:
         Error: The zpm-package.json file already exists
@@ -48,7 +57,7 @@
     and then execute the cmd:`zpm run cmd1`
     
 * [x] Execute the zsh script by zpm, like: zpm run <zsh-script>
-* [ ] Implement the cli: zpm uninstall <domain>/username/repository, to
+* [x] Implement the cli: zpm uninstall <domain>/username/repository, to
     remove the dependence in zpm-package.json.
 * [x] Create and implement ./install.sh to install zpm cli.
 * [x] release: update the version number after the zpm released on github.
@@ -79,14 +88,16 @@
     import demo --as demo # instead of import github.com/zpm-zpm/lib-demo --as demo
     ```
 
-* [ ] implement the cli: zpm install, to install all the dependence in zpm-package.json.
-* [ ] add a new feature to set a workspace directory when execute a script, like:
+* [x] implement the cli: zpm install, to install all the dependence in zpm-package.json.
+* [x] add a new feature to set a workspace directory when execute a script, like:
 ```zsh
-    zpm run <script> --workspace <workspace>
+zpm run <script> --workspace <workspace>
+# OR
+zpm run <script> -w <workspace>
 ```
     and then the script will be executed in the workspace directory and used the zpm-package.json file in the workspace directory.
 
-* [ ] impreve the zpm docs, the actual docs is not friendly for the new user. for example, the zpm create command:
+* [x] impreve the zpm docs, the actual docs is not friendly for the new user. for example, the zpm create command:
 ``` zsh
 $ zpm create -h
 Usage: 
