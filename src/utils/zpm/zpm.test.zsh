@@ -186,10 +186,40 @@ function init() {
     echo "hello"
 }
 EOF
-cd ${currentDir}
+    cd ${currentDir}
     local actual1=$(zpm run ${scriptFile})
     local actual2=$(zpm ${scriptFile})
     local expect="hello"
     call test.equal -e "${actual1}" -a "${expect}"
     call test.equal -e "${actual2}" -a "${expect}"
 }
+
+##
+# add the test to test the feature to call the function in the same file with a frendly name.like:
+# #!/usr/bin/env zpm
+# function init() {
+# call foo # <- this will call the function foo in the same file.
+# }
+#
+# function foo() {
+# echo "foo"
+# }
+function test_call_function_in_the_same_file() {
+    local tmpDir=$(mktemp -d)
+    local currentDir=$(pwd)
+    cd ${tmpDir}
+    local scriptFile="${tmpDir}/demo.zsh"
+    cat > ${scriptFile} <<EOF
+#!/usr/bin/env zpm
+function init() {
+    call foo
+}
+function foo() {
+    echo "foo"
+}
+EOF
+    cd ${currentDir}
+    local actual=$(zpm run ${scriptFile})
+    call test.equal -e "${actual}" -a "foo"
+}
+

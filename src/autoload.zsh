@@ -336,68 +336,87 @@ function call() {
         return ${FALSE}
     fi
     # 1.2 check the args is legal
-    local regex="([a-zA-Z0-9_-]+).([a-zA-Z0-9_-]+)"
+    local regex="([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)"
+    local localFuncRegex="([a-zA-Z0-9_-]+)"
     local aliasName=''
     local funcName=''
-    if [[ $funcAliasName =~ $regex ]]; then
+    local isCallLocalFunc="${FALSE}"
+    if [[ $funcAliasName =~ ${regex} ]]; then
          aliasName=$match[1]
          funcName=$match[2]
+    elif [[ ${funcAliasName} =~ '([a-zA-Z0-9_-]+)' ]]; then
+        isCallLocalFunc="${TRUE}"
+         funcName=$match[1]
     else
         throw --error-message "the function name is not legal"  --trace-level 2
         return ${FALSE}
     fi
     
-    # 2 get the loaded path in prev file
-    # 2.1 get the prev file path
-    local prefFileLine="${funcfiletrace[1]}"
-    local prevFilePath="${prefFileLine%:*}"
-    prevFilePath="${prevFilePath:A}"
+    # 2 get the loaded path, for example:
+    #   import /loaded/path/file.zsh --as alias-name # <-- get the loaded path in the current file
+    #   import ./loaded/path/file.zsh --as alias-name # ...
+    #   import @/loaded/path/file.zsh --as alias-name # ...
+    local loadedFilePath=""
+    if [[ $isCallLocalFunc == ${TRUE} ]]; then
+        local prefFileLine="${funcfiletrace[1]}"
+        local prevFilePath="${prefFileLine%:*}"
+        loadedFilePath="${prevFilePath:A}"
+        if [[ -z ${loadedFilePath} && ${#ZPM_CALL_STACE[@]} -gt 0 ]]; then
+            local funcAliasName=${ZPM_CALL_STACE[-1]}
+            loadedFilePath=${funcAliasName%%:*}
+        fi
+    else
+        # 2.2.1 get the prev file path
+        local prefFileLine="${funcfiletrace[1]}"
+        local prevFilePath="${prefFileLine%:*}"
+        prevFilePath="${prevFilePath:A}"
 
-    if [[ -z ${prevFilePath} && ${#ZPM_CALL_STACE[@]} -gt 0 ]]; then
-    local funcAliasName=${ZPM_CALL_STACE[-1]}
-     prevFilePath=${funcAliasName%%:*}
-    fi
-    
-    # 2.2 get the import path in the current file with the --as name
-    local loadedFilePath=$(
-        ${ZPM_DIR}/src/qjs-tools/bin/get-import-path-in-zsh-file \
-        -f ${prevFilePath} -a ${aliasName} 2>&1
-    )
-    if [[ $? -ne 0 ]]; then
-        throw --error-message "get the import path failed: ${loadedFilePath}"  --trace-level 2
-        return ${FALSE}
+        if [[ -z ${prevFilePath} && ${#ZPM_CALL_STACE[@]} -gt 0 ]]; then
+            local funcAliasName=${ZPM_CALL_STACE[-1]}
+            prevFilePath=${funcAliasName%%:*}
+        fi
+        # 2.2.2 get the import path in the current file with the --as name
+        loadedFilePath=$(
+            ${ZPM_DIR}/src/qjs-tools/bin/get-import-path-in-zsh-file \
+            -f ${prevFilePath} -a ${aliasName} 2>&1
+        )
+        if [[ $? -ne 0 ]]; then
+            throw --error-message "get the import path failed: ${loadedFilePath}"  --trace-level 2
+            return ${FALSE}
+        fi
+
+        # 2.2.3 convert the loaded path to absolute path
+        # 2.2.3.1 convert the loaded path to absolute path
+        case ${loadedFilePath} in
+            .*)
+                # 2.2.3.1.1 get the absolute prev file path
+                local prevDir="${prevFilePath%/*}"
+                # 2.2.3.1.2 get the absolute path
+                case ${loadedFilePath:1:1} in
+                    /)
+                        loadedFilePath="${prevDir}/${loadedFilePath:2}"
+                        ;;
+                .)
+                        loadedFilePath="${prevDir}/${loadedFilePath}"
+                        ;;
+                esac
+                ;;
+            @/*)
+                loadedFilePath="${ZPM_WORKSPACE}/${loadedFilePath:3}"
+                ;;
+            *)
+                # the loaded path in the current file is the third-party module
+                # so the loaded path is the package name
+                typeset -g ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP=()
+                parse_package_name --package-name "${loadedFilePath}" --output-list-ref ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP
+                local packageWorkspace="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[1]}"
+                local packageMainFile="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[2]}"
+                loadedFilePath="${packageWorkspace}/${packageMainFile}"
+            ;;
+        esac
+        loadedFilePath=${loadedFilePath:A}
     fi
 
-    # 3 convert the loaded path to absolute path
-    # 3.1 convert the loaded path to absolute path
-    case ${loadedFilePath} in
-        .*)
-            # 3.1 get the absolute prev file path
-            local prevDir="${prevFilePath%/*}"
-            # 3.2 get the absolute path
-            case ${loadedFilePath:1:1} in
-                /)
-                    loadedFilePath="${prevDir}/${loadedFilePath:2}"
-                    ;;
-               .)
-                    loadedFilePath="${prevDir}/${loadedFilePath}"
-                    ;;
-            esac
-            ;;
-        @/*)
-            loadedFilePath="${ZPM_WORKSPACE}/${loadedFilePath:3}"
-            ;;
-        *)
-            # the loaded path in the current file is the third-party module
-            # so the loaded path is the package name
-            typeset -g ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP=()
-            parse_package_name --package-name "${loadedFilePath}" --output-list-ref ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP
-            local packageWorkspace="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[1]}"
-            local packageMainFile="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[2]}"
-            loadedFilePath="${packageWorkspace}/${packageMainFile}"
-        ;;
-    esac
-    loadedFilePath=${loadedFilePath:A}
     # 4 contact the function name with the loaded path and function name
     local lineNumbers=($(
         grep -En "^(function\s+${funcName}\(\))|^\s*${funcName}\(\)" "${loadedFilePath}"  \
@@ -409,6 +428,7 @@ function call() {
 
     # 5 check the function exists
     if [[ -z ${functions[$funcAliasName]} ]]; then
+        echo "funcAliasName: ${funcAliasName}"
         throw --error-message "the function ${aliasName}.${funcName} not exists"  --trace-level 2
         return ${FALSE}
     fi
