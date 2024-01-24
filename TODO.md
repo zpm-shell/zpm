@@ -129,3 +129,9 @@ function foo() {
 }
 ```
 this feature to make the code more readable and clear.
+
+* [ ] Add a new feature to set the the `--as aliasName` as a optional argument in the `import` command, like:
+```zsh
+import <script.zsh path> --as <alias name>
+import <script.zsh path>
+```
