@@ -222,4 +222,3 @@ EOF
     local actual=$(zpm run ${scriptFile})
     call test.equal -e "${actual}" -a "foo"
 }
-

@@ -164,12 +164,6 @@ function run_script() {
         fi
     fi
 
-    local zpmjson="zpm-package.json"
-    # if the zpm-package.json file exists, then exit
-    if [[ ! -f "${zpmjson}" ]]; then
-        call self.zpm_error -m "No ${zpmjson} was found in \"$(pwd)\""
-         return 1;
-    fi
     local scriptName=$($jq -j "${inputData}" -q "args.0.value" -t get)
     if [[ -f ${scriptName} ]]; then
         call self.exec_zsh_script -f ${scriptName}
@@ -182,7 +176,14 @@ function run_script() {
             return ${FALSE}
         fi
     fi
+    # try to run the script in the zpm-package.json file
     # check if the script name was not exits and then print the error message
+    local zpmjson="${ZPM_WORKSPACE}/zpm-package.json"
+    # if the zpm-package.json file exists, then exit
+    if [[ ! -f "${zpmjson}" ]]; then
+        call self.zpm_error -m "No ${zpmjson} was found in \"$(pwd)\""
+         return 1;
+    fi
     local zpmjsonData=$(cat ${zpmjson})
     local hasScripName=$($jq -j "${zpmjsonData}" -q "scripts.${scriptName}" -t has)
     if [[ ${hasScripName} == "false" ]]; then
