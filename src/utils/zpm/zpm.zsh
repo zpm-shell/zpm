@@ -125,8 +125,16 @@ function exec_zsh_script() {
     # check the file was zsh file
     local fileExt=$(echo "${inputFile}" | awk -F '.' '{print $NF}')
     if [[ "${fileExt}" != "zsh" ]]; then
-        call self.zpm_error -m "The file: ${inputFile} is not a zsh file"
-        return ${FALSE}
+        local firstLine=$( head -n 1 ${inputFile} )
+        local allowInterprerList=(
+            '#!/usr/bin/env zsh'
+            '#!/bin/zsh'
+            '#!/usr/bin/env zpm'
+        )
+        if [[ -z allowInterprerList[${firstLine}] ]]; then
+            call self.zpm_error -m "The file: ${inputFile} is not a zsh file"
+            return ${FALSE}
+        fi
     fi
 
     import ${inputFile:A} --as zshScript
