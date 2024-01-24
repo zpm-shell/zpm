@@ -108,7 +108,7 @@ Flags:
 ```
 the flag `--template` has been seted the alias name `-t`, but the `-t` was not displayed in the help docs.
 
-* [ ] Add a new feature to call a function self, like:
+* [x] Add a new feature to call a function self, like:
 > demo.zsh
 ``` zsh 
 import ./demo.zsh --as self
