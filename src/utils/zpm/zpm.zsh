@@ -129,7 +129,7 @@ function exec_zsh_script() {
         return ${FALSE}
     fi
 
-    . ${inputFile}
+    import ${inputFile:A} --as zshScript
 }
 
 ##

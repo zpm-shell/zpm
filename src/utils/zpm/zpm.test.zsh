@@ -159,3 +159,37 @@ EOF
     call test.equal -e "${actualWorkspace}" -a "${actualVal1}"
     call test.equal -e "${actualWorkspace}" -a "${actualVal2}"
 }
+
+##
+# this test to test the feature that the init function will be called after the script executed with the cmd: 
+# zpm run <script.zsh>
+# or
+# zpm <script.zsh>
+# like this snippet in demo.zsh file:
+# #!/usr/bin/env zpm
+# function init() { # <- this function will be called after the script executed.
+#   echo "hello"
+# }
+#
+# function other_func_name() {
+# ...
+#}
+# ...
+function test_auto_call_init_function() {
+    local tmpDir=$(mktemp -d)
+    local currentDir=$(pwd)
+    cd ${tmpDir}
+    local scriptFile="${tmpDir}/demo.zsh"
+    cat > ${scriptFile} <<EOF
+#!/usr/bin/env zpm
+function init() {
+    echo "hello"
+}
+EOF
+cd ${currentDir}
+    local actual1=$(zpm run ${scriptFile})
+    local actual2=$(zpm ${scriptFile})
+    local expect="hello"
+    call test.equal -e "${actual1}" -a "${expect}"
+    call test.equal -e "${actual2}" -a "${expect}"
+}
