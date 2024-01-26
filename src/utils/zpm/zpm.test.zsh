@@ -222,3 +222,35 @@ EOF
     local actual=$(zpm run ${scriptFile})
     call test.equal -e "${actual}" -a "foo"
 }
+
+##
+# add the test to test the feature to reference the function from a third party
+# package with a special file path.like:
+# #!/usr/bin/env zpm
+# import github.com/username/third-party-package/a/specifical/path/file.zsh --as thirdFild
+# function init() {
+# call thirdFild.foo # <- this will call the function foo in the file.zsh.
+# }
+function test_call_function_in_the_third_party_package() {
+    local tmpDir=$(mktemp -d)
+    local currentDir=$(pwd)
+    cd ${tmpDir}
+    zpm init github.com/zpm-shell/demo-test
+    zpm install github.com/zpm-shell/deep-dependence-test-package2
+    local scriptFile="${tmpDir}/demo.zsh"
+    cat > ${scriptFile} <<EOF
+#!/usr/bin/env zpm
+import github.com/zpm-shell/deep-dependence-test-package2/lib/otherFile.zsh --as other
+
+function init() {
+    call other.other
+}
+EOF
+    zpm run ${scriptFile} > result.log
+    cat result.log
+    local actual=$(cat result.log)
+    local expect="I got caught"
+    cd ${currentDir}
+    call test.equal -e "${actual}" -a "${expect}"
+}
+    

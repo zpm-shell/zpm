@@ -16,6 +16,7 @@
     "testIgnore": [
       "./test/*",
       "./src/utils/zpm/create-dotfiles/template/*",
-      "./src/utils/zpm/zpm-interpreter.test.zsh"
+      "./src/utils/zpm/zpm-interpreter.test.zsh",
+      "./packages/*"
     ]
   }
