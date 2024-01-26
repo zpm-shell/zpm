@@ -13,7 +13,7 @@ fi
 . ${ZPM_DIR}/src/core/extract-functions.zsh #{extract_functions}
 
 ZPM_WORKSPACE=$(pwd);
-local args=${@}
+local args=(${@})
 local autoloadArgIndex=0
 while [[ ${autoloadArgIndex} -lt ${#args[@]} ]]; do
     local arg=${args[$autoloadArgIndex]}
