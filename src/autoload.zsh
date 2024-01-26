@@ -1,4 +1,6 @@
 #!/usr/bin/env zsh
+# @param --workspace|-w {string} the workspace path
+##
 
 TRUE=0
 FALSE=1
@@ -10,7 +12,19 @@ fi
 . ${ZPM_DIR}/src/core/error.zsh #{print_number_line, throw}
 . ${ZPM_DIR}/src/core/extract-functions.zsh #{extract_functions}
 
-ZPM_WORKSPACE=$(pwd)
+ZPM_WORKSPACE=$(pwd);
+local args=${@}
+local autoloadArgIndex=0
+while [[ ${autoloadArgIndex} -lt ${#args[@]} ]]; do
+    local arg=${args[$autoloadArgIndex]}
+    case ${arg} in
+    -w|--workspace)
+        ZPM_WORKSPACE=${args[$autoloadArgIndex + 1]}
+        (( autoloadArgIndex++ ))
+    ;;
+    esac
+    (( autoloadArgIndex++ ))
+done
 
 # the stack is used to store the current workspace path in the call stack
 # because the workspace path will be changed in the third-party module,
@@ -79,14 +93,14 @@ function zpm_get_workspace_path() {
 #)
 ##
 function parse_package_name() {
-    local inputPackageName=''
+    local inputPath=''
     local outputListRef=''
     local args=("$@")
     for (( i = 1; i <= ${#args[@]}; i++ )); do
         local arg=${args[$i]}
         case ${arg} in
             --package-name)
-                inputPackageName="${args[ $i + 1 ]}"
+                inputPath="${args[ $i + 1 ]}"
                 continue
                 ;;
             --output-list-ref)
@@ -95,49 +109,80 @@ function parse_package_name() {
                 ;;
         esac
     done
-    if [[ -z ${inputPackageName} ]]; then
+    if [[ -z ${inputPath} ]]; then
         throw --error-message "the --package-name arg is required" --exit-code 1 --trace-level 3
     fi
     if [[ -z ${outputListRef} ]]; then
         throw --error-message "the --output-list-ref arg is required" --exit-code 1 --trace-level 3
     fi
-    # check the dependence package was existed or not in the zpm-package.json of the current workspace
-    local dq="${ZPM_DIR}/src/qjs-tools/bin/zpm-json-dependencies-query"
+    # get the package name and the reference file path frome the input path, like
+    # github.com/username/package-name/src/main.zsh
+    # and then the package name is github.com/username/package-name
+    # then the reference file path is src/main.zsh
+    local packageName=''
+    local referenceFilePath=''
+    local jq="${ZPM_DIR}/src/qjs-tools/bin/jq"
     local workspace=$(zpm_get_workspace_path)
     local packageJsonPath="${workspace}/zpm-package.json"
-    local packageVersion=$( ${dq} -f ${packageJsonPath} -k ${inputPackageName} )
-    if [[ -z ${packageVersion} ]]; then
-        throw --error-message "the package ${inputPackageName} not exists, try to install with cmd: zpm install ${inputPackageName}" --exit-code 1 --trace-level 3
+    local hasDependencies=$(${jq} -q dependencies -j "$(cat ${packageJsonPath})" -t has)
+    if [[  ${hasDependencies} == 'false' ]]; then
+        throw --error-message "the dependencies field was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
+    fi
+    local allDependenciesJsonStr=$(${jq} -q dependencies -j "$(cat ${packageJsonPath})" -t keys)
+    local dependenceCount=$(${jq} -q dependencies -j "$(cat ${packageJsonPath})" -t size)
+    local i=0
+    while [[ ${i} -lt ${dependenceCount} ]]; do
+        local dependenceName=$(${jq} -q ${i} -j "${allDependenciesJsonStr}" -t get )
+        if [[ ${inputPath} == ${dependenceName}* ]]; then
+            packageName=${dependenceName}
+            referenceFilePath=${inputPath:${#packageName}}
+            break
+        fi
+        (( i++ ))
+    done
+    if [[ -z ${packageName} ]]; then
+        throw --error-message "the package ${inputPath} not exists, try to install with cmd: zpm install ${inputPath}" --exit-code 1 --trace-level 3
     fi
 
+    # check the dependence package was existed or not in the zpm-package.json of the current workspace
+    local dq="${ZPM_DIR}/src/qjs-tools/bin/zpm-json-dependencies-query"
+    # convert the github.com/username/package-name to github\.com/username/package-name
+    local packageVersion=$( ${dq} -f ${packageJsonPath} -k ${packageName} )
+
     # check the package was installed.
-    local packagePath="${ZPM_DIR}/packages/${inputPackageName}/${packageVersion}"
+    local packagePath="${ZPM_DIR}/packages/${packageName}/${packageVersion}"
     if [[ ! -d ${packagePath} ]]; then
-        throw --error-message "the package ${inputPackageName} not exists in ${packagePath}" --exit-code 1 --trace-level 3
+        throw --error-message "the package ${packageName} not exists in ${packagePath}" --exit-code 1 --trace-level 3
     fi
     local packageJsonPath="${packagePath}/zpm-package.json"
     if [[ ! -f ${packageJsonPath} ]]; then
         throw --error-message "the zpm-package.json was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
     fi
-    # check the main file exists
+
+    # get the reference file path
     local jq="${ZPM_DIR}/src/qjs-tools/bin/jq"
     local packageJsonData="$(cat ${packageJsonPath})"
-    local isFieldExisted=$(${jq} -q main -j "${packageJsonData}" -t has)
-    if [[ ${isFieldExisted} == false ]]; then
-        throw --error-message "the main field was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
+    if [[ ! -z ${referenceFilePath} ]]; then
+        referenceFilePath=${referenceFilePath:1}
+    else
+        # check the main file exists
+        local isFieldExisted=$(${jq} -q main -j "${packageJsonData}" -t has)
+        if [[ ${isFieldExisted} == false ]]; then
+            throw --error-message "the main field was not existed in ${packageJsonPath}" --exit-code 1 --trace-level 3
+        fi
+        # check the main file exists
+        referenceFilePath=$( ${jq} -q main -j "${packageJsonData}" -t get)
     fi
-    
-    # check the main file exists
-    local relativeMainFile=$( ${jq} -q main -j "${packageJsonData}" -t get)
-    local mainFile="${packagePath}/${relativeMainFile}"
-    if [[ ! -f ${mainFile} ]]; then
+
+    local referenceFilePath="${packagePath}/${referenceFilePath}"
+    if [[ ! -f ${referenceFilePath} ]]; then
         throw --error-message \
-            "the main file ${relativeMainFile} was not existed in ${inputPackageName}" \
+            "the main file ${referenceFilePath} was not existed in ${packageName}" \
             --exit-code 1 --trace-level 3
     fi
     eval " ${outputListRef}=( 
         \"${packagePath}\"
-        \"${relativeMainFile}\"
+        \"${referenceFilePath}\"
      )"
 }
 
@@ -219,7 +264,7 @@ function import() {
             fi
             local packageWorkspace="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[1]}"
             local packageMainFile="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[2]}"
-            relativeImportPath="${packageWorkspace}/${packageMainFile}"
+            relativeImportPath="${packageMainFile}"
             isThirdPardModule="${TRUE}"
             ;;
     esac
@@ -411,7 +456,7 @@ function call() {
                 parse_package_name --package-name "${loadedFilePath}" --output-list-ref ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP
                 local packageWorkspace="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[1]}"
                 local packageMainFile="${ZPM_GLOBAL_THIRD_PARD_PACKAGE_INFO_LIST_TMP[2]}"
-                loadedFilePath="${packageWorkspace}/${packageMainFile}"
+                loadedFilePath="${packageMainFile}"
             ;;
         esac
         loadedFilePath=${loadedFilePath:A}

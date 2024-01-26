@@ -3,7 +3,7 @@
 if [[ ${ZPM_DIR}/.zpmrc  ]]; then
     . ${ZPM_DIR}/.zpmrc || exit 1;
 fi
-. ${ZPM_DIR}/src/autoload.zsh || exit 1;
+. ${ZPM_DIR}/src/autoload.zsh ${@} || exit 1;
 import ../src/utils/ref.zsh --as ref;
 import ../src/utils/ref-hash.zsh --as hash;
 import ../src/utils/zpm/zpm.zsh --as zpm;

@@ -530,6 +530,9 @@ function loop_install_package() {
 
     # download the dependence of the package
     local zpmjson="${saveDir}/zpm-package.json"
+    if [[ ! -f ${zpmjson} ]]; then
+        return ${TRUE}
+    fi
     local zpmJsonData=$(cat ${zpmjson})
     local hasDependencies=$( $jq -j "${zpmJsonData}" -q "dependencies" -t has )
     if [[ ${hasDependencies} == 'false' ]]; then
