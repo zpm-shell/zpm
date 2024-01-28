@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2024-01-28
+
+### Features
+- Enhanced 'jsonQuery' function with 'type' query capability in JSON Query CLI tool (42ff0a539addf75070ad429c28bc380efbecb7c9).
+- Added test for third-party package function reference in ZPM tool (dac775ad088c6cf1b82051c9db068cdf1f131420).
+- Implemented feature for self-referencing functions in scripts and associated tests (ef1607723b889d1447c923cffaad76f05f7add8a, f4a9e1f1926a7511e9bd4b9a3f27d026fbf0fa57).
+- Auto-call 'init' function in scripts executed with ZPM (3101cf231f003561dda6fc341da588765c09cd33).
+- Introduced replace-variable utility for dynamic file updates in ZPM (8160aad471b7d1553a5099381cca9fb260392e9c).
+- Enable script execution with ZPM as interpreter (b73bbd9b5efd428df3c7a4ebf10a2d36b306cea9).
+- Introduce dotfiles template for ZPM, enhancing the versatility and user-friendliness of the package manager (c07aee265f36af0b6bd410a19d3aada41b97607e).
+- Introduced 'create' command for ZPM project initialization (01ecf3e4222c3b627dfbba1103e207c2e4ed88a5).
+
+### Fixes
+- Corrected parsing of workspace path in autoload script for ZPM (f96b15f5b4bd234a13c05c302b7ad3d85834bdf8).
+- Resolved third-party module reference and workspace path issues in ZPM (cffe97c5d9b21a6c0505ab047e2fd63b1ebf9118).
+- Allowed execution of executable files with ZPM interpreter (c1e51bfcdffc2bb26288d2374dca442cf0bc0200).
+- Fixed ${ZPM_WORKSPACE} environment variable issue in `zpm run` command (efe34a7bb3094eb83990d53fbada51110c6f8b22).
+
+### Refactoring
+- Improved test execution output formatting in zpm.zsh (2abfbe81f0950a08b97033621248f581d087be3d).
+
+### Documentation
+- Added a new feature and documentation improvements to the TODO list (be31b6cf63e39b6194900e5aa09418e39374ebaa, docs: Update TODO List with New Features and Documentation Improvements).
+- Enhanced CLI help documentation with alias information (c7bd3133dea7889e1c8544af89df4c700da20749, d01a9d5f8af6b5c2bc0f8b50d8222301833b9c87).
+- Updated the new version: 0.0.29 in README.md (be60070c2d2ca760dafe81f96c0f54fe69491df4).
+
+### Testing
+- Exclude specific test directories in zpm test execution (5713b1bf63215533fe2407039bc5173bfd859407).
+- Enhanced logging and testing for dotfiles creation in ZPM (6bf59a57c0b2857e0af96d027601da921314656b).
+- Test update for `zpm create -h` command (dc0c6f96f9cc52576477041892d100bf244580be).
+
+### Chores
+- Added README.md template for ZPM dotfiles, providing clear guidelines for setting up and personalizing the Zsh environment with ZPM (875c5c462d22dd590ee01bae1f527ff8241292ae).
+- Introduced install.zsh script in Dotfiles template for ZPM, automating the checking and installation of necessary tools for a new ZPM-managed dotfiles project (f3d5f28ac4f75d9152931ff388a5a764db68e6bd).
+- Added TODO item for self-referencing functions enhancement in ZPM (7f08dc255b478831092e0b11258bcc907648d63d).
+
 ## [0.0.29] - 2024-01-17
 
 #### Features
