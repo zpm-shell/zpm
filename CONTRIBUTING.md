@@ -4,81 +4,22 @@
 
 The following is a set of guidelines for contributing to the zpm, which are hosted on [zpm-shell/zpm](https://github.com/zpm-shell/zpm) on GitHub. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
-## 1 Local development
 
-### 1.1 Prerequisites
+## 1 The release process
 
-What things you need to install the software and how to install them.
+For example, we want to release a new version `0.1.0`, and then the list of steps is as follows:
 
-```plaintext
-Make (v3.81+)
-```
+1. Add the change log to the `CHANGELOG.md` file
+2. Modify the version number in the the flowing files:
+    - `install.sh`
+    - `src/zpm-boot.zsh`
+    - `test/unit/zpm.test/expect_help_doc.txt`
+    - `test/unit/zpm.test/zpm.test.zsh`
+3. update the version number with the `make update_release_version VERSION=0.1.0`, to update the flowing files:
+    - `zpm-package.json`
+    - `install.sh`
+4. git tag the version, like: `git tag -a 0.1.0 -m "release: 0.1.0"`
+6. push the tag to github: `git push origin master 0.1.0`, and then the git action will release the new version to github release page and create a new commit to update the version number to `0.1.1` in `README.md` file.
+7. if the version number was released successfully, then you should pull the new commit to your local repository with `git pull origin master` command.
 
-### 1.2 Install git hooks
-
-```bash
-$ make install_git_hooks
-```
-
-## 2 Styleguides
-
-### 2.1 Git Commit Messages
-
-- Use the present tense ("Add feature" not "Added feature")
-- Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
-- Limit the first line to 72 characters or less
-- Reference issues and pull requests liberally after the first line
-
-### 2.2 Documentation Styleguide
-
-- Use [Markdown](https://daringfireball.net/projects/markdown).
-
-## 3 How Can I Contribute?
-
-### 3.1 Reporting Bugs
-
-This section guides users through submitting a bug report. This explains how to define what a bug is and maybe provides a template for submitting a bug.
-
-#### 3.1.1 Before Submitting A Bug Report
-
-- Check the debugging guide.
-- Determine [which repository](https://github.com/zpm-shell) the problem should be reported in.
-- Check if the issue has already been reported.
-- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/zpm-shell/zpm/issues/new).
-
-#### 3.1.2How Do I Submit A (Good) Bug Report?
-
-Provide information on how to write a good bug report. Issues are a means of communication and need to be clear and contain all the necessary details.
-
-### 3.2 Suggesting Enhancements
-
-This section guides users through submitting an enhancement suggestion, including completely new features and minor improvements to existing functionality.
-
-#### 3.2.1 Before Submitting An Enhancement Suggestion
-
-- Check the roadmap or discuss in issues if there's already a plan for that feature.
-- Determine [which repository](https://github.com/zpm-shell) the enhancement should be suggested in.
-- Check if it's already been suggested.
-- If it hasn't, [open a new suggestion](https://github.com/zpm-shell/zpm/issues/new).
-
-#### 3.2.2 How Do I Submit A (Good) Enhancement Suggestion?
-
-Provide information on how to submit a good enhancement suggestion.
-
-### 3.3 Your First Code Contribution
-
-Unsure where to begin contributing to ProjectName? You can start by looking through `beginner` and `help-wanted` issues:
-
-- [Beginner issues](https://github.com/zpm-shell/zpm/labels/beginner) - issues which should only require a few lines of code, and a test or two.
-- [Help wanted issues](https://github.com/zpm-shell/zpm/labels/help%20wanted) - issues which should be a bit more involved than `beginner` issues.
-
-
-## 4 Collaborative development approach
-
-there 2 main branches: 
-
-- `master` - the main branch.
-- `release` - the branch was commited on github actions after the tests passed and the version was updated.
-
-so, when the new version is ready, and the new version tag was created, the github actions will run the tests and if the tests passed, the new version will be commited to the `release` branch.
-and then all the developers can pull the `release` branch and get the new version.
+After the steps was done, this release process was completed.
