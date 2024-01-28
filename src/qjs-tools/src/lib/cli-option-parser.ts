@@ -4,6 +4,7 @@ type OptionType = Record<
     type: "boolean" | "string";
     alias: string;
     description: string;
+    required?: boolean;
   }
 >;
 // type OptionParserResultType = Record<string, string | boolean>;

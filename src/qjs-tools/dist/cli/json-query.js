@@ -106,6 +106,19 @@ const jsonQuery = (json, query, queryType) => {
                 i++;
             });
             return jsonObj;
+        case "type":
+            i = 0;
+            return queryArr.reduce((prev, curr) => {
+                const isLastElement = i === queryArr.length - 1;
+                i++;
+                checkKeyExist(prev, curr);
+                if (isLastElement) {
+                    return typeof prev[curr];
+                }
+                else {
+                    return prev[curr];
+                }
+            }, jsonObj);
     }
 };
 const parserResult = optionParser({
@@ -122,7 +135,7 @@ const parserResult = optionParser({
     queryType: {
         alias: "t",
         type: "string",
-        description: "query type: has, get, size, keys, delete",
+        description: "query type: has, get, size, keys, delete, type",
     },
 }, scriptArgs.slice(1));
 const result = jsonQuery(parserResult["jsonString"], parserResult["query"], parserResult.queryType);
