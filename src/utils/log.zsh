@@ -16,8 +16,10 @@ function debug() {
 function info() {
     local isPrintPath=${FALSE}
     local args=("$@")
-    local index=0;
-    while [ $index -lt ${#args[@]} ]; do
+    local index=1;
+    
+    # // if $index is less than or equal to the length of the array
+    while [[ ${index} -le ${#args} ]]; do
         case ${args[$index]} in
             --no-path|-n)
                 isPrintPath=${TRUE}
