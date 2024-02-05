@@ -10,10 +10,31 @@ function debug() {
     fi
 }
 
+##
+# @param --no-path|-n: Do not print the file path
+##
 function info() {
+    local isPrintPath=${FALSE}
+    local args=("$@")
+    local index=0;
+    while [ $index -lt ${#args[@]} ]; do
+        case ${args[$index]} in
+            --no-path|-n)
+                isPrintPath=${TRUE}
+                ;;
+        esac
+        index=$((index+1))
+    done
+    
     local calltrace=($(zpm_calltrace -l 3))
-    local colorSymbol="[\e[1mINFO\e[0m]"
-    echo "${calltrace[1]} ${colorSymbol} $1"
+    call color.reset
+    call color.shape_bold
+    local colorSymbol="[$(call color.print INFO)]"
+    if [[ ${isPrintPath} -eq ${TRUE} ]]; then
+        echo "${colorSymbol} $1"
+    else
+        echo "${calltrace[1]} ${colorSymbol} $1"
+    fi
 }
 
 function success() {

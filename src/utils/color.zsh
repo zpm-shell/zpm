@@ -10,9 +10,9 @@ typeset -A -g COLOR_REGISTER=(
 
 function reset() {
     COLOR_REGISTER=(
-        [color]=0
+        [color]=""
         [background]=""
-        [shape]=""
+        [shape]="0"
     )
 }
 
@@ -169,15 +169,15 @@ function background_white() {
 ##
 function print() {
     local text=$1
-    local color=${COLOR_REGISTER[color]}
-    local colorCode="\e[${color}"
+    local shape=${COLOR_REGISTER[shape]}
+    local colorCode="${shape}"
     local background=${COLOR_REGISTER[background]}
     if [[ ${background} != "" ]]; then
         colorCode="${colorCode};${background}"
     fi
-    local shape=${COLOR_REGISTER[shape]}
-    if [[ ${shape} != "" ]]; then
-        colorCode="${colorCode};${shape}"
+    local color=${COLOR_REGISTER[color]}
+    if [[ ${color} != "" ]]; then
+        colorCode="${colorCode};${color}"
     fi
     colorCode="\e[${colorCode}m"
     echo -e "${colorCode}${text}\e[0m"
