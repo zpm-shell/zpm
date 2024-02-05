@@ -332,7 +332,38 @@ ${jsonStr}
 EOF
 }
 
+##
+# @param --data|-d <json> like: {name: "test", args: ["<directory>|file path | empty"], flags: {}, description: "Test files"}
+# @return <void>
+##
 function test() {
+    local inputData=''
+    local args=("$@")
+    for (( i = 1; i <= $#; i++ )); do
+        local arg="${args[$i]}"
+        case "${arg}" in
+            --data|-d)
+                (( i++ ))
+                inputData="${args[$i]}"
+            ;;
+        esac
+    done
+    # if the input data is empty, then exit
+    if [[ -z "${inputData}" ]]; then
+        throw --error-message "The flag: --data|-d was requird" --exit-code 1
+    fi
+    local isTestPath=${FALSE}
+    local argsSize=$($jq -j "${inputData}" -q "args" -t size)
+    local testPath='.'
+    if [[ ${argsSize} -gt 0 ]]; then
+        testPath=$($jq -j "${inputData}" -q "args.0.value" -t get)
+        if [[ ! -d ${testPath} &&  ! -f ${testPath} ]]; then
+            throw --error-message "The test path: ${testPath} was not found" --exit-code 1
+            return $?;
+        esle
+            isTestPath=${TRUE}
+        fi
+    fi
 
     typeset -g TRUE=0
     typeset -g FALSE=1
@@ -347,50 +378,52 @@ function test() {
     typeset -g IS_CURRENT_TEST_OK=${FALSE}
     typeset -g CURRENT_TEST_FILE=''
     typeset -g CURRENT_TEST_NAME=''
-
-    local testFiles=($( find . -name '*.test.zsh' -type f ))
+    
+    local testFiles=($( find ${testPath} -name '*.test.zsh' -type f ))
 
     # filter the test files with the testIgnore field in zpm-package.json.
-    local packageJson=$(cat zpm-package.json)
-    local hasTestIgnoreField=$( $jq -j "${packageJson}" -q "testIgnore" -t has )
-    if [[ ${hasTestIgnoreField} == 'true' ]]; then
-        local testIgnoreListCount=$( $jq -j "${packageJson}" -q "testIgnore" -t size )
-        local testIgnoreListIndex=0
-        while [[ ${testIgnoreListIndex} -lt ${testIgnoreListCount} ]]; do
-            local testIgnore=$( $jq -j "${packageJson}" -q "testIgnore.${testIgnoreListIndex}" -t get )
-            testFiles=($(printf '%s\n' ${testFiles[@]} | grep -vE "${testIgnore}"))
-            testIgnoreListIndex=$(( testIgnoreListIndex + 1 ))
-        done
+    if [[ -d ${testPath} ]]; then
+        local packageJson=$(cat zpm-package.json)
+        local hasTestIgnoreField=$( $jq -j "${packageJson}" -q "testIgnore" -t has )
+        if [[ ${hasTestIgnoreField} == 'true' ]]; then
+            local testIgnoreListCount=$( $jq -j "${packageJson}" -q "testIgnore" -t size )
+            local testIgnoreListIndex=0
+            while [[ ${testIgnoreListIndex} -lt ${testIgnoreListCount} ]]; do
+                local testIgnore=$( $jq -j "${packageJson}" -q "testIgnore.${testIgnoreListIndex}" -t get )
+                testFiles=($(printf '%s\n' ${testFiles[@]} | grep -vE "${testIgnore}"))
+                testIgnoreListIndex=$(( testIgnoreListIndex + 1 ))
+            done
+        fi
     fi
 
     for testFile in ${testFiles[@]}; do
-    local relativeTestFile=${testFile#./}
-    call color.reset
-    call color.shape_bold
-    echo "$(call color.print TEST) ${relativeTestFile}"
-    # load the test file
-    . ${testFile}
+        local relativeTestFile=${testFile#./}
+        call color.reset
+        call color.shape_bold
+        echo "$(call color.print TEST) ${relativeTestFile}"
+        # load the test file
+        . ${testFile}
 
-    call global.set "TOTAL_FILES" "$(( TOTAL_FILES + 1 ))"
-    
-    # loop the test functions
-    call global.set "CURRENT_TEST_FILE" "${relativeTestFile}"
-    local testFunctions=($(call test.extract_test_functions ${testFile}))
-    local testFunc=''
-        for testFunc in ${testFunctions[@]}; do
-            # execute the test function
-            call global.set "CURRENT_TEST_NAME" "${testFunc}"
-            call global.set IS_CURRENT_TEST_OK "${TRUE}"
-            ${testFunc}
-            call test.print_current_test_result ${testFunc} ${IS_CURRENT_TEST_OK}
-            # Collecting test data
-            call global.set "TOTAL_TESTS" "$(( TOTAL_TESTS + 1 ))"
-            if [[ ${IS_CURRENT_TEST_OK} -eq ${TRUE} ]]; then
-            call global.set "TOTAL_PASSED_TESTS" "$(( TOTAL_PASSED_TESTS + 1 ))"
-            else
-            call global.set "TOTAL_FAILED_TESTS" "$(( TOTAL_FAILED_TESTS + 1 ))"
-            fi
-        done
+        call global.set "TOTAL_FILES" "$(( TOTAL_FILES + 1 ))"
+
+        # loop the test functions
+        call global.set "CURRENT_TEST_FILE" "${relativeTestFile}"
+        local testFunctions=($(call test.extract_test_functions ${testFile}))
+        local testFunc=''
+            for testFunc in ${testFunctions[@]}; do
+                # execute the test function
+                call global.set "CURRENT_TEST_NAME" "${testFunc}"
+                call global.set IS_CURRENT_TEST_OK "${TRUE}"
+                ${testFunc}
+                call test.print_current_test_result ${testFunc} ${IS_CURRENT_TEST_OK}
+                # Collecting test data
+                call global.set "TOTAL_TESTS" "$(( TOTAL_TESTS + 1 ))"
+                if [[ ${IS_CURRENT_TEST_OK} -eq ${TRUE} ]]; then
+                call global.set "TOTAL_PASSED_TESTS" "$(( TOTAL_PASSED_TESTS + 1 ))"
+                else
+                call global.set "TOTAL_FAILED_TESTS" "$(( TOTAL_FAILED_TESTS + 1 ))"
+                fi
+            done
     done
 
     call color.reset

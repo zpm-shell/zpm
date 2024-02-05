@@ -35,8 +35,9 @@ local zpm_cli_conf='
         "uninstall": { "args": [{"name": "package name", "required": true}], "flags": {}, "docs": [
             "zpm uninstall <package name>        Install a package"
         ]},
-        "test": { "args": [], "flags": {}, "docs": [
-            "zpm test                            Test the scripts flowing the test folder, if the folder is exists."
+        "test": { "args": [{"name": "file.zsh", "required": false}], "flags": {}, "docs": [
+            "zpm test                            Test all test fils like: *.test.zsh.",
+            "zpm test [<test.zsh> | <directory>] Test a specifc test file or directory."
         ]},
         "create": { "args": [{"name": "package name", "required": true}], "flags": {
             "template": {
