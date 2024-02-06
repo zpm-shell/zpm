@@ -1,6 +1,6 @@
 function test_version() {
     local version=$(zpm --version)
-    local expectVal="0.1.0"
+    local expectVal="0.1.1"
     expect_equal --expected "${expectVal}" --actual "${version}"
 
     version=$(zpm -v)

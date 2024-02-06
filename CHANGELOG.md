@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2024-02-06
+
+### Features
+- **Testing**: Enhanced Test Command with Specific File or Directory Support. Implemented support for launching test processes with a specific file or directory path, allowing for more targeted testing within zpm projects. Updated `zpm.zsh` to process `--data|-d` flags for test command input and added a new unit test file `log.test.zsh`. Revised help documentation and test expectations to reflect the new testing capabilities. Fixed a syntax error in `zpm.zsh` and improved error handling for non-existent test paths, ensuring robustness in test execution.
+
+### Fixes
+- **Log**: Correct Error Output in Info Log Function. Fixed an issue in `log.info` function where the error output was not correctly formatted. Updated the `log.test.zsh` unit test to validate the corrected functionality, ensuring that the output matches expected values without printing the file path when the `--no-path` flag is used. Adjustments made to ensure adherence to the expected output format.
+- **Utils**: Correct Color Formatting and Add Conditional Path Printing in Log Utility. Fixed incorrect color formatting in `color.zsh` and enhanced the `info` function in `log.zsh` to conditionally print the file path. Modified the `color.zsh` reset function to use more appropriate default values, improving the readability and utility of log messages.
+
+### Documentation
+- Refined CONTRIBUTING.md to focus on the release process for ZPM. Streamlined CONTRIBUTING.md by removing sections on local development, style guides, bug reporting, and enhancement suggestions. Introduced a detailed guide for the release process of new versions, including specific file updates and Git commands. Emphasized the importance of version consistency across multiple files and provided clear instructions for tagging releases in Git.
+
 ## [0.1.0] - 2024-01-28
 
 ### Features

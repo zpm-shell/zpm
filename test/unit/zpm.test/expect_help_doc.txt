@@ -14,4 +14,4 @@ GLOBAL OPTIONS:
 --help, -h     show help (default: false)
 --version, -v  show version (default: false)
 
-zpm@0.1.0
+zpm@0.1.1
