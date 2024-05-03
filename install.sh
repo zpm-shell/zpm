@@ -81,8 +81,7 @@ start_start_symbol="# zpm conf start"
 end_start_symbol="# zpm conf end"
 config_in_zshrc=$(cat <<EOF
 ${start_start_symbol}
-export ZPM_DIR=${save_dir}
-export PATH=\${ZPM_DIR}/bin:\${PATH}
+export PATH=\${save_dir}/bin:\${PATH}
 ${end_start_symbol}
 EOF
 )

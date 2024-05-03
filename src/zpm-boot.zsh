@@ -1,5 +1,14 @@
 #!/usr/bin/env zsh
 
+# If the env $ZPM_DIR is empty and then try to init this env.
+if [[ -z ${ZPM_DIR} ]]; then
+    if [[ -d ~/.zpm && ! -z "$(ls -A ~/.zpm)" ]]; then
+        ZPM_DIR=${HOME}/.zpm
+    else
+        echo "The env:\$ZPM_DIR was not found."
+        sleep 5; exit 1;
+    fi
+fi
 if [[ ${ZPM_DIR}/.zpmrc  ]]; then
     . ${ZPM_DIR}/.zpmrc || exit 1;
 fi
