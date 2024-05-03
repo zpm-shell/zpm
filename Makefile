@@ -1,7 +1,7 @@
 define exec-test
-	PATH=${PWD}/bin:${PATH} \
-	ZPM_DIR=${PWD}\
-	ZPM_WORKSPACE=${PWD} \
+	PATH="${PWD}/bin:${PATH}" \
+	ZPM_DIR="${PWD}"\
+	ZPM_WORKSPACE="${PWD}" \
 	zsh src/boot/test-boot.zsh $1
 endef
 
@@ -16,9 +16,9 @@ integration-test:
 	$(call exec-test,src/config/integrate-test-conf.zsh)
 
 zpm-test:
-	PATH=${PWD}/bin:${PATH} \
-	ZPM_DIR=${PWD} \
-	ZPM_WORKSPACE=${PWD} \
+	PATH="${PWD}/bin:${PATH}" \
+	ZPM_DIR="${PWD}" \
+	ZPM_WORKSPACE="${PWD}" \
 	zpm test
 
 tmp:
