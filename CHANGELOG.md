@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2024-05-03
+### Features
+- **Installation**: Simplified post-install configuration in `~/.zshrc`.
+  - Updated `install.sh` to directly export `PATH` with `${save_dir}/bin`, eliminating the need for a separate `ZPM_DIR` export.
+  - Incorporated logic in `src/zpm-boot.zsh` to initialize `ZPM_DIR` automatically if not set, reinforcing the robustness of the installation process.
+
+### Fixes
+- **Testing**: Ensured environment variables are quoted to accommodate paths containing spaces.
+  - Applied quotes around `PATH`, `ZPM_DIR`, and `ZPM_WORKSPACE` assignments in the Makefile to prevent failures when these paths include whitespace.
+  - Adjusted the 'exec-test' definition, 'integration-test', 'zpm-test', and 'update_release_version' targets to handle paths with spaces properly.
+
 ## [0.1.1] - 2024-02-06
 
 ### Features
