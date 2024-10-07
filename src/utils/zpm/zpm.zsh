@@ -554,6 +554,11 @@ function loop_install_package() {
         git clone https://${inputName} ${tmpDir}
         cd ${tmpDir}
         git reset --hard ${inputVersion}
+
+        # If the template directory is empty, then throw error.
+        if [[ -z "$(ls -A ${tmpDir})" ]]; then
+            throw --error-message "The package: ${inputName}@${inputVersion} installed failed" --exit-code 1
+        fi
         cd -
         
         [[ ! -d  ${saveDir} ]] && mkdir -p $( dirname ${saveDir} )
