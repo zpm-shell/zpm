@@ -1,6 +1,6 @@
 {
     "name": "github.com/wuchuheng/zpm-hello",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "description": "A zpm package",
     "main": "src/main.zsh",
     "scripts": {

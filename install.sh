@@ -4,7 +4,7 @@
 TRUE=0
 FALSE=1
 
-VERSION_NAME="0.1.2"
+VERSION_NAME="0.1.4"
 
 ##
 # check the current shell is zsh or not
