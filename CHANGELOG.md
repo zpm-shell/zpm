@@ -7,12 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.4] - 2024-10-07
-
-### Fixes
-- fix: make the printing message more frendly when the package installed failed.
-
-## [0.1.3] - 2024-10-07
+## [0.1.5] - 2024-10-07
 
 ### Fixes
 - fix: make the printing message more frendly when the package installed failed.
