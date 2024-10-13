@@ -21,7 +21,7 @@ local zpm_cli_conf='
 {
     "name": "zpm",
     "description": "zpm is a zsh package manager.",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "commands": {
         "install": { "args": [{"name": "package name", "required": false}], "flags": {}, "docs": [
             "zpm install                         Install all dependences",

@@ -4,7 +4,7 @@
 TRUE=0
 FALSE=1
 
-VERSION_NAME="0.1.6"
+VERSION_NAME="0.1.7"
 
 ##
 # print error message

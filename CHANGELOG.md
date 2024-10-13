@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7] - 2024-10-07
+
+### Features
+- Feat: Add a new variable `ZPM_DIR` to the zsh environment.
+
 ## [0.1.6] - 2024-10-07
 
 ### Refactor
