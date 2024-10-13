@@ -7,6 +7,29 @@ FALSE=1
 VERSION_NAME="0.1.5"
 
 ##
+# print error message
+##
+function print_error() {
+    echo -e "\033[1;31mERROR: \033[0m$1"
+    exit ${FALSE}
+}
+
+##
+# print success message
+##
+function print_success() {
+    echo -e "\033[1;32mSUCCESS: \033[0m$1"
+}
+print_success hello
+
+##
+# print info message
+##
+function print_info() {
+    echo -e "\033[1;34mINFO: \033[0m$1"
+}
+
+##
 # check the current shell is zsh or not
 ##
 function check_zsh_shell() {
@@ -72,11 +95,16 @@ if ! check_zsh_installed; then
     exit 1
 fi
 
+
+# 1. Process the input.
+
+# 2. Process the logic.
+# 2.1 Download the zpm source code.
 # download the zpm
 save_dir=~/.zpm
 git clone --branch ${VERSION_NAME} --single-branch https://github.com/zpm-shell/zpm ${save_dir}
 
-# add the zpm to the zshrc
+# 2.2 Add the zpm environment variable to the zshrc.
 start_start_symbol="# zpm conf start"
 end_start_symbol="# zpm conf end"
 config_in_zshrc=$(cat <<EOF
@@ -93,13 +121,17 @@ if grep -q "${start_start_symbol}" ~/.zshrc; then
 else
     echo "${config_in_zshrc}" >> ~/.zshrc
 fi
-# load the zpm in the current shell
-eval "${config_in_zshrc}"
-# echo the message: the config ${config_in_zshrc} is added to ~/.zshrc
-echo "${config_in_zshrc}"
-echo "=> the zpm config is added to ~/.zshrc"
-echo "=> zpm installed successfully"
 
+# 2.3 Load the zpm in the current shell
+eval "${config_in_zshrc}"
+
+# 2.4 Remove the install script
 if [ -f install.sh ]; then
     rm install.sh
 fi
+
+# 3. Print the message.
+print_info "${config_in_zshrc}"
+print_info "the zpm config is added to ~/.zshrc"
+print_success "zpm installed successfully"
+
