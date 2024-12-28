@@ -1,0 +1,13 @@
+{
+    "name": "package-name",
+    "version": "1.0.0",
+    "description": "A zpm package",
+    "main": "lib/main.zsh",
+    "scripts": {
+        "start": "zpm run lib/main.zsh",
+        "test": "zpm test"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

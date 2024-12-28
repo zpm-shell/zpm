@@ -32,6 +32,18 @@ zpm install <domain>/username/repository # e.g. zpm install github/zpm-shell/lib
 zpm uninstall <domain>/username/repository # e.g. zpm uninstall github/zpm-shell/lib-demo
 ```
 
+### For example
+```sh
+# install the lib module
+zpm install github/zpm-shell/lib-demo
+
+# use the lib module in zsh script
+source ~/.zpm/modules/github/zpm-shell/lib-demo/lib-demo.zsh
+```
+
+
+
+
 ## Contributing
 
 We welcome contributions to zpm! If you have suggestions for improvements or new features, please open an issue or submit a pull request.

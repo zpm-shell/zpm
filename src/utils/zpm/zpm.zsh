@@ -6,6 +6,7 @@ import ../global.zsh --as global
 import ../color.zsh --as color
 import ../log.zsh --as log
 import ./create-dotfiles/create-dotfiles.zsh --as create_dotfiles
+import ./create-package/create-package.zsh --as create_package
 import ../bin.zsh --as bin
 
 local jq;
@@ -618,9 +619,13 @@ function create() {
     fi
 
     local template=$( $jq -j "${inputData}" -q flags.template -t get )
+
     case ${template} in
         dotfiles)
             call create_dotfiles.create_dotfiles -d ${inputData}
+        ;;
+        package)
+            call create_package.create_package -d ${inputData}
         ;;
         *)
             throw --error-message "The template: ${template} was not supported" --exit-code 1
