@@ -33,16 +33,53 @@ zpm uninstall <domain>/username/repository # e.g. zpm uninstall github/zpm-shell
 ```
 
 ### For example
-```sh
-# install the lib module
-zpm install github/zpm-shell/lib-demo
+#### 1. Initialize the zpm project.
 
-# use the lib module in zsh script
-source ~/.zpm/modules/github/zpm-shell/lib-demo/lib-demo.zsh
+```sh
+$ zpm init demo
+{
+    "name": "demo",
+    "version": "1.0.0",
+    "description": "A zpm package",
+    "main": "lib/main.zsh",
+    "scripts": {
+        "start": "zpm run lib/main.zsh",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
+Create zpm-package.json success
+$ tree .
+.
+├── lib
+│   └── main.zsh
+└── zpm-package.json
 ```
 
+#### 2. Install a lib module.
 
+```sh
+zpm install github/zpm-shell/lib-demo
+```
 
+#### 3. Use the lib module in zsh script in `lib/main.zsh`
+```sh
+# !/usr/bin/env zpm
+
+import "github.com/zpm-shell/lib-demo" --as demo # <-- import the lib module.
+
+function main() {
+    call demo.main # <-- Use the main function from the lib module.
+}
+
+```
+
+#### 4. Run the script
+```sh
+zpm run lib/main.zsh
+```
 
 ## Contributing
 
