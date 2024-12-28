@@ -4,7 +4,7 @@
 TRUE=0
 FALSE=1
 
-VERSION_NAME="0.1.7"
+VERSION_NAME="0.1.8"
 
 ##
 # print error message
@@ -135,4 +135,3 @@ fi
 print_info "${config_in_zshrc}"
 print_info "the zpm config is added to ~/.zshrc"
 print_success "zpm installed successfully"
-
