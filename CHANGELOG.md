@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.8] - 2024-12-28
+
+### Features
+- Feat: Add a new command `zpm create` to create a new zpm project.
+
+### Docs:
+- Update the `README.md` for usage examples.
 ## [0.1.7] - 2024-10-07
 
 ### Features
